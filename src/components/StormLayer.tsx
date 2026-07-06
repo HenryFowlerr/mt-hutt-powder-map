@@ -20,7 +20,7 @@ type Props = {
 // its own toolbar toggle.
 
 const MAX_SNOWFLAKES = 6000
-const STREAK_COUNT = 56
+const STREAK_COUNT = 110
 const TIME_SCALE = 24 // real m/s feels static at map scale; speed time up
 
 function windVector(windFromDeg: number, windKph: number) {
@@ -259,7 +259,7 @@ export function StormLayer({ terrain, weather }: Props) {
       const attribute = streaks.getAttribute('position') as THREE.BufferAttribute
       const array = attribute.array as Float32Array
       const gustScale = Math.max(1, gustKph / Math.max(windKph, 1)) * 0.5
-      const tailLength = 0.15 + 0.5 * clamp01(windKph / 60) + 0.3 * clamp01(gustScale - 0.5)
+      const tailLength = 0.25 + 0.7 * clamp01(windKph / 60) + 0.4 * clamp01(gustScale - 0.5)
       const speed = Math.hypot(wind.vx, wind.vz) || 0.001
       const dirX = wind.vx / speed
       const dirZ = wind.vz / speed
@@ -317,10 +317,10 @@ export function StormLayer({ terrain, weather }: Props) {
           <pointsMaterial
             map={flakeTexture}
             color="#ffffff"
-            size={0.03}
+            size={0.038}
             sizeAttenuation
             transparent
-            opacity={0.9}
+            opacity={0.95}
             depthWrite={false}
           />
         </points>
@@ -331,7 +331,7 @@ export function StormLayer({ terrain, weather }: Props) {
           <bufferGeometry ref={streakGeometry}>
             <bufferAttribute attach="attributes-position" args={[streakPositions, 3]} />
           </bufferGeometry>
-          <lineBasicMaterial color="#5f89a6" transparent opacity={0.6} depthWrite={false} />
+          <lineBasicMaterial color="#39647f" transparent opacity={0.8} depthWrite={false} />
         </lineSegments>
       ) : null}
 

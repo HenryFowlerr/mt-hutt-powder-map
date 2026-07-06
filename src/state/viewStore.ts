@@ -8,6 +8,7 @@ type ViewState = {
   showClouds: boolean
   showSnowfall: boolean
   showWind: boolean
+  showFreezingLevel: boolean
   exaggeration: number
   mapView: boolean
   resetCount: number
@@ -16,6 +17,7 @@ type ViewState = {
   toggleClouds: () => void
   toggleSnowfall: () => void
   toggleWind: () => void
+  toggleFreezingLevel: () => void
   toggleExaggeration: () => void
   toggleMapView: () => void
   resetCamera: () => void
@@ -27,6 +29,7 @@ export const useViewStore = create<ViewState>((set) => ({
   showClouds: false,
   showSnowfall: false,
   showWind: false,
+  showFreezingLevel: false,
   exaggeration: 1.25,
   mapView: false,
   resetCount: 0,
@@ -36,6 +39,7 @@ export const useViewStore = create<ViewState>((set) => ({
   toggleClouds: () => set((state) => ({ showClouds: !state.showClouds })),
   toggleSnowfall: () => set((state) => ({ showSnowfall: !state.showSnowfall })),
   toggleWind: () => set((state) => ({ showWind: !state.showWind })),
+  toggleFreezingLevel: () => set((state) => ({ showFreezingLevel: !state.showFreezingLevel })),
   toggleExaggeration: () =>
     set((state) => ({ exaggeration: state.exaggeration > 1.4 ? 1.25 : 1.75 })),
   toggleMapView: () =>

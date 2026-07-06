@@ -9,6 +9,7 @@ import { PowderOverlay } from './PowderOverlay'
 import { MapDetails } from './MapDetails'
 import { MapLabels } from './MapLabels'
 import { StormLayer } from './StormLayer'
+import { FreezingLevelBand } from './FreezingLevelBand'
 import { terrainPoint } from '../lib/terrain'
 import type { PowderField, PowderWeather } from '../lib/powderModel'
 import type { TerrainAnalysis } from '../lib/terrainAnalysis'
@@ -110,6 +111,7 @@ export function MountainScene({ terrain, trails, analysis, field, weather }: Pro
       <MapDetails terrain={terrain} trails={trails} />
       <MapLabels terrain={terrain} trails={trails} />
       <StormLayer terrain={terrain} weather={weather} />
+      <FreezingLevelBand terrain={terrain} freezingLevelM={weather.freezingLevelM} />
       <CameraRig terrain={terrain} trails={trails} />
     </Canvas>
   )

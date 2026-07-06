@@ -69,7 +69,16 @@ export type LatestData = {
     headline: string
     reasons: string[]
   }
-  observations: unknown[]
-  forecast: unknown[]
+  observations: WeatherHour[]
+  forecast: WeatherHour[]
   powderPolygons?: PowderPolygon[]
+}
+
+export type WeatherHour = {
+  time: string
+  temperatureC: number
+  snowfallCm: number
+  windKph: number
+  windDirectionDeg: number
+  freezingLevelM?: number
 }

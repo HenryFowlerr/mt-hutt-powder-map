@@ -86,7 +86,16 @@ function App() {
         )}
       </div>
       <Toolbar />
-      {data && derived ? <WeatherPanel latest={data.latest} field={derived.field} /> : null}
+      {data && derived ? (
+        <WeatherPanel
+          latest={data.latest}
+          field={derived.field}
+          terrain={data.terrain}
+          analysis={derived.analysis}
+          trails={data.trails}
+          weather={derived.weather}
+        />
+      ) : null}
     </main>
   )
 }

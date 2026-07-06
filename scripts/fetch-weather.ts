@@ -28,7 +28,7 @@ url.searchParams.set('latitude', String(lat))
 url.searchParams.set('longitude', String(lon))
 url.searchParams.set('hourly', hourly)
 url.searchParams.set('past_days', '3')
-url.searchParams.set('forecast_days', '3')
+url.searchParams.set('forecast_days', '5')
 url.searchParams.set('timezone', 'Pacific/Auckland')
 
 try {
@@ -143,13 +143,19 @@ try {
       windKph: weather.hourly.wind_speed_10m[index],
       windDirectionDeg: weather.hourly.wind_direction_10m[index],
     })),
-    forecast: forecastIndexes.map((index) => ({
-      time: hours[index],
-      temperatureC: weather.hourly.temperature_2m[index],
-      snowfallCm: weather.hourly.snowfall[index],
-      windKph: weather.hourly.wind_speed_10m[index],
-      windDirectionDeg: weather.hourly.wind_direction_10m[index],
-    })),
+    // The powder model uses the next 72 h; the outlook strip in the panel
+    // shows every future hour available (5 forecast days).
+    forecast: hours
+      .map((time, index) => ({ time: new Date(time).getTime(), index }))
+      .filter(({ time }) => time > now)
+      .map(({ index }) => ({
+        time: hours[index],
+        temperatureC: weather.hourly.temperature_2m[index],
+        snowfallCm: weather.hourly.snowfall[index],
+        windKph: weather.hourly.wind_speed_10m[index],
+        windDirectionDeg: weather.hourly.wind_direction_10m[index],
+        freezingLevelM: weather.hourly.freezing_level_height?.[index],
+      })),
   }
 
   writeFileSync(latestPath, `${JSON.stringify(next, null, 2)}\n`)

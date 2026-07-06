@@ -235,6 +235,121 @@ button {
   color: var(--muted);
 }
 
+.snowline {
+  margin-bottom: 12px;
+  padding: 7px 10px;
+  border-radius: 7px;
+  background: rgba(224, 52, 47, 0.08);
+  color: #7c3531;
+  font-size: 11.5px;
+  line-height: 1.35;
+}
+
+.panel-section {
+  margin: 12px 0 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.zone-list {
+  display: grid;
+  gap: 4px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+  font-size: 12.5px;
+}
+
+.zone-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  cursor: default;
+}
+
+.zone-list li:hover {
+  background: rgba(31, 143, 82, 0.08);
+}
+
+.zone-swatch {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(18, 84, 49, 0.25);
+}
+
+.zone-name {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.zone-cm {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.zone-cm em {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.outlook-strip {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.outlook-day {
+  display: grid;
+  gap: 1px;
+  padding: 6px 4px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: rgba(239, 245, 237, 0.72);
+  text-align: center;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.outlook-label {
+  font-weight: 700;
+  color: var(--ink);
+  text-transform: uppercase;
+}
+
+.outlook-day strong {
+  font-size: 12px;
+  color: var(--ink);
+}
+
+.outlook-day strong.snowy {
+  color: var(--green);
+}
+
+.freezing-label {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(224, 52, 47, 0.92);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
 .legend-bar-wrap {
   margin-bottom: 8px;
 }

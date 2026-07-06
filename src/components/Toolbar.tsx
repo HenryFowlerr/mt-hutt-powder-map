@@ -1,4 +1,4 @@
-import { CalendarClock, CloudSnow, Cloudy, Map, Mountain, RotateCcw, Route, Snowflake, Wind } from 'lucide-react'
+import { CalendarClock, CloudSnow, Cloudy, Map, Mountain, RotateCcw, Route, Snowflake, Thermometer, Wind } from 'lucide-react'
 import { useViewStore } from '../state/viewStore'
 
 export function Toolbar() {
@@ -8,6 +8,7 @@ export function Toolbar() {
     showClouds,
     showSnowfall,
     showWind,
+    showFreezingLevel,
     exaggeration,
     mapView,
     setPowderMode,
@@ -15,6 +16,7 @@ export function Toolbar() {
     toggleClouds,
     toggleSnowfall,
     toggleWind,
+    toggleFreezingLevel,
     toggleExaggeration,
     toggleMapView,
     resetCamera,
@@ -66,6 +68,15 @@ export function Toolbar() {
         aria-label="Toggle wind streaks"
       >
         <Wind size={19} />
+      </button>
+      <button
+        className={`tool-button ${showFreezingLevel ? 'active' : ''}`}
+        type="button"
+        onClick={toggleFreezingLevel}
+        title="Live freezing level band"
+        aria-label="Toggle live freezing level band"
+      >
+        <Thermometer size={19} />
       </button>
       <button
         className={`tool-button ${showTrails ? 'active' : ''}`}

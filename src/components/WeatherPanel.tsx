@@ -1,11 +1,18 @@
 import { formatDistanceToNow } from 'date-fns'
-import { fieldMaxCm, type PowderField } from '../lib/powderModel'
+import { useMemo } from 'react'
+import { fieldMaxCm, powderColorForCm, type PowderField, type PowderWeather } from '../lib/powderModel'
+import { buildZoneSummaries } from '../lib/zoneSummary'
+import type { TerrainAnalysis } from '../lib/terrainAnalysis'
 import { useViewStore } from '../state/viewStore'
-import type { LatestData } from '../types'
+import type { LatestData, TerrainData, TrailCollection, WeatherHour } from '../types'
 
 type Props = {
   latest: LatestData
   field: PowderField
+  terrain: TerrainData
+  analysis: TerrainAnalysis
+  trails: TrailCollection
+  weather: PowderWeather
 }
 
 function windCompass(degrees: number) {
@@ -13,7 +20,47 @@ function windCompass(degrees: number) {
   return directions[Math.round(degrees / 45) % 8]
 }
 
-export function WeatherPanel({ latest, field }: Props) {
+type DayOutlook = {
+  label: string
+  snowCm: number
+  windKph: number
+  minC: number
+  maxC: number
+}
+
+// Aggregate the hourly forecast into per-day rows for the outlook strip.
+function buildOutlook(forecast: WeatherHour[]): DayOutlook[] {
+  const byDay = new Map<string, WeatherHour[]>()
+  for (const hour of forecast) {
+    const day = hour.time.slice(0, 10)
+    const list = byDay.get(day)
+    if (list) list.push(hour)
+    else byDay.set(day, [hour])
+  }
+  const days: DayOutlook[] = []
+  for (const [day, hours] of byDay) {
+    if (hours.length < 4) continue // skip fragments at the range edges
+    const temps = hours.map((hour) => hour.temperatureC)
+    days.push({
+      label: new Date(`${day}T12:00`).toLocaleDateString('en-NZ', { weekday: 'short' }),
+      snowCm: hours.reduce((total, hour) => total + hour.snowfallCm, 0),
+      windKph: hours.reduce((total, hour) => total + hour.windKph, 0) / hours.length,
+      minC: Math.min(...temps),
+      maxC: Math.max(...temps),
+    })
+  }
+  return days.slice(0, 5)
+}
+
+function snowlineSentence(freezingLevelM: number | undefined) {
+  if (!freezingLevelM) return null
+  if (freezingLevelM < 1450) return `Freezing level ~${Math.round(freezingLevelM)} m — snow falling to the access road.`
+  if (freezingLevelM < 1900)
+    return `Freezing level ~${Math.round(freezingLevelM)} m — wet low down, drier snow up high.`
+  return `Freezing level ~${Math.round(freezingLevelM)} m — warm, rain risk on most of the mountain.`
+}
+
+export function WeatherPanel({ latest, field, terrain, analysis, trails, weather }: Props) {
   const powderMode = useViewStore((state) => state.powderMode)
   const generated = new Date(latest.generatedAt)
   const mode = powderMode === 'forecast' ? 'forecast' : 'recent'
@@ -41,6 +88,13 @@ export function WeatherPanel({ latest, field }: Props) {
   const windFrom = windCompass(windDirection)
   const leeSide = windCompass((windDirection + 180) % 360)
   const snowCm = mode === 'forecast' ? latest.summary.forecastSnowCm : latest.summary.recentSnowCm
+
+  const zones = useMemo(
+    () => buildZoneSummaries(terrain, analysis, field, weather, trails, mode).slice(0, 5),
+    [terrain, analysis, field, weather, trails, mode],
+  )
+  const outlook = useMemo(() => buildOutlook(latest.forecast ?? []), [latest.forecast])
+  const snowline = snowlineSentence(latest.summary.freezingLevelM)
 
   return (
     <aside className="weather-panel">
@@ -78,6 +132,39 @@ export function WeatherPanel({ latest, field }: Props) {
           </strong>
         </div>
       </div>
+
+      {snowline ? <p className="snowline">{snowline}</p> : null}
+
+      <h2 className="panel-section">Best zones · {mode === 'forecast' ? 'next 72 h' : 'right now'}</h2>
+      <ul className="zone-list">
+        {zones.map((zone) => (
+          <li key={zone.name} title={zone.reason}>
+            <span className="zone-swatch" style={{ background: powderColorForCm(zone.maxCm) }} />
+            <span className="zone-name">{zone.name}</span>
+            <span className="zone-cm">
+              ~{zone.maxCm} <em>cm</em>
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      {outlook.length > 0 ? (
+        <>
+          <h2 className="panel-section">Outlook</h2>
+          <div className="outlook-strip">
+            {outlook.map((day) => (
+              <div key={day.label} className="outlook-day">
+                <span className="outlook-label">{day.label}</span>
+                <strong className={day.snowCm >= 5 ? 'snowy' : ''}>{Math.round(day.snowCm)}cm</strong>
+                <span>{Math.round(day.windKph)}km/h</span>
+                <span>
+                  {Math.round(day.minC)}°…{Math.round(day.maxC)}°
+                </span>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : null}
 
       <div className="legend-bar-wrap">
         <div className="legend-bar" />
