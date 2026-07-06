@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "generate:data": "tsx scripts/generate-sample-data.ts",
     "fetch:terrain": "tsx scripts/fetch-opentopo-terrain.ts",
     "fetch:trails": "tsx scripts/fetch-osm-trails.ts",
     "update:data": "tsx scripts/fetch-weather.ts && tsx scripts/build-powder-grid.ts",
