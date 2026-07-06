@@ -1,6 +1,7 @@
 import { formatDistanceToNow } from 'date-fns'
 import { useMemo } from 'react'
 import { fieldMaxCm, powderColorForCm, type PowderField, type PowderWeather } from '../lib/powderModel'
+import { buildAspectRose, buildSnowTimeline, pickBestDay } from '../lib/insights'
 import { buildZoneSummaries } from '../lib/zoneSummary'
 import type { TerrainAnalysis } from '../lib/terrainAnalysis'
 import { useViewStore } from '../state/viewStore'
@@ -97,6 +98,13 @@ export function WeatherPanel({ latest, field, terrain, analysis, trails, weather
   )
   const outlook = useMemo(() => buildOutlook(latest.forecast ?? []), [latest.forecast])
   const snowline = snowlineSentence(latest.summary.freezingLevelM)
+  const bestDay = useMemo(() => pickBestDay(outlook), [outlook])
+  const timeline = useMemo(
+    () => buildSnowTimeline(latest.observations ?? [], latest.forecast ?? []),
+    [latest.observations, latest.forecast],
+  )
+  const timelineMax = Math.max(1, ...timeline.map((bucket) => bucket.snowCm))
+  const rose = useMemo(() => buildAspectRose(analysis, field, mode), [analysis, field, mode])
 
   return (
     <aside className="weather-panel">
@@ -167,9 +175,17 @@ export function WeatherPanel({ latest, field, terrain, analysis, trails, weather
       {outlook.length > 0 ? (
         <>
           <h2 className="panel-section">Outlook</h2>
+          {bestDay ? (
+            <p className="best-day">
+              <strong>Ski {bestDay.label}</strong> — {bestDay.reason}
+            </p>
+          ) : null}
           <div className="outlook-strip">
             {outlook.map((day) => (
-              <div key={day.label} className="outlook-day">
+              <div
+                key={day.label}
+                className={`outlook-day ${bestDay && day.label === bestDay.label ? 'best' : ''}`}
+              >
                 <span className="outlook-label">{day.label}</span>
                 <strong className={day.snowCm >= 5 ? 'snowy' : ''}>{Math.round(day.snowCm)}cm</strong>
                 <span>{Math.round(day.windKph)}km/h</span>
@@ -181,6 +197,61 @@ export function WeatherPanel({ latest, field, terrain, analysis, trails, weather
           </div>
         </>
       ) : null}
+
+      {timeline.length > 0 ? (
+        <>
+          <h2 className="panel-section">Storm timeline · 6 h steps</h2>
+          <div className="timeline" aria-label="Snowfall timeline, past 72 hours and next 72 hours">
+            {timeline.map((bucket, index) => (
+              <div
+                key={index}
+                className={`timeline-bar ${bucket.future ? 'future' : ''}`}
+                title={`${bucket.label} NZT · ${bucket.snowCm.toFixed(1)} cm`}
+                style={{ height: `${Math.max(6, (bucket.snowCm / timelineMax) * 100)}%` }}
+              />
+            ))}
+          </div>
+          <div className="timeline-axis">
+            <span>-72 h</span>
+            <span>now</span>
+            <span>+72 h</span>
+          </div>
+        </>
+      ) : null}
+
+      <h2 className="panel-section">Loaded aspects</h2>
+      <div className="aspect-rose-row">
+        <svg className="aspect-rose" viewBox="-50 -50 100 100" aria-label="Powder by aspect">
+          {rose.meanCm.map((cm, sector) => {
+            const start = ((sector * 45 - 112.5) * Math.PI) / 180
+            const end = ((sector * 45 - 67.5) * Math.PI) / 180
+            const radius = 14 + 30 * (cm / rose.maxCm)
+            const x1 = Math.cos(start) * radius
+            const y1 = Math.sin(start) * radius
+            const x2 = Math.cos(end) * radius
+            const y2 = Math.sin(end) * radius
+            return (
+              <path
+                key={sector}
+                d={`M0,0 L${x1.toFixed(1)},${y1.toFixed(1)} A${radius},${radius} 0 0 1 ${x2.toFixed(1)},${y2.toFixed(1)} Z`}
+                fill={powderColorForCm(cm)}
+                stroke="rgba(18,84,49,0.25)"
+                strokeWidth="0.6"
+              >
+                <title>{`${rose.labels[sector]}-facing: ~${Math.round(cm)} cm average`}</title>
+              </path>
+            )
+          })}
+          <text x="0" y="-42" textAnchor="middle" className="rose-label">N</text>
+          <text x="45" y="3" textAnchor="middle" className="rose-label">E</text>
+          <text x="0" y="47" textAnchor="middle" className="rose-label">S</text>
+          <text x="-45" y="3" textAnchor="middle" className="rose-label">W</text>
+        </svg>
+        <p className="rose-hint">
+          Average expected powder by slope aspect. {windFrom} wind means {leeSide}-facing terrain holds
+          the most.
+        </p>
+      </div>
 
       <div className="legend-bar-wrap">
         <div className="legend-bar" />

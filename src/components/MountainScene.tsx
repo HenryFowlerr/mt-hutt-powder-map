@@ -22,6 +22,7 @@ type Props = {
   analysis: TerrainAnalysis
   field: PowderField
   weather: PowderWeather
+  overrides?: TrailCollection | null
 }
 
 // Camera target sits on the main ski area (mean of lift midpoints) so the
@@ -118,7 +119,7 @@ function CameraRig({ terrain, trails }: { terrain: TerrainData; trails: TrailCol
   )
 }
 
-export function MountainScene({ terrain, trails, analysis, field, weather }: Props) {
+export function MountainScene({ terrain, trails, analysis, field, weather, overrides }: Props) {
   return (
     <Canvas dpr={[1, 1.9]} gl={{ antialias: true }}>
       {/* No fog and no scene lighting: the map look is baked into textures
@@ -127,7 +128,7 @@ export function MountainScene({ terrain, trails, analysis, field, weather }: Pro
       <TerrainMesh terrain={terrain} analysis={analysis} />
       <PowderOverlay terrain={terrain} analysis={analysis} field={field} weather={weather} />
       <TrailOverlay terrain={terrain} trails={trails} />
-      <MapDetails terrain={terrain} trails={trails} />
+      <MapDetails terrain={terrain} trails={trails} overrides={overrides} />
       <MapLabels terrain={terrain} trails={trails} />
       <StormLayer terrain={terrain} weather={weather} />
       <FreezingLevelBand terrain={terrain} freezingLevelM={weather.freezingLevelM} />

@@ -355,6 +355,74 @@ button {
   color: var(--green);
 }
 
+.best-day {
+  margin-bottom: 8px;
+  padding: 7px 10px;
+  border-radius: 7px;
+  background: rgba(31, 143, 82, 0.1);
+  color: #1c5b3a;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.outlook-day.best {
+  border-color: rgba(31, 143, 82, 0.55);
+  box-shadow: inset 0 0 0 1px rgba(31, 143, 82, 0.35);
+}
+
+.timeline {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 44px;
+  padding: 4px 2px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.timeline-bar {
+  flex: 1;
+  min-width: 0;
+  border-radius: 2px 2px 0 0;
+  background: #7fb891;
+}
+
+.timeline-bar.future {
+  background: #b8d4ea;
+}
+
+.timeline-axis {
+  display: flex;
+  justify-content: space-between;
+  margin: 2px 0 12px;
+  color: var(--muted);
+  font-size: 9.5px;
+}
+
+.aspect-rose-row {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.aspect-rose {
+  width: 96px;
+  height: 96px;
+}
+
+.rose-label {
+  font-size: 9px;
+  font-weight: 700;
+  fill: var(--muted);
+}
+
+.rose-hint {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
 .freezing-label {
   padding: 2px 8px;
   border-radius: 999px;

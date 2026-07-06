@@ -24,6 +24,7 @@ async function loadJson<T>(path: string): Promise<T> {
 
 function App() {
   const [data, setData] = useState<AppData | null>(null)
+  const [overrides, setOverrides] = useState<TrailCollection | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -38,6 +39,10 @@ function App() {
       .catch((loadError: unknown) => {
         setError(loadError instanceof Error ? loadError.message : 'Data failed to load')
       })
+    // Optional base-area detail layer (real carparks/road/buildings from OSM).
+    loadJson<TrailCollection>('data/map-overrides.geojson')
+      .then(setOverrides)
+      .catch(() => setOverrides(null))
   }, [])
 
   // Terrain analysis and the powder field are computed once per data load
@@ -77,6 +82,7 @@ function App() {
             analysis={derived.analysis}
             field={derived.field}
             weather={derived.weather}
+            overrides={overrides}
           />
         ) : (
           <div className="loading-state">
