@@ -36,6 +36,9 @@ Do not merge this branch into `main`. Open a PR or leave the branch pushed for C
   OpenTopoData nzdem8m, tighter bbox (171.500-171.592, -43.535 - -43.455).
   Heights carry one decimal. `scripts/fetch-opentopo-terrain.ts` caches
   batches in `.terrain-cache/` (gitignored) and resumes on failure.
+- `latest.json` summary also has `cloudLowPct`, `cloudMidPct`,
+  `cloudHighPct`, `freezingLevelM` (recent 6 h averages) driving the live
+  3D cloud/snow/wind layers.
 - Trail data corrections (names/difficulties vs the official 2026 PDF) are
   applied at runtime by `src/lib/trailOverrides.ts`, not baked into
   `trails.geojson`, so an OSM refetch will not lose them.
