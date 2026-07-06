@@ -1,22 +1,57 @@
 {
-  "generatedAt": "2026-07-06T03:04:23.030Z",
+  "generatedAt": "2026-07-06T10:59:11.865Z",
   "location": "Mt Hutt",
   "summary": {
-    "recentSnowCm": 20.6,
-    "forecastSnowCm": 58.4,
-    "mainWindDirectionDeg": 275,
+    "recentSnowCm": 12.2,
+    "forecastSnowCm": 68.2,
+    "mainWindDirectionDeg": 284,
     "avgWindKph": 12,
     "temperatureMinC": -6.1,
     "temperatureMaxC": 2.1,
     "confidence": "medium",
     "headline": "Recent snow and wind are producing a stronger powder signal on sheltered lee terrain.",
     "reasons": [
-      "21 cm estimated snowfall in the last 72 hours from Open-Meteo.",
-      "Mean recent wind around 12 km/h from 275 degrees.",
+      "12 cm estimated snowfall in the last 72 hours from Open-Meteo.",
+      "Mean recent wind around 12 km/h from 284 degrees.",
       "Terrain score favours cold upper mountain bowls, gullies, and lee-facing aspects."
     ]
   },
   "observations": [
+    {
+      "time": "2026-07-03T11:00",
+      "temperatureC": -0.7,
+      "snowfallCm": 0,
+      "windKph": 6.8,
+      "windDirectionDeg": 323
+    },
+    {
+      "time": "2026-07-03T12:00",
+      "temperatureC": 0.4,
+      "snowfallCm": 0,
+      "windKph": 8.1,
+      "windDirectionDeg": 329
+    },
+    {
+      "time": "2026-07-03T13:00",
+      "temperatureC": 0.2,
+      "snowfallCm": 0,
+      "windKph": 6.4,
+      "windDirectionDeg": 328
+    },
+    {
+      "time": "2026-07-03T14:00",
+      "temperatureC": 0.3,
+      "snowfallCm": 0,
+      "windKph": 6.6,
+      "windDirectionDeg": 334
+    },
+    {
+      "time": "2026-07-03T15:00",
+      "temperatureC": 0.2,
+      "snowfallCm": 0,
+      "windKph": 7.2,
+      "windDirectionDeg": 335
+    },
     {
       "time": "2026-07-03T16:00",
       "temperatureC": -0.3,
@@ -485,7 +520,9 @@
       "snowfallCm": 0.84,
       "windKph": 13.4,
       "windDirectionDeg": 192
-    },
+    }
+  ],
+  "forecast": [
     {
       "time": "2026-07-06T11:00",
       "temperatureC": -5.7,
@@ -495,831 +532,829 @@
     },
     {
       "time": "2026-07-06T12:00",
-      "temperatureC": -5.6,
+      "temperatureC": -6,
       "snowfallCm": 1.4,
-      "windKph": 12.5,
-      "windDirectionDeg": 200
-    },
-    {
-      "time": "2026-07-06T13:00",
-      "temperatureC": -5.5,
-      "snowfallCm": 1.33,
-      "windKph": 11.1,
-      "windDirectionDeg": 202
-    },
-    {
-      "time": "2026-07-06T14:00",
-      "temperatureC": -5.3,
-      "snowfallCm": 1.96,
-      "windKph": 12.5,
-      "windDirectionDeg": 192
-    },
-    {
-      "time": "2026-07-06T15:00",
-      "temperatureC": -5.2,
-      "snowfallCm": 2.38,
-      "windKph": 13,
-      "windDirectionDeg": 191
-    }
-  ],
-  "forecast": [
-    {
-      "time": "2026-07-06T16:00",
-      "temperatureC": -5.1,
-      "snowfallCm": 3.01,
-      "windKph": 12.6,
-      "windDirectionDeg": 194
-    },
-    {
-      "time": "2026-07-06T17:00",
-      "temperatureC": -4.9,
-      "snowfallCm": 2.45,
-      "windKph": 8.7,
-      "windDirectionDeg": 201
-    },
-    {
-      "time": "2026-07-06T18:00",
-      "temperatureC": -5,
-      "snowfallCm": 2.87,
-      "windKph": 9,
-      "windDirectionDeg": 190
-    },
-    {
-      "time": "2026-07-06T19:00",
-      "temperatureC": -5,
-      "snowfallCm": 3.15,
-      "windKph": 8.4,
+      "windKph": 13.4,
       "windDirectionDeg": 195
     },
     {
+      "time": "2026-07-06T13:00",
+      "temperatureC": -5.8,
+      "snowfallCm": 0.63,
+      "windKph": 13.5,
+      "windDirectionDeg": 194
+    },
+    {
+      "time": "2026-07-06T14:00",
+      "temperatureC": -5.7,
+      "snowfallCm": 1.19,
+      "windKph": 13.7,
+      "windDirectionDeg": 194
+    },
+    {
+      "time": "2026-07-06T15:00",
+      "temperatureC": -5.8,
+      "snowfallCm": 1.68,
+      "windKph": 14.2,
+      "windDirectionDeg": 195
+    },
+    {
+      "time": "2026-07-06T16:00",
+      "temperatureC": -5.7,
+      "snowfallCm": 2.1,
+      "windKph": 13,
+      "windDirectionDeg": 200
+    },
+    {
+      "time": "2026-07-06T17:00",
+      "temperatureC": -5.8,
+      "snowfallCm": 1.82,
+      "windKph": 8.3,
+      "windDirectionDeg": 196
+    },
+    {
+      "time": "2026-07-06T18:00",
+      "temperatureC": -5.6,
+      "snowfallCm": 2.24,
+      "windKph": 8.6,
+      "windDirectionDeg": 200
+    },
+    {
+      "time": "2026-07-06T19:00",
+      "temperatureC": -5.4,
+      "snowfallCm": 2.52,
+      "windKph": 9.8,
+      "windDirectionDeg": 197
+    },
+    {
       "time": "2026-07-06T20:00",
-      "temperatureC": -4.9,
-      "snowfallCm": 2.38,
-      "windKph": 8.7,
-      "windDirectionDeg": 201
+      "temperatureC": -5.4,
+      "snowfallCm": 2.59,
+      "windKph": 10.4,
+      "windDirectionDeg": 190
     },
     {
       "time": "2026-07-06T21:00",
-      "temperatureC": -4.8,
-      "snowfallCm": 2.03,
-      "windKph": 9.3,
-      "windDirectionDeg": 196
+      "temperatureC": -5.3,
+      "snowfallCm": 2.24,
+      "windKph": 10.2,
+      "windDirectionDeg": 198
     },
     {
       "time": "2026-07-06T22:00",
-      "temperatureC": -4.6,
-      "snowfallCm": 2.1,
-      "windKph": 9.6,
-      "windDirectionDeg": 196
+      "temperatureC": -5.4,
+      "snowfallCm": 1.89,
+      "windKph": 10.8,
+      "windDirectionDeg": 191
     },
     {
       "time": "2026-07-06T23:00",
-      "temperatureC": -4.7,
-      "snowfallCm": 2.45,
-      "windKph": 9.4,
-      "windDirectionDeg": 193
+      "temperatureC": -5.3,
+      "snowfallCm": 2.87,
+      "windKph": 11.3,
+      "windDirectionDeg": 194
     },
     {
       "time": "2026-07-07T00:00",
-      "temperatureC": -4.8,
-      "snowfallCm": 2.73,
-      "windKph": 9.4,
-      "windDirectionDeg": 197
+      "temperatureC": -5.2,
+      "snowfallCm": 3.57,
+      "windKph": 10.5,
+      "windDirectionDeg": 199
     },
     {
       "time": "2026-07-07T01:00",
-      "temperatureC": -4.7,
-      "snowfallCm": 2.52,
-      "windKph": 9,
-      "windDirectionDeg": 193
-    },
-    {
-      "time": "2026-07-07T02:00",
-      "temperatureC": -4.8,
-      "snowfallCm": 2.94,
+      "temperatureC": -5.3,
+      "snowfallCm": 3.5,
       "windKph": 9.4,
       "windDirectionDeg": 197
     },
     {
+      "time": "2026-07-07T02:00",
+      "temperatureC": -5.1,
+      "snowfallCm": 3.78,
+      "windKph": 9.2,
+      "windDirectionDeg": 196
+    },
+    {
       "time": "2026-07-07T03:00",
-      "temperatureC": -4.6,
-      "snowfallCm": 2.66,
-      "windKph": 9.3,
+      "temperatureC": -5,
+      "snowfallCm": 3.29,
+      "windKph": 8.8,
       "windDirectionDeg": 195
     },
     {
       "time": "2026-07-07T04:00",
-      "temperatureC": -4.5,
-      "snowfallCm": 2.59,
-      "windKph": 9.9,
-      "windDirectionDeg": 190
+      "temperatureC": -5,
+      "snowfallCm": 2.94,
+      "windKph": 8.2,
+      "windDirectionDeg": 202
     },
     {
       "time": "2026-07-07T05:00",
-      "temperatureC": -4.7,
+      "temperatureC": -5,
       "snowfallCm": 2.59,
-      "windKph": 9.4,
-      "windDirectionDeg": 192
+      "windKph": 7.6,
+      "windDirectionDeg": 202
     },
     {
       "time": "2026-07-07T06:00",
-      "temperatureC": -4.9,
-      "snowfallCm": 2.17,
-      "windKph": 8,
-      "windDirectionDeg": 198
+      "temperatureC": -5.3,
+      "snowfallCm": 2.03,
+      "windKph": 6.9,
+      "windDirectionDeg": 208
     },
     {
       "time": "2026-07-07T07:00",
-      "temperatureC": -5,
-      "snowfallCm": 1.96,
-      "windKph": 7.9,
-      "windDirectionDeg": 197
+      "temperatureC": -5.6,
+      "snowfallCm": 1.61,
+      "windKph": 6.8,
+      "windDirectionDeg": 198
     },
     {
       "time": "2026-07-07T08:00",
-      "temperatureC": -5.1,
-      "snowfallCm": 1.89,
-      "windKph": 8.2,
+      "temperatureC": -5.7,
+      "snowfallCm": 1.75,
+      "windKph": 7.6,
       "windDirectionDeg": 194
     },
     {
       "time": "2026-07-07T09:00",
-      "temperatureC": -4.8,
-      "snowfallCm": 1.33,
-      "windKph": 7.4,
-      "windDirectionDeg": 193
+      "temperatureC": -5.4,
+      "snowfallCm": 1.82,
+      "windKph": 7.7,
+      "windDirectionDeg": 196
     },
     {
       "time": "2026-07-07T10:00",
-      "temperatureC": -4.5,
-      "snowfallCm": 1.12,
-      "windKph": 6.9,
-      "windDirectionDeg": 187
+      "temperatureC": -5,
+      "snowfallCm": 1.68,
+      "windKph": 7.4,
+      "windDirectionDeg": 202
     },
     {
       "time": "2026-07-07T11:00",
-      "temperatureC": -4.1,
-      "snowfallCm": 1.05,
-      "windKph": 6.7,
-      "windDirectionDeg": 189
+      "temperatureC": -4.4,
+      "snowfallCm": 0.98,
+      "windKph": 7.2,
+      "windDirectionDeg": 199
     },
     {
       "time": "2026-07-07T12:00",
-      "temperatureC": -3.9,
-      "snowfallCm": 0.91,
-      "windKph": 5.7,
-      "windDirectionDeg": 193
+      "temperatureC": -4,
+      "snowfallCm": 0.63,
+      "windKph": 6.3,
+      "windDirectionDeg": 195
     },
     {
       "time": "2026-07-07T13:00",
-      "temperatureC": -3.7,
-      "snowfallCm": 0.35,
-      "windKph": 5.1,
-      "windDirectionDeg": 190
+      "temperatureC": -3.9,
+      "snowfallCm": 0.63,
+      "windKph": 5.5,
+      "windDirectionDeg": 189
     },
     {
       "time": "2026-07-07T14:00",
-      "temperatureC": -3.5,
-      "snowfallCm": 0,
-      "windKph": 4.7,
-      "windDirectionDeg": 184
+      "temperatureC": -3.8,
+      "snowfallCm": 0.28,
+      "windKph": 4.9,
+      "windDirectionDeg": 188
     },
     {
       "time": "2026-07-07T15:00",
-      "temperatureC": -3.3,
-      "snowfallCm": 0,
-      "windKph": 4.8,
-      "windDirectionDeg": 191
+      "temperatureC": -3.7,
+      "snowfallCm": 0.14,
+      "windKph": 4.5,
+      "windDirectionDeg": 187
     },
     {
       "time": "2026-07-07T16:00",
-      "temperatureC": -3.2,
+      "temperatureC": -3.3,
       "snowfallCm": 0,
-      "windKph": 4.8,
-      "windDirectionDeg": 207
+      "windKph": 5.3,
+      "windDirectionDeg": 192
     },
     {
       "time": "2026-07-07T17:00",
       "temperatureC": -3.3,
       "snowfallCm": 0,
       "windKph": 4.4,
-      "windDirectionDeg": 215
+      "windDirectionDeg": 207
     },
     {
       "time": "2026-07-07T18:00",
-      "temperatureC": -3.2,
+      "temperatureC": -3.3,
       "snowfallCm": 0,
-      "windKph": 4.2,
-      "windDirectionDeg": 216
+      "windKph": 3.9,
+      "windDirectionDeg": 214
     },
     {
       "time": "2026-07-07T19:00",
-      "temperatureC": -3.2,
+      "temperatureC": -3.3,
       "snowfallCm": 0,
-      "windKph": 4.2,
-      "windDirectionDeg": 211
+      "windKph": 3.7,
+      "windDirectionDeg": 219
     },
     {
       "time": "2026-07-07T20:00",
-      "temperatureC": -3.2,
+      "temperatureC": -3.3,
       "snowfallCm": 0,
-      "windKph": 3.7,
-      "windDirectionDeg": 194
+      "windKph": 3.1,
+      "windDirectionDeg": 225
     },
     {
       "time": "2026-07-07T21:00",
       "temperatureC": -3.2,
       "snowfallCm": 0,
-      "windKph": 3.4,
-      "windDirectionDeg": 205
+      "windKph": 2.2,
+      "windDirectionDeg": 228
     },
     {
       "time": "2026-07-07T22:00",
-      "temperatureC": -3.2,
+      "temperatureC": -3.1,
       "snowfallCm": 0,
-      "windKph": 2.3,
-      "windDirectionDeg": 225
+      "windKph": 1.6,
+      "windDirectionDeg": 270
     },
     {
       "time": "2026-07-07T23:00",
-      "temperatureC": -3.1,
+      "temperatureC": -3.4,
       "snowfallCm": 0,
-      "windKph": 2.3,
-      "windDirectionDeg": 241
+      "windKph": 2,
+      "windDirectionDeg": 297
     },
     {
       "time": "2026-07-08T00:00",
-      "temperatureC": -3,
+      "temperatureC": -3.1,
       "snowfallCm": 0,
-      "windKph": 2.5,
-      "windDirectionDeg": 262
+      "windKph": 2,
+      "windDirectionDeg": 275
     },
     {
       "time": "2026-07-08T01:00",
-      "temperatureC": -2.9,
+      "temperatureC": -3.2,
       "snowfallCm": 0,
-      "windKph": 1.9,
-      "windDirectionDeg": 253
+      "windKph": 1.7,
+      "windDirectionDeg": 283
     },
     {
       "time": "2026-07-08T02:00",
-      "temperatureC": -2.9,
+      "temperatureC": -3.2,
       "snowfallCm": 0,
-      "windKph": 1.9,
-      "windDirectionDeg": 197
+      "windKph": 1.5,
+      "windDirectionDeg": 300
     },
     {
       "time": "2026-07-08T03:00",
-      "temperatureC": -3.1,
+      "temperatureC": -3.2,
       "snowfallCm": 0,
-      "windKph": 1.9,
-      "windDirectionDeg": 163
+      "windKph": 0.6,
+      "windDirectionDeg": 124
     },
     {
       "time": "2026-07-08T04:00",
-      "temperatureC": -3.2,
+      "temperatureC": -3.5,
       "snowfallCm": 0,
-      "windKph": 2.6,
-      "windDirectionDeg": 146
+      "windKph": 3.1,
+      "windDirectionDeg": 130
     },
     {
       "time": "2026-07-08T05:00",
-      "temperatureC": -3.3,
+      "temperatureC": -3.5,
       "snowfallCm": 0,
-      "windKph": 4.3,
-      "windDirectionDeg": 138
+      "windKph": 3.7,
+      "windDirectionDeg": 145
     },
     {
       "time": "2026-07-08T06:00",
-      "temperatureC": -3.2,
+      "temperatureC": -3.5,
       "snowfallCm": 0,
-      "windKph": 4.8,
-      "windDirectionDeg": 146
+      "windKph": 4.2,
+      "windDirectionDeg": 160
     },
     {
       "time": "2026-07-08T07:00",
-      "temperatureC": -3.4,
+      "temperatureC": -3.5,
       "snowfallCm": 0,
-      "windKph": 4.7,
-      "windDirectionDeg": 157
+      "windKph": 4.5,
+      "windDirectionDeg": 164
     },
     {
       "time": "2026-07-08T08:00",
-      "temperatureC": -3.3,
+      "temperatureC": -3.5,
       "snowfallCm": 0,
-      "windKph": 5.4,
-      "windDirectionDeg": 150
+      "windKph": 5.9,
+      "windDirectionDeg": 168
     },
     {
       "time": "2026-07-08T09:00",
-      "temperatureC": -3.3,
+      "temperatureC": -3.5,
       "snowfallCm": 0,
-      "windKph": 6.4,
-      "windDirectionDeg": 158
+      "windKph": 6.5,
+      "windDirectionDeg": 166
     },
     {
       "time": "2026-07-08T10:00",
-      "temperatureC": -3.5,
+      "temperatureC": -3.4,
       "snowfallCm": 0,
-      "windKph": 7.3,
-      "windDirectionDeg": 164
+      "windKph": 6.8,
+      "windDirectionDeg": 158
     },
     {
       "time": "2026-07-08T11:00",
       "temperatureC": -3.8,
-      "snowfallCm": 0.21,
-      "windKph": 7,
-      "windDirectionDeg": 159
+      "snowfallCm": 0.14,
+      "windKph": 6.6,
+      "windDirectionDeg": 163
     },
     {
       "time": "2026-07-08T12:00",
-      "temperatureC": -3.7,
-      "snowfallCm": 0.07,
-      "windKph": 7.6,
-      "windDirectionDeg": 152
+      "temperatureC": -4,
+      "snowfallCm": 0.42,
+      "windKph": 6,
+      "windDirectionDeg": 173
     },
     {
       "time": "2026-07-08T13:00",
-      "temperatureC": -4.1,
-      "snowfallCm": 0.42,
-      "windKph": 6.4,
-      "windDirectionDeg": 172
+      "temperatureC": -4.2,
+      "snowfallCm": 0.63,
+      "windKph": 6.6,
+      "windDirectionDeg": 167
     },
     {
       "time": "2026-07-08T14:00",
-      "temperatureC": -4.2,
-      "snowfallCm": 0.7,
-      "windKph": 5.8,
-      "windDirectionDeg": 176
+      "temperatureC": -4.1,
+      "snowfallCm": 0.28,
+      "windKph": 7.4,
+      "windDirectionDeg": 166
     },
     {
       "time": "2026-07-08T15:00",
-      "temperatureC": -4.2,
-      "snowfallCm": 0.35,
-      "windKph": 7,
+      "temperatureC": -3.6,
+      "snowfallCm": 0.42,
+      "windKph": 6.8,
       "windDirectionDeg": 162
     },
     {
       "time": "2026-07-08T16:00",
       "temperatureC": -3.8,
-      "snowfallCm": 0.56,
-      "windKph": 6.7,
-      "windDirectionDeg": 161
-    },
-    {
-      "time": "2026-07-08T17:00",
-      "temperatureC": -3.9,
-      "snowfallCm": 1.47,
-      "windKph": 7.8,
-      "windDirectionDeg": 158
-    },
-    {
-      "time": "2026-07-08T18:00",
-      "temperatureC": -4.2,
-      "snowfallCm": 1.26,
-      "windKph": 6.3,
-      "windDirectionDeg": 160
-    },
-    {
-      "time": "2026-07-08T19:00",
-      "temperatureC": -4.4,
-      "snowfallCm": 1.05,
-      "windKph": 6,
-      "windDirectionDeg": 163
-    },
-    {
-      "time": "2026-07-08T20:00",
-      "temperatureC": -4.4,
-      "snowfallCm": 1.05,
+      "snowfallCm": 0.49,
       "windKph": 6.9,
       "windDirectionDeg": 160
     },
     {
-      "time": "2026-07-08T21:00",
+      "time": "2026-07-08T17:00",
+      "temperatureC": -4,
+      "snowfallCm": 1.54,
+      "windKph": 8.1,
+      "windDirectionDeg": 159
+    },
+    {
+      "time": "2026-07-08T18:00",
+      "temperatureC": -4.2,
+      "snowfallCm": 1.68,
+      "windKph": 8.4,
+      "windDirectionDeg": 165
+    },
+    {
+      "time": "2026-07-08T19:00",
       "temperatureC": -4.5,
-      "snowfallCm": 1.19,
-      "windKph": 6.6,
-      "windDirectionDeg": 171
+      "snowfallCm": 1.26,
+      "windKph": 6.1,
+      "windDirectionDeg": 168
+    },
+    {
+      "time": "2026-07-08T20:00",
+      "temperatureC": -4.7,
+      "snowfallCm": 1.54,
+      "windKph": 6.4,
+      "windDirectionDeg": 172
+    },
+    {
+      "time": "2026-07-08T21:00",
+      "temperatureC": -5,
+      "snowfallCm": 1.61,
+      "windKph": 7.2,
+      "windDirectionDeg": 180
     },
     {
       "time": "2026-07-08T22:00",
-      "temperatureC": -5,
-      "snowfallCm": 1.75,
-      "windKph": 8.7,
-      "windDirectionDeg": 173
+      "temperatureC": -5.4,
+      "snowfallCm": 1.33,
+      "windKph": 8.8,
+      "windDirectionDeg": 171
     },
     {
       "time": "2026-07-08T23:00",
-      "temperatureC": -5.5,
+      "temperatureC": -5.8,
       "snowfallCm": 1.12,
-      "windKph": 8.2,
-      "windDirectionDeg": 171
+      "windKph": 7.8,
+      "windDirectionDeg": 167
     }
   ],
   "powderGrid": [
     {
       "lon": 171.52625,
       "lat": -43.482273,
-      "score": 0.34,
-      "recentScore": 0.34,
-      "forecastScore": 0.36,
-      "expectedSnowCm": 13,
+      "score": 0.28,
+      "recentScore": 0.28,
+      "forecastScore": 0.31,
+      "expectedSnowCm": 10,
       "reason": "Lower score from exposure, warmth, or limited recent snow."
     },
     {
       "lon": 171.530114,
       "lat": -43.482273,
-      "score": 0.51,
-      "recentScore": 0.51,
-      "forecastScore": 0.53,
-      "expectedSnowCm": 19,
+      "score": 0.43,
+      "recentScore": 0.43,
+      "forecastScore": 0.47,
+      "expectedSnowCm": 16,
       "reason": "Moderate score from elevation and sheltered terrain."
     },
     {
       "lon": 171.533977,
       "lat": -43.482273,
-      "score": 0.47,
-      "recentScore": 0.47,
-      "forecastScore": 0.49,
-      "expectedSnowCm": 18,
-      "reason": "Moderate score from elevation and sheltered terrain."
+      "score": 0.38,
+      "recentScore": 0.38,
+      "forecastScore": 0.43,
+      "expectedSnowCm": 14,
+      "reason": "Lower score from exposure, warmth, or limited recent snow."
     },
     {
       "lon": 171.537841,
       "lat": -43.482273,
-      "score": 0.38,
-      "recentScore": 0.38,
+      "score": 0.3,
+      "recentScore": 0.3,
+      "forecastScore": 0.34,
+      "expectedSnowCm": 11,
+      "reason": "Lower score from exposure, warmth, or limited recent snow."
+    },
+    {
+      "lon": 171.541705,
+      "lat": -43.482273,
+      "score": 0.29,
+      "recentScore": 0.29,
+      "forecastScore": 0.32,
+      "expectedSnowCm": 11,
+      "reason": "Lower score from exposure, warmth, or limited recent snow."
+    },
+    {
+      "lon": 171.52625,
+      "lat": -43.485909,
+      "score": 0.36,
+      "recentScore": 0.36,
+      "forecastScore": 0.41,
+      "expectedSnowCm": 14,
+      "reason": "Lower score from exposure, warmth, or limited recent snow."
+    },
+    {
+      "lon": 171.530114,
+      "lat": -43.485909,
+      "score": 0.53,
+      "recentScore": 0.53,
+      "forecastScore": 0.59,
+      "expectedSnowCm": 20,
+      "reason": "Moderate score from elevation and sheltered terrain."
+    },
+    {
+      "lon": 171.533977,
+      "lat": -43.485909,
+      "score": 0.5,
+      "recentScore": 0.5,
+      "forecastScore": 0.56,
+      "expectedSnowCm": 19,
+      "reason": "Moderate score from elevation and sheltered terrain."
+    },
+    {
+      "lon": 171.537841,
+      "lat": -43.485909,
+      "score": 0.49,
+      "recentScore": 0.49,
+      "forecastScore": 0.55,
+      "expectedSnowCm": 18,
+      "reason": "Moderate score from elevation and sheltered terrain."
+    },
+    {
+      "lon": 171.541705,
+      "lat": -43.485909,
+      "score": 0.43,
+      "recentScore": 0.43,
+      "forecastScore": 0.49,
+      "expectedSnowCm": 16,
+      "reason": "Moderate score from elevation and sheltered terrain."
+    },
+    {
+      "lon": 171.545568,
+      "lat": -43.485909,
+      "score": 0.36,
+      "recentScore": 0.36,
+      "forecastScore": 0.4,
+      "expectedSnowCm": 13,
+      "reason": "Lower score from exposure, warmth, or limited recent snow."
+    },
+    {
+      "lon": 171.549432,
+      "lat": -43.485909,
+      "score": 0.25,
+      "recentScore": 0.25,
+      "forecastScore": 0.28,
+      "expectedSnowCm": 9,
+      "reason": "Lower score from exposure, warmth, or limited recent snow."
+    },
+    {
+      "lon": 171.522386,
+      "lat": -43.489545,
+      "score": 0.36,
+      "recentScore": 0.36,
       "forecastScore": 0.4,
       "expectedSnowCm": 14,
       "reason": "Lower score from exposure, warmth, or limited recent snow."
     },
     {
-      "lon": 171.541705,
-      "lat": -43.482273,
-      "score": 0.35,
-      "recentScore": 0.35,
-      "forecastScore": 0.37,
-      "expectedSnowCm": 13,
-      "reason": "Lower score from exposure, warmth, or limited recent snow."
-    },
-    {
       "lon": 171.52625,
-      "lat": -43.485909,
-      "score": 0.44,
-      "recentScore": 0.44,
-      "forecastScore": 0.46,
+      "lat": -43.489545,
+      "score": 0.47,
+      "recentScore": 0.47,
+      "forecastScore": 0.52,
       "expectedSnowCm": 17,
       "reason": "Moderate score from elevation and sheltered terrain."
     },
     {
       "lon": 171.530114,
-      "lat": -43.485909,
-      "score": 0.64,
-      "recentScore": 0.64,
-      "forecastScore": 0.67,
-      "expectedSnowCm": 24,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.533977,
-      "lat": -43.485909,
-      "score": 0.62,
-      "recentScore": 0.62,
-      "forecastScore": 0.64,
-      "expectedSnowCm": 23,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.537841,
-      "lat": -43.485909,
-      "score": 0.6,
-      "recentScore": 0.6,
-      "forecastScore": 0.63,
-      "expectedSnowCm": 23,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.541705,
-      "lat": -43.485909,
-      "score": 0.53,
-      "recentScore": 0.53,
-      "forecastScore": 0.56,
-      "expectedSnowCm": 20,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.545568,
-      "lat": -43.485909,
-      "score": 0.44,
-      "recentScore": 0.44,
-      "forecastScore": 0.46,
-      "expectedSnowCm": 17,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.549432,
-      "lat": -43.485909,
-      "score": 0.31,
-      "recentScore": 0.31,
-      "forecastScore": 0.33,
-      "expectedSnowCm": 12,
-      "reason": "Lower score from exposure, warmth, or limited recent snow."
-    },
-    {
-      "lon": 171.522386,
       "lat": -43.489545,
-      "score": 0.43,
-      "recentScore": 0.43,
-      "forecastScore": 0.45,
-      "expectedSnowCm": 16,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.52625,
-      "lat": -43.489545,
-      "score": 0.56,
-      "recentScore": 0.56,
-      "forecastScore": 0.58,
-      "expectedSnowCm": 21,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.530114,
-      "lat": -43.489545,
-      "score": 0.59,
-      "recentScore": 0.59,
-      "forecastScore": 0.61,
-      "expectedSnowCm": 22,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.533977,
-      "lat": -43.489545,
-      "score": 0.61,
-      "recentScore": 0.61,
-      "forecastScore": 0.63,
-      "expectedSnowCm": 23,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.537841,
-      "lat": -43.489545,
-      "score": 0.65,
-      "recentScore": 0.65,
-      "forecastScore": 0.68,
-      "expectedSnowCm": 24,
-      "reason": "High score from upper elevation, cold snow, and lee loading."
-    },
-    {
-      "lon": 171.541705,
-      "lat": -43.489545,
-      "score": 0.59,
-      "recentScore": 0.59,
-      "forecastScore": 0.62,
-      "expectedSnowCm": 22,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.545568,
-      "lat": -43.489545,
-      "score": 0.58,
-      "recentScore": 0.58,
-      "forecastScore": 0.61,
-      "expectedSnowCm": 22,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.549432,
-      "lat": -43.489545,
-      "score": 0.46,
-      "recentScore": 0.46,
-      "forecastScore": 0.49,
-      "expectedSnowCm": 17,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.518523,
-      "lat": -43.493182,
-      "score": 0.3,
-      "recentScore": 0.3,
-      "forecastScore": 0.31,
-      "expectedSnowCm": 11,
-      "reason": "Lower score from exposure, warmth, or limited recent snow."
-    },
-    {
-      "lon": 171.522386,
-      "lat": -43.493182,
-      "score": 0.53,
-      "recentScore": 0.53,
-      "forecastScore": 0.55,
-      "expectedSnowCm": 20,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.52625,
-      "lat": -43.493182,
-      "score": 0.61,
-      "recentScore": 0.61,
-      "forecastScore": 0.64,
-      "expectedSnowCm": 23,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.530114,
-      "lat": -43.493182,
-      "score": 0.55,
-      "recentScore": 0.55,
-      "forecastScore": 0.57,
-      "expectedSnowCm": 21,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.533977,
-      "lat": -43.493182,
-      "score": 0.6,
-      "recentScore": 0.6,
-      "forecastScore": 0.62,
-      "expectedSnowCm": 22,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.537841,
-      "lat": -43.493182,
-      "score": 0.62,
-      "recentScore": 0.62,
-      "forecastScore": 0.65,
-      "expectedSnowCm": 23,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.541705,
-      "lat": -43.493182,
-      "score": 0.56,
-      "recentScore": 0.56,
-      "forecastScore": 0.58,
-      "expectedSnowCm": 21,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.545568,
-      "lat": -43.493182,
-      "score": 0.59,
-      "recentScore": 0.59,
-      "forecastScore": 0.61,
-      "expectedSnowCm": 22,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.549432,
-      "lat": -43.493182,
-      "score": 0.46,
-      "recentScore": 0.46,
-      "forecastScore": 0.48,
-      "expectedSnowCm": 17,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.522386,
-      "lat": -43.496818,
-      "score": 0.43,
-      "recentScore": 0.43,
-      "forecastScore": 0.45,
-      "expectedSnowCm": 16,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.52625,
-      "lat": -43.496818,
-      "score": 0.55,
-      "recentScore": 0.55,
-      "forecastScore": 0.58,
-      "expectedSnowCm": 21,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.530114,
-      "lat": -43.496818,
-      "score": 0.64,
-      "recentScore": 0.64,
-      "forecastScore": 0.67,
-      "expectedSnowCm": 24,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.533977,
-      "lat": -43.496818,
-      "score": 0.54,
-      "recentScore": 0.54,
-      "forecastScore": 0.57,
-      "expectedSnowCm": 20,
-      "reason": "Moderate score from elevation and sheltered terrain."
-    },
-    {
-      "lon": 171.537841,
-      "lat": -43.496818,
-      "score": 0.49,
-      "recentScore": 0.49,
-      "forecastScore": 0.51,
+      "score": 0.48,
+      "recentScore": 0.48,
+      "forecastScore": 0.53,
       "expectedSnowCm": 18,
       "reason": "Moderate score from elevation and sheltered terrain."
     },
     {
-      "lon": 171.541705,
-      "lat": -43.496818,
+      "lon": 171.533977,
+      "lat": -43.489545,
       "score": 0.5,
       "recentScore": 0.5,
-      "forecastScore": 0.52,
+      "forecastScore": 0.55,
       "expectedSnowCm": 19,
       "reason": "Moderate score from elevation and sheltered terrain."
     },
     {
+      "lon": 171.537841,
+      "lat": -43.489545,
+      "score": 0.54,
+      "recentScore": 0.54,
+      "forecastScore": 0.6,
+      "expectedSnowCm": 20,
+      "reason": "Moderate score from elevation and sheltered terrain."
+    },
+    {
+      "lon": 171.541705,
+      "lat": -43.489545,
+      "score": 0.48,
+      "recentScore": 0.48,
+      "forecastScore": 0.54,
+      "expectedSnowCm": 18,
+      "reason": "Moderate score from elevation and sheltered terrain."
+    },
+    {
       "lon": 171.545568,
-      "lat": -43.496818,
-      "score": 0.45,
-      "recentScore": 0.45,
-      "forecastScore": 0.47,
-      "expectedSnowCm": 17,
+      "lat": -43.489545,
+      "score": 0.47,
+      "recentScore": 0.47,
+      "forecastScore": 0.53,
+      "expectedSnowCm": 18,
       "reason": "Moderate score from elevation and sheltered terrain."
     },
     {
       "lon": 171.549432,
+      "lat": -43.489545,
+      "score": 0.38,
+      "recentScore": 0.38,
+      "forecastScore": 0.42,
+      "expectedSnowCm": 14,
+      "reason": "Lower score from exposure, warmth, or limited recent snow."
+    },
+    {
+      "lon": 171.518523,
+      "lat": -43.493182,
+      "score": 0.24,
+      "recentScore": 0.24,
+      "forecastScore": 0.27,
+      "expectedSnowCm": 9,
+      "reason": "Lower score from exposure, warmth, or limited recent snow."
+    },
+    {
+      "lon": 171.522386,
+      "lat": -43.493182,
+      "score": 0.44,
+      "recentScore": 0.44,
+      "forecastScore": 0.49,
+      "expectedSnowCm": 16,
+      "reason": "Moderate score from elevation and sheltered terrain."
+    },
+    {
+      "lon": 171.52625,
+      "lat": -43.493182,
+      "score": 0.5,
+      "recentScore": 0.5,
+      "forecastScore": 0.56,
+      "expectedSnowCm": 19,
+      "reason": "Moderate score from elevation and sheltered terrain."
+    },
+    {
+      "lon": 171.530114,
+      "lat": -43.493182,
+      "score": 0.44,
+      "recentScore": 0.44,
+      "forecastScore": 0.5,
+      "expectedSnowCm": 17,
+      "reason": "Moderate score from elevation and sheltered terrain."
+    },
+    {
+      "lon": 171.533977,
+      "lat": -43.493182,
+      "score": 0.49,
+      "recentScore": 0.49,
+      "forecastScore": 0.54,
+      "expectedSnowCm": 18,
+      "reason": "Moderate score from elevation and sheltered terrain."
+    },
+    {
+      "lon": 171.537841,
+      "lat": -43.493182,
+      "score": 0.51,
+      "recentScore": 0.51,
+      "forecastScore": 0.57,
+      "expectedSnowCm": 19,
+      "reason": "Moderate score from elevation and sheltered terrain."
+    },
+    {
+      "lon": 171.541705,
+      "lat": -43.493182,
+      "score": 0.45,
+      "recentScore": 0.45,
+      "forecastScore": 0.5,
+      "expectedSnowCm": 17,
+      "reason": "Moderate score from elevation and sheltered terrain."
+    },
+    {
+      "lon": 171.545568,
+      "lat": -43.493182,
+      "score": 0.47,
+      "recentScore": 0.47,
+      "forecastScore": 0.53,
+      "expectedSnowCm": 18,
+      "reason": "Moderate score from elevation and sheltered terrain."
+    },
+    {
+      "lon": 171.549432,
+      "lat": -43.493182,
+      "score": 0.38,
+      "recentScore": 0.38,
+      "forecastScore": 0.42,
+      "expectedSnowCm": 14,
+      "reason": "Lower score from exposure, warmth, or limited recent snow."
+    },
+    {
+      "lon": 171.522386,
       "lat": -43.496818,
-      "score": 0.34,
-      "recentScore": 0.34,
-      "forecastScore": 0.36,
+      "score": 0.35,
+      "recentScore": 0.35,
+      "forecastScore": 0.39,
       "expectedSnowCm": 13,
       "reason": "Lower score from exposure, warmth, or limited recent snow."
     },
     {
       "lon": 171.52625,
-      "lat": -43.500455,
+      "lat": -43.496818,
+      "score": 0.45,
+      "recentScore": 0.45,
+      "forecastScore": 0.5,
+      "expectedSnowCm": 17,
+      "reason": "Moderate score from elevation and sheltered terrain."
+    },
+    {
+      "lon": 171.530114,
+      "lat": -43.496818,
+      "score": 0.52,
+      "recentScore": 0.52,
+      "forecastScore": 0.58,
+      "expectedSnowCm": 20,
+      "reason": "Moderate score from elevation and sheltered terrain."
+    },
+    {
+      "lon": 171.533977,
+      "lat": -43.496818,
+      "score": 0.44,
+      "recentScore": 0.44,
+      "forecastScore": 0.5,
+      "expectedSnowCm": 16,
+      "reason": "Moderate score from elevation and sheltered terrain."
+    },
+    {
+      "lon": 171.537841,
+      "lat": -43.496818,
+      "score": 0.39,
+      "recentScore": 0.39,
+      "forecastScore": 0.44,
+      "expectedSnowCm": 15,
+      "reason": "Lower score from exposure, warmth, or limited recent snow."
+    },
+    {
+      "lon": 171.541705,
+      "lat": -43.496818,
+      "score": 0.41,
+      "recentScore": 0.41,
+      "forecastScore": 0.46,
+      "expectedSnowCm": 15,
+      "reason": "Lower score from exposure, warmth, or limited recent snow."
+    },
+    {
+      "lon": 171.545568,
+      "lat": -43.496818,
       "score": 0.37,
       "recentScore": 0.37,
-      "forecastScore": 0.39,
+      "forecastScore": 0.41,
       "expectedSnowCm": 14,
+      "reason": "Lower score from exposure, warmth, or limited recent snow."
+    },
+    {
+      "lon": 171.549432,
+      "lat": -43.496818,
+      "score": 0.28,
+      "recentScore": 0.28,
+      "forecastScore": 0.31,
+      "expectedSnowCm": 10,
+      "reason": "Lower score from exposure, warmth, or limited recent snow."
+    },
+    {
+      "lon": 171.52625,
+      "lat": -43.500455,
+      "score": 0.3,
+      "recentScore": 0.3,
+      "forecastScore": 0.33,
+      "expectedSnowCm": 11,
       "reason": "Lower score from exposure, warmth, or limited recent snow."
     },
     {
       "lon": 171.530114,
       "lat": -43.500455,
-      "score": 0.55,
-      "recentScore": 0.55,
-      "forecastScore": 0.57,
-      "expectedSnowCm": 21,
+      "score": 0.45,
+      "recentScore": 0.45,
+      "forecastScore": 0.5,
+      "expectedSnowCm": 17,
       "reason": "Moderate score from elevation and sheltered terrain."
     },
     {
       "lon": 171.533977,
       "lat": -43.500455,
-      "score": 0.55,
-      "recentScore": 0.55,
-      "forecastScore": 0.58,
-      "expectedSnowCm": 21,
+      "score": 0.44,
+      "recentScore": 0.44,
+      "forecastScore": 0.5,
+      "expectedSnowCm": 17,
       "reason": "Moderate score from elevation and sheltered terrain."
     },
     {
       "lon": 171.537841,
       "lat": -43.500455,
-      "score": 0.48,
-      "recentScore": 0.48,
-      "forecastScore": 0.51,
-      "expectedSnowCm": 18,
-      "reason": "Moderate score from elevation and sheltered terrain."
+      "score": 0.38,
+      "recentScore": 0.38,
+      "forecastScore": 0.44,
+      "expectedSnowCm": 14,
+      "reason": "Lower score from exposure, warmth, or limited recent snow."
     },
     {
       "lon": 171.541705,
       "lat": -43.500455,
-      "score": 0.37,
-      "recentScore": 0.37,
-      "forecastScore": 0.39,
-      "expectedSnowCm": 14,
+      "score": 0.3,
+      "recentScore": 0.3,
+      "forecastScore": 0.34,
+      "expectedSnowCm": 11,
       "reason": "Lower score from exposure, warmth, or limited recent snow."
     },
     {
       "lon": 171.530114,
       "lat": -43.504091,
-      "score": 0.32,
-      "recentScore": 0.32,
-      "forecastScore": 0.33,
-      "expectedSnowCm": 12,
+      "score": 0.26,
+      "recentScore": 0.26,
+      "forecastScore": 0.29,
+      "expectedSnowCm": 10,
       "reason": "Lower score from exposure, warmth, or limited recent snow."
     },
     {
       "lon": 171.533977,
       "lat": -43.504091,
-      "score": 0.36,
-      "recentScore": 0.36,
-      "forecastScore": 0.38,
-      "expectedSnowCm": 14,
+      "score": 0.29,
+      "recentScore": 0.29,
+      "forecastScore": 0.33,
+      "expectedSnowCm": 11,
       "reason": "Lower score from exposure, warmth, or limited recent snow."
     },
     {
       "lon": 171.537841,
       "lat": -43.504091,
-      "score": 0.34,
-      "recentScore": 0.34,
-      "forecastScore": 0.35,
-      "expectedSnowCm": 13,
+      "score": 0.27,
+      "recentScore": 0.27,
+      "forecastScore": 0.31,
+      "expectedSnowCm": 10,
       "reason": "Lower score from exposure, warmth, or limited recent snow."
     }
   ]
