@@ -13,7 +13,7 @@ export function TerrainMesh({ terrain }: Props) {
 
   return (
     <mesh geometry={geometry} receiveShadow rotation={[0, 0, 0]}>
-      <meshStandardMaterial vertexColors roughness={0.92} metalness={0.02} />
+      <meshStandardMaterial vertexColors roughness={0.96} metalness={0.01} />
     </mesh>
   )
 }

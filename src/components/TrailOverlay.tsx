@@ -31,7 +31,15 @@ function TrailLine({ feature, terrain }: { feature: TrailFeature; terrain: Terra
 
   return (
     <group>
-      <Line points={points} color={color} lineWidth={isLift ? 2.8 : 2} transparent opacity={isBoundary ? 0.78 : 0.94} />
+      {isBoundary ? (
+        <Line points={points} color="#f47b20" lineWidth={2.4} dashed dashSize={0.18} gapSize={0.11} transparent opacity={0.96} />
+      ) : (
+        <>
+          <Line points={points} color="#ffffff" lineWidth={isLift ? 4.8 : 5.2} transparent opacity={0.96} />
+          <Line points={points} color={isLift ? '#5c676d' : color} lineWidth={isLift ? 3.2 : 2.8} transparent opacity={0.98} />
+          {isLift ? <Line points={points} color="#20282d" lineWidth={0.9} transparent opacity={0.8} /> : null}
+        </>
+      )}
       {feature.properties.label && mid ? (
         <Html position={[mid.x, mid.y + 0.18, mid.z]} center distanceFactor={9}>
           <span className="scene-label">{feature.properties.name}</span>

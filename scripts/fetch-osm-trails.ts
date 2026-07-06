@@ -42,9 +42,34 @@ function difficulty(tags: Record<string, string> = {}) {
 function trailColor(mapped?: string) {
   if (mapped === 'beginner') return '#26a64b'
   if (mapped === 'intermediate') return '#2563eb'
-  if (mapped === 'advanced' || mapped === 'expert') return '#1f2937'
-  if (mapped === 'extreme') return '#111827'
+  if (mapped === 'advanced') return '#ed1c24'
+  if (mapped === 'expert' || mapped === 'extreme') return '#111111'
   return '#d9480f'
+}
+
+function applyMapStyling(collection: any) {
+  const priorityLabel = ['Summit Six Chair', 'International Express', 'Norwest Express', 'Broadway', 'International']
+  const labelled = new Set<string>()
+
+  return {
+    ...collection,
+    features: collection.features.map((feature: any) => {
+      const name = feature.properties?.name ?? ''
+      const kind = feature.properties?.kind
+      const mappedDifficulty = feature.properties?.difficulty
+      const label = Boolean(name) && kind !== 'boundary' && !labelled.has(name) && priorityLabel.includes(name)
+      if (label) labelled.add(name)
+
+      return {
+        ...feature,
+        properties: {
+          ...feature.properties,
+          color: kind === 'lift' ? '#5f686d' : kind === 'boundary' ? '#f47b20' : trailColor(mappedDifficulty),
+          label,
+        },
+      }
+    }),
+  }
 }
 
 async function fetchOverpass(endpoint: string) {
@@ -69,7 +94,7 @@ function fetchOverpassWithCurl(endpoint: string) {
     [
       '-sS',
       '--max-time',
-      '30',
+      '10',
       '-A',
       'mt-hutt-powder-map/0.1 (personal ski map; contact via repo owner)',
       endpoint,
@@ -115,10 +140,10 @@ if (!data) {
 
 if (!data || data.elements.length < 8) {
   console.warn(`OSM trail fetch failed or returned too little data. Keeping fallback. ${lastError}`)
+  writeFileSync(outputPath, `${JSON.stringify(applyMapStyling(fallback), null, 2)}\n`)
   process.exit(0)
 }
 
-const labelled = new Set<string>()
 const features = [
   fallback.features.find((feature: any) => feature.properties.kind === 'boundary'),
   ...data.elements
@@ -128,9 +153,6 @@ const features = [
       const isLift = Boolean(tags.aerialway)
       const mappedDifficulty = difficulty(tags)
       const name = tags.name || `${isLift ? 'Lift' : 'Run'} ${element.id}`
-      const shouldLabel = Boolean(tags.name) && labelled.size < 12 && !labelled.has(name)
-      if (shouldLabel) labelled.add(name)
-
       return {
         type: 'Feature',
         properties: {
@@ -138,7 +160,7 @@ const features = [
           kind: isLift ? 'lift' : 'run',
           difficulty: mappedDifficulty,
           color: isLift ? '#d9480f' : trailColor(mappedDifficulty),
-          label: shouldLabel,
+          label: false,
           source: 'OpenStreetMap',
           osmId: element.id,
         },
@@ -153,10 +175,10 @@ const features = [
 writeFileSync(
   outputPath,
   `${JSON.stringify(
-    {
+    applyMapStyling({
       type: 'FeatureCollection',
       features,
-    },
+    }),
     null,
     2,
   )}\n`,

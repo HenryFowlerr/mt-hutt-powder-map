@@ -38,6 +38,7 @@ export type PowderPoint = {
   score: number
   recentScore: number
   forecastScore: number
+  expectedSnowCm: number
   reason: string
 }
 

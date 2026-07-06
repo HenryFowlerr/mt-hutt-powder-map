@@ -2,6 +2,8 @@ import * as THREE from 'three'
 import { lonLatToXZ, TERRAIN_SIZE } from './geo'
 import type { TerrainData } from '../types'
 
+const RENDER_GRID_SIZE = 96
+
 export function elevationToY(elevation: number, terrain: TerrainData, exaggeration: number) {
   const range = terrain.maxElevation - terrain.minElevation
   return ((elevation - terrain.minElevation) / range - 0.5) * 3.2 * exaggeration
@@ -39,26 +41,46 @@ export function createTerrainGeometry(terrain: TerrainData, exaggeration: number
   const colors: number[] = []
   const indices: number[] = []
   const color = new THREE.Color()
+  const renderWidth = Math.max(terrain.width, RENDER_GRID_SIZE)
+  const renderHeight = Math.max(terrain.height, RENDER_GRID_SIZE)
 
-  for (let row = 0; row < terrain.height; row += 1) {
-    for (let col = 0; col < terrain.width; col += 1) {
-      const x = (col / (terrain.width - 1) - 0.5) * TERRAIN_SIZE
-      const z = (row / (terrain.height - 1) - 0.5) * TERRAIN_SIZE
-      const elevation = terrain.heights[row * terrain.width + col]
+  for (let row = 0; row < renderHeight; row += 1) {
+    for (let col = 0; col < renderWidth; col += 1) {
+      const xRatio = col / (renderWidth - 1)
+      const zRatio = row / (renderHeight - 1)
+      const x = (xRatio - 0.5) * TERRAIN_SIZE
+      const z = (zRatio - 0.5) * TERRAIN_SIZE
+      const lon = terrain.bounds.west + xRatio * (terrain.bounds.east - terrain.bounds.west)
+      const lat = terrain.bounds.north - zRatio * (terrain.bounds.north - terrain.bounds.south)
+      const elevation = sampleElevation(lon, lat, terrain)
       const y = elevationToY(elevation, terrain, exaggeration)
       positions.push(x, y, z)
 
       const normalized = (elevation - terrain.minElevation) / (terrain.maxElevation - terrain.minElevation)
-      color.setHSL(0.28 - normalized * 0.1, 0.24, 0.32 + normalized * 0.36)
+      const ridgeTexture = Math.sin(col * 0.72 + row * 0.16) * Math.cos(row * 0.42)
+      const fallLineShade = Math.sin(row * 0.27) * 0.05
+      const shadow = Math.max(0, Math.sin(col * 0.34 - row * 0.18)) * 0.18
+      const rockBand =
+        normalized > 0.7 &&
+        ridgeTexture > 0.78 &&
+        (col < renderWidth * 0.28 || row < renderHeight * 0.34 || row > renderHeight * 0.84)
+
+      if (rockBand) {
+        color.setStyle('#9cabb2')
+      } else {
+        const lightness = 0.91 - shadow * 0.55 - fallLineShade + normalized * 0.04
+        const saturation = 0.28 + shadow * 0.28
+        color.setHSL(0.55, saturation, Math.max(0.63, Math.min(0.96, lightness)))
+      }
       colors.push(color.r, color.g, color.b)
     }
   }
 
-  for (let row = 0; row < terrain.height - 1; row += 1) {
-    for (let col = 0; col < terrain.width - 1; col += 1) {
-      const a = row * terrain.width + col
+  for (let row = 0; row < renderHeight - 1; row += 1) {
+    for (let col = 0; col < renderWidth - 1; col += 1) {
+      const a = row * renderWidth + col
       const b = a + 1
-      const c = a + terrain.width
+      const c = a + renderWidth
       const d = c + 1
       indices.push(a, c, b, b, c, d)
     }

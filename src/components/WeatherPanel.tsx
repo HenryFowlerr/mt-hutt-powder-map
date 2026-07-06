@@ -12,6 +12,7 @@ function windCompass(degrees: number) {
 
 export function WeatherPanel({ latest }: Props) {
   const generated = new Date(latest.generatedAt)
+  const maxExpectedSnow = Math.max(5, ...latest.powderGrid.map((point) => point.expectedSnowCm ?? 0))
   return (
     <aside className="weather-panel">
       <p className="panel-eyebrow">Mt Hutt powder model</p>
@@ -46,16 +47,14 @@ export function WeatherPanel({ latest }: Props) {
         ))}
       </ul>
 
-      <h2 className="section-title">Overlay scale</h2>
-      <div className="legend">
-        <div className="legend-ramp" />
-        <div className="legend-row">
-          <span>Red</span>
-          <span>Scoured, warm, or low confidence</span>
-        </div>
-        <div className="legend-row">
-          <span>Green</span>
-          <span>Likely better sheltered powder pockets</span>
+      <h2 className="section-title">New snow scale</h2>
+      <div className="snow-scale">
+        <div className="snow-ramp" />
+        <div className="snow-scale-labels">
+          <strong>{maxExpectedSnow} cm</strong>
+          <span>deeper loaded pockets</span>
+          <span>lighter new snow</span>
+          <strong>0 cm</strong>
         </div>
       </div>
 

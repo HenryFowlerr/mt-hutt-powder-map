@@ -5,6 +5,7 @@ import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import { TerrainMesh } from './TerrainMesh'
 import { TrailOverlay } from './TrailOverlay'
 import { PowderOverlay } from './PowderOverlay'
+import { MapDetails } from './MapDetails'
 import { useViewStore } from '../state/viewStore'
 import type { LatestData, TerrainData, TrailCollection } from '../types'
 
@@ -14,7 +15,7 @@ type Props = {
   latest: LatestData
 }
 
-const defaultCameraPosition: [number, number, number] = [-2.2, 5.8, 7.4]
+const defaultCameraPosition: [number, number, number] = [-2.2, 4.5, 6.4]
 const defaultCameraTarget: [number, number, number] = [-2.2, 0.18, -0.55]
 
 function CameraControls() {
@@ -53,6 +54,7 @@ export function MountainScene({ terrain, trails, latest }: Props) {
       <ambientLight intensity={0.9} />
       <directionalLight position={[5, 8, 3]} intensity={2.1} castShadow />
       <TerrainMesh terrain={terrain} />
+      <MapDetails terrain={terrain} />
       <PowderOverlay terrain={terrain} latest={latest} />
       <TrailOverlay terrain={terrain} trails={trails} />
       <Environment preset="city" />

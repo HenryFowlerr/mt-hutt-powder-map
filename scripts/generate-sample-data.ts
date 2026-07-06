@@ -133,6 +133,7 @@ for (let y = 0; y < 8; y += 1) {
       score: Number(score.toFixed(2)),
       recentScore: Number(score.toFixed(2)),
       forecastScore: Number(Math.max(0.1, Math.min(0.96, score + (x > 3 ? 0.12 : -0.04))).toFixed(2)),
+      expectedSnowCm: Math.round(32 * score),
       reason: 'Sheltered upper terrain with probable wind loading.',
     })
   }
