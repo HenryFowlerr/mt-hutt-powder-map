@@ -43,6 +43,18 @@ Do not merge this branch into `main`. Open a PR or leave the branch pushed for C
   applied at runtime by `src/lib/trailOverrides.ts`, not baked into
   `trails.geojson`, so an OSM refetch will not lose them.
 
+## Update Pipeline Reliability (checked by Fable)
+- `update-data.yml` (cron every 6 h) runs `fetch-weather` then
+  `build-powder-grid`, commits `latest.json`, rebuilds, republishes gh-pages.
+- `fetch-weather` validates summary numbers and on any failure leaves
+  `latest.json` untouched (so `generatedAt` honestly reflects data age).
+- `build-powder-grid` catches its own failures and keeps old polygons.
+- The app tolerates missing optional fields (forecast*, cloud*, polygons)
+  and shows a "data may be stale" warning after 24 h.
+- Bot commits every 6 h keep the repo active, so GitHub will not disable
+  the scheduled workflow for inactivity.
+- Terrain is static (no scheduled refetch); `.terrain-cache/` is local-only.
+
 ## Current Risks
 - Terrain is currently too generic.
 - Powder overlay currently appears grid-like.
