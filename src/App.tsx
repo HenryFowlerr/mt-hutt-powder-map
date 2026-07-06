@@ -48,6 +48,11 @@ function App() {
       mainWindDirectionDeg: data.latest.summary.mainWindDirectionDeg,
       avgWindKph: data.latest.summary.avgWindKph,
       maxGustKph: data.latest.summary.maxGustKph,
+      forecastWindDirectionDeg: data.latest.summary.forecastWindDirectionDeg,
+      forecastAvgWindKph: data.latest.summary.forecastAvgWindKph,
+      forecastMaxGustKph: data.latest.summary.forecastMaxGustKph,
+      forecastTemperatureMaxC: data.latest.summary.forecastTemperatureMaxC,
+      forecastTemperatureMinC: data.latest.summary.forecastTemperatureMinC,
       temperatureMaxC: data.latest.summary.temperatureMaxC,
       temperatureMinC: data.latest.summary.temperatureMinC,
     }

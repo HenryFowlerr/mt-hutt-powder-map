@@ -18,6 +18,11 @@ export type PowderWeather = {
   mainWindDirectionDeg: number
   avgWindKph: number
   maxGustKph?: number
+  forecastWindDirectionDeg?: number
+  forecastAvgWindKph?: number
+  forecastMaxGustKph?: number
+  forecastTemperatureMaxC?: number
+  forecastTemperatureMinC?: number
   temperatureMaxC: number
   temperatureMinC: number
 }
@@ -120,13 +125,15 @@ export function buildPowderField(
 
   const recentSignal = clamp01(weather.recentSnowCm / 35)
   const forecastSignal = clamp01(weather.forecastSnowCm / 35)
+  const forecastModeWeather = forecastWeather(weather)
 
   for (let index = 0; index < size; index += 1) {
-    const factors = cellFactors(index, terrain, analysis, weather)
-    recentScore[index] = scoreCell(recentSignal, factors)
-    forecastScore[index] = scoreCell(forecastSignal, factors)
-    recentCm[index] = expectedCm(weather.recentSnowCm, recentScore[index], factors)
-    forecastCm[index] = expectedCm(weather.forecastSnowCm, forecastScore[index], factors)
+    const recentFactors = cellFactors(index, terrain, analysis, weather)
+    const forecastFactors = cellFactors(index, terrain, analysis, forecastModeWeather)
+    recentScore[index] = scoreCell(recentSignal, recentFactors)
+    forecastScore[index] = scoreCell(forecastSignal, forecastFactors)
+    recentCm[index] = expectedCm(weather.recentSnowCm, recentScore[index], recentFactors)
+    forecastCm[index] = expectedCm(weather.forecastSnowCm, forecastScore[index], forecastFactors)
     // Below ~2 cm is not a powder signal worth showing.
     if (recentCm[index] < 2) recentCm[index] = 0
     if (forecastCm[index] < 2) forecastCm[index] = 0
@@ -139,6 +146,17 @@ export function buildPowderField(
     forecastCm: boxBlur(forecastCm, terrain.width, terrain.height, 1),
     recentScore: boxBlur(recentScore, terrain.width, terrain.height, 1),
     forecastScore: boxBlur(forecastScore, terrain.width, terrain.height, 1),
+  }
+}
+
+function forecastWeather(weather: PowderWeather): PowderWeather {
+  return {
+    ...weather,
+    mainWindDirectionDeg: weather.forecastWindDirectionDeg ?? weather.mainWindDirectionDeg,
+    avgWindKph: weather.forecastAvgWindKph ?? weather.avgWindKph,
+    maxGustKph: weather.forecastMaxGustKph ?? weather.maxGustKph,
+    temperatureMaxC: weather.forecastTemperatureMaxC ?? weather.temperatureMaxC,
+    temperatureMinC: weather.forecastTemperatureMinC ?? weather.temperatureMinC,
   }
 }
 
@@ -178,10 +196,12 @@ export function buildPowderDisplayField(
   const scoreGrid = mode === 'recent' ? field.recentScore : field.forecastScore
   const output = new Float32Array(cmGrid.length)
 
-  const shallowEdgeCm = mode === 'recent' ? 10 : 14
-  const usefulEdgeCm = mode === 'recent' ? 16 : 30
-  const scoreEdge = mode === 'recent' ? 0.22 : 0.3
-  const strongScore = mode === 'recent' ? 0.38 : 0.5
+  const shallowEdgeCm = mode === 'recent' ? 10 : 24
+  const usefulEdgeCm = mode === 'recent' ? 16 : 42
+  const scoreEdge = mode === 'recent' ? 0.22 : 0.34
+  const strongScore = mode === 'recent' ? 0.38 : 0.56
+  const collectorEdge = mode === 'recent' ? 0.24 : 0.34
+  const minimumMask = mode === 'recent' ? 0.18 : 0.26
 
   for (let row = 0; row < field.height; row += 1) {
     for (let col = 0; col < field.width; col += 1) {
@@ -191,6 +211,7 @@ export function buildPowderDisplayField(
 
       const score = scoreGrid[index]
       const skiable = analysis.skiMask[index]
+      const slope = analysis.slopeDeg[index]
       const gully = analysis.gullyFactor[index]
       const ridge = analysis.ridgeExposure[index]
       const localScore = score - neighborhoodMean(scoreGrid, field.width, field.height, col, row, 5)
@@ -199,20 +220,22 @@ export function buildPowderDisplayField(
       const depthMask = smoothstep(shallowEdgeCm, usefulEdgeCm, cm)
       const scoreMask = smoothstep(scoreEdge, strongScore, score)
       const skiMask = smoothstep(0.52, 0.84, skiable)
-      const collectorMask = smoothstep(0.24, 0.68, 0.42 * gully + 0.42 * score + 0.16 * localScore - 0.22 * ridge)
+      const slopeMask = smoothstep(10, 18, slope) * (1 - smoothstep(44, 58, slope))
+      const collectorMask = smoothstep(collectorEdge, 0.72, 0.42 * gully + 0.42 * score + 0.16 * localScore - 0.22 * ridge)
       const pocketMask =
         0.45 * smoothstep(-0.015, 0.07, localScore) +
         0.35 * smoothstep(-0.7, 2.7, localDepth) +
         0.2 * gully
-      const combinedMask = depthMask * scoreMask * skiMask * collectorMask * clamp01(0.35 + 0.65 * pocketMask)
+      const combinedMask =
+        depthMask * scoreMask * skiMask * slopeMask * collectorMask * clamp01(0.35 + 0.65 * pocketMask)
 
-      if (combinedMask >= 0.18) {
+      if (combinedMask >= minimumMask) {
         output[index] = cm
       }
     }
   }
 
-  return output
+  return boxBlur(output, field.width, field.height, 1)
 }
 
 function compassLabel(degrees: number) {

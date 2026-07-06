@@ -26,3 +26,20 @@ jobs:
           git add public/data/latest.json
           git diff --cached --quiet || git commit -m "Update Mt Hutt weather data"
           git push
+      - run: npm run build
+      - name: Publish refreshed site to gh-pages
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm -rf /tmp/mt-hutt-gh-pages
+          mkdir -p /tmp/mt-hutt-gh-pages
+          cp -R dist/. /tmp/mt-hutt-gh-pages/
+          cd /tmp/mt-hutt-gh-pages
+          git init
+          git checkout -b gh-pages
+          git add .
+          git commit -m "Deploy refreshed Mt Hutt data"
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push --force origin gh-pages

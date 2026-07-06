@@ -48,28 +48,48 @@ try {
   const avg = (field: string, indexes: number[]) =>
     indexes.length ? indexes.reduce((total, index) => total + Number(weather.hourly?.[field]?.[index] ?? 0), 0) / indexes.length : 0
   const values = (field: string, indexes: number[]) => indexes.map((index) => Number(weather.hourly?.[field]?.[index] ?? 0))
+  const percentile = (field: string, indexes: number[], p: number, fallbackValue: number) => {
+    const sorted = values(field, indexes).sort((a, b) => a - b)
+    return sorted.length ? sorted[Math.floor((sorted.length - 1) * p)] : fallbackValue
+  }
+  const minValue = (field: string, indexes: number[], fallbackValue: number) => {
+    const nums = values(field, indexes)
+    return nums.length ? Math.min(...nums) : fallbackValue
+  }
+  const maxValue = (field: string, indexes: number[], fallbackValue: number) => {
+    const nums = values(field, indexes)
+    return nums.length ? Math.max(...nums) : fallbackValue
+  }
+  const snowWeightedWindDirection = (indexes: number[], fallbackDegrees: number) => {
+    let vx = 0
+    let vy = 0
+    for (const index of indexes) {
+      const directionRad = (Number(weather.hourly?.wind_direction_10m?.[index] ?? 0) * Math.PI) / 180
+      const weight = Number(weather.hourly?.snowfall?.[index] ?? 0) + 0.05
+      vx += Math.sin(directionRad) * weight
+      vy += Math.cos(directionRad) * weight
+    }
+    if (Math.hypot(vx, vy) < 0.001) return fallbackDegrees
+    return ((Math.atan2(vx, vy) * 180) / Math.PI + 360) % 360
+  }
 
   const recentSnowCm = sum('snowfall', recentIndexes)
   const forecastSnowCm = sum('snowfall', forecastIndexes)
   const wind = avg('wind_speed_10m', recentIndexes)
-  const temperatures = values('temperature_2m', recentIndexes)
-  // 90th-percentile gust: robust against single-hour spikes in the model data.
-  const gusts = values('wind_gusts_10m', recentIndexes).sort((a, b) => a - b)
-  const maxGustKph = gusts.length ? gusts[Math.floor(gusts.length * 0.9)] : wind * 1.6
+  const forecastWind = avg('wind_speed_10m', forecastIndexes)
+  const maxGustKph = percentile('wind_gusts_10m', recentIndexes, 0.9, wind * 1.6)
+  const forecastMaxGustKph = percentile('wind_gusts_10m', forecastIndexes, 0.9, forecastWind * 1.6)
 
   // Storm wind direction: weight each hour's direction by its snowfall (plus
   // a small floor so windy-but-dry hours still count). A plain average of
   // compass degrees is meaningless across the 0/360 wrap, so average the
   // direction vectors instead.
-  let vx = 0
-  let vy = 0
-  for (const index of recentIndexes) {
-    const directionRad = (Number(weather.hourly?.wind_direction_10m?.[index] ?? 0) * Math.PI) / 180
-    const weight = Number(weather.hourly?.snowfall?.[index] ?? 0) + 0.05
-    vx += Math.sin(directionRad) * weight
-    vy += Math.cos(directionRad) * weight
-  }
-  const windDirection = ((Math.atan2(vx, vy) * 180) / Math.PI + 360) % 360
+  const windDirection = snowWeightedWindDirection(recentIndexes, fallback.summary.mainWindDirectionDeg ?? 0)
+  const forecastWindDirection = snowWeightedWindDirection(forecastIndexes, windDirection)
+  const temperatureMinC = minValue('temperature_2m', recentIndexes, fallback.summary.temperatureMinC ?? 0)
+  const temperatureMaxC = maxValue('temperature_2m', recentIndexes, fallback.summary.temperatureMaxC ?? 0)
+  const forecastTemperatureMinC = minValue('temperature_2m', forecastIndexes, temperatureMinC)
+  const forecastTemperatureMaxC = maxValue('temperature_2m', forecastIndexes, temperatureMaxC)
 
   const next = {
     ...fallback,
@@ -81,8 +101,13 @@ try {
       mainWindDirectionDeg: Number(windDirection.toFixed(0)),
       avgWindKph: Number(wind.toFixed(0)),
       maxGustKph: Number(maxGustKph.toFixed(0)),
-      temperatureMinC: Number(Math.min(...temperatures).toFixed(1)),
-      temperatureMaxC: Number(Math.max(...temperatures).toFixed(1)),
+      forecastWindDirectionDeg: Number(forecastWindDirection.toFixed(0)),
+      forecastAvgWindKph: Number(forecastWind.toFixed(0)),
+      forecastMaxGustKph: Number(forecastMaxGustKph.toFixed(0)),
+      temperatureMinC: Number(temperatureMinC.toFixed(1)),
+      temperatureMaxC: Number(temperatureMaxC.toFixed(1)),
+      forecastTemperatureMinC: Number(forecastTemperatureMinC.toFixed(1)),
+      forecastTemperatureMaxC: Number(forecastTemperatureMaxC.toFixed(1)),
       confidence: recentSnowCm > 4 || forecastSnowCm > 4 ? 'medium' : 'low',
       headline:
         recentSnowCm > 4
@@ -91,6 +116,7 @@ try {
       reasons: [
         `${recentSnowCm.toFixed(0)} cm estimated snowfall in the last 72 hours from Open-Meteo.`,
         `Mean recent wind around ${wind.toFixed(0)} km/h from ${windDirection.toFixed(0)} degrees.`,
+        `Forecast wind trends ${forecastWind.toFixed(0)} km/h from ${forecastWindDirection.toFixed(0)} degrees over the next 72 hours.`,
         'Terrain score favours cold upper mountain bowls, gullies, and lee-facing aspects.',
       ],
     },

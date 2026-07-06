@@ -26,8 +26,28 @@ export function WeatherPanel({ latest, field }: Props) {
   const generated = new Date(latest.generatedAt)
   const mode = powderMode === 'forecast' ? 'forecast' : 'recent'
   const maxCm = Math.round(fieldMaxCm(field, mode))
-  const windFrom = windCompass(latest.summary.mainWindDirectionDeg)
-  const leeSide = windCompass((latest.summary.mainWindDirectionDeg + 180) % 360)
+  const windDirection =
+    mode === 'forecast'
+      ? (latest.summary.forecastWindDirectionDeg ?? latest.summary.mainWindDirectionDeg)
+      : latest.summary.mainWindDirectionDeg
+  const windSpeed =
+    mode === 'forecast'
+      ? (latest.summary.forecastAvgWindKph ?? latest.summary.avgWindKph)
+      : latest.summary.avgWindKph
+  const windGust =
+    mode === 'forecast'
+      ? (latest.summary.forecastMaxGustKph ?? latest.summary.maxGustKph)
+      : latest.summary.maxGustKph
+  const temperatureMin =
+    mode === 'forecast'
+      ? (latest.summary.forecastTemperatureMinC ?? latest.summary.temperatureMinC)
+      : latest.summary.temperatureMinC
+  const temperatureMax =
+    mode === 'forecast'
+      ? (latest.summary.forecastTemperatureMaxC ?? latest.summary.temperatureMaxC)
+      : latest.summary.temperatureMaxC
+  const windFrom = windCompass(windDirection)
+  const leeSide = windCompass((windDirection + 180) % 360)
 
   return (
     <aside className="weather-panel">
@@ -47,14 +67,14 @@ export function WeatherPanel({ latest, field }: Props) {
         <div className="metric">
           <span>Wind</span>
           <strong>
-            {windFrom} {Math.round(latest.summary.avgWindKph)}
-            {latest.summary.maxGustKph ? ` g${Math.round(latest.summary.maxGustKph)}` : ''}
+            {windFrom} {Math.round(windSpeed)}
+            {windGust ? ` g${Math.round(windGust)}` : ''}
           </strong>
         </div>
         <div className="metric">
           <span>Temp</span>
           <strong>
-            {Math.round(latest.summary.temperatureMinC)}° to {Math.round(latest.summary.temperatureMaxC)}°
+            {Math.round(temperatureMin)}° to {Math.round(temperatureMax)}°
           </strong>
         </div>
       </div>
@@ -62,8 +82,8 @@ export function WeatherPanel({ latest, field }: Props) {
       <h2 className="section-title">Why it is scoring this way</h2>
       <ul className="reason-list">
         <li>
-          {windFrom} wind transports snow onto sheltered {leeSide}-facing terrain; exposed {windFrom}-facing
-          ridges are more likely scoured.
+          {mode === 'forecast' ? 'Forecast' : 'Recent'} {windFrom} wind transports snow onto sheltered{' '}
+          {leeSide}-facing terrain; exposed {windFrom}-facing ridges are more likely scoured.
         </li>
         {latest.summary.reasons.map((reason) => (
           <li key={reason}>{reason}</li>

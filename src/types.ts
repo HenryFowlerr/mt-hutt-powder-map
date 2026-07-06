@@ -54,6 +54,11 @@ export type LatestData = {
     mainWindDirectionDeg: number
     avgWindKph: number
     maxGustKph?: number
+    forecastWindDirectionDeg?: number
+    forecastAvgWindKph?: number
+    forecastMaxGustKph?: number
+    forecastTemperatureMinC?: number
+    forecastTemperatureMaxC?: number
     temperatureMinC: number
     temperatureMaxC: number
     confidence: 'low' | 'medium' | 'high'
