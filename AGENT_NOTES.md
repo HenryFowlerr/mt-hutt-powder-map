@@ -39,6 +39,11 @@ Do not merge this branch into `main`. Open a PR or leave the branch pushed for C
 - `latest.json` summary also has `cloudLowPct`, `cloudMidPct`,
   `cloudHighPct`, `freezingLevelM` (recent 6 h averages) driving the live
   3D cloud/snow/wind layers.
+- `public/data/map-overrides.geojson` (new, static, committed): real OSM
+  carpark polygons, access road, and base buildings fetched once by
+  `scripts/fetch-map-details.ts` (curl transport; Overpass rejects node
+  fetch on some networks). App renders it when present, falls back to
+  approximate markers otherwise.
 - Trail data corrections (names/difficulties vs the official 2026 PDF) are
   applied at runtime by `src/lib/trailOverrides.ts`, not baked into
   `trails.geojson`, so an OSM refetch will not lose them.

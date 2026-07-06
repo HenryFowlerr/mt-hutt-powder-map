@@ -281,6 +281,16 @@ export function WeatherPanel({ latest, field, terrain, analysis, trails, weather
         </ul>
       </details>
 
+      <p className="official-links">
+        <a href="https://www.mthutt.co.nz/weather-report/" target="_blank" rel="noreferrer">
+          Official snow report
+        </a>
+        {' · '}
+        <a href="https://www.avalanche.net.nz/" target="_blank" rel="noreferrer">
+          Avalanche advisory
+        </a>
+      </p>
+
       <p className="disclaimer">
         Updated {formatDistanceToNow(generated, { addSuffix: true })}
         {isStale ? <strong className="stale-warning"> · data may be stale</strong> : null} · recreational
