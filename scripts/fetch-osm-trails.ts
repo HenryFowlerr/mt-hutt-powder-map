@@ -128,7 +128,7 @@ const features = [
       const isLift = Boolean(tags.aerialway)
       const mappedDifficulty = difficulty(tags)
       const name = tags.name || `${isLift ? 'Lift' : 'Run'} ${element.id}`
-      const shouldLabel = Boolean(tags.name) && labelled.size < 22 && !labelled.has(name)
+      const shouldLabel = Boolean(tags.name) && labelled.size < 12 && !labelled.has(name)
       if (shouldLabel) labelled.add(name)
 
       return {

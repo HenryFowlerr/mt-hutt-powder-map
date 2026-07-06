@@ -14,14 +14,17 @@ type Props = {
   latest: LatestData
 }
 
+const defaultCameraPosition: [number, number, number] = [-2.2, 5.8, 7.4]
+const defaultCameraTarget: [number, number, number] = [-2.2, 0.18, -0.55]
+
 function CameraControls() {
   const controlsRef = useRef<OrbitControlsImpl | null>(null)
   const resetCount = useViewStore((state) => state.resetCount)
 
   useEffect(() => {
     if (!controlsRef.current) return
-    controlsRef.current.object.position.set(0, 8.5, 12)
-    controlsRef.current.target.set(0, 0.2, 0)
+    controlsRef.current.object.position.set(...defaultCameraPosition)
+    controlsRef.current.target.set(...defaultCameraTarget)
     controlsRef.current.update()
   }, [resetCount])
 
@@ -31,7 +34,7 @@ function CameraControls() {
       enableDamping
       dampingFactor={0.08}
       maxPolarAngle={Math.PI * 0.48}
-      minDistance={5}
+      minDistance={3.2}
       maxDistance={24}
     />
   )
@@ -40,7 +43,7 @@ function CameraControls() {
 export function MountainScene({ terrain, trails, latest }: Props) {
   return (
     <Canvas
-      camera={{ position: [0, 8.5, 12], fov: 45, near: 0.1, far: 100 }}
+      camera={{ position: defaultCameraPosition, fov: 43, near: 0.1, far: 100 }}
       dpr={[1, 1.8]}
       gl={{ antialias: true }}
     >
