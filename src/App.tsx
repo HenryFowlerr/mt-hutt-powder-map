@@ -4,6 +4,7 @@ import { Toolbar } from './components/Toolbar'
 import { WeatherPanel } from './components/WeatherPanel'
 import { buildPowderField, type PowderWeather } from './lib/powderModel'
 import { analyzeTerrain } from './lib/terrainAnalysis'
+import { applyTrailOverrides } from './lib/trailOverrides'
 import type { LatestData, TerrainData, TrailCollection } from './types'
 import './index.css'
 
@@ -31,7 +32,9 @@ function App() {
       loadJson<TrailCollection>('data/trails.geojson'),
       loadJson<LatestData>('data/latest.json'),
     ])
-      .then(([terrain, trails, latest]) => setData({ terrain, trails, latest }))
+      .then(([terrain, trails, latest]) =>
+        setData({ terrain, trails: applyTrailOverrides(trails), latest }),
+      )
       .catch((loadError: unknown) => {
         setError(loadError instanceof Error ? loadError.message : 'Data failed to load')
       })

@@ -3,8 +3,8 @@ import { lonLatToXZ, WORLD_UNITS_PER_METER } from './geo'
 import { clamp01, sampleGrid, smoothstep, type TerrainAnalysis } from './terrainAnalysis'
 import type { TerrainData } from '../types'
 
-export const RENDER_GRID_WIDTH = 200
-export const RENDER_GRID_HEIGHT = 220
+export const RENDER_GRID_WIDTH = 260
+export const RENDER_GRID_HEIGHT = 300
 export const TEXTURE_WIDTH = 800
 export const TEXTURE_HEIGHT = 880
 

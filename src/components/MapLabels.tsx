@@ -31,13 +31,16 @@ const LIFT_DISPLAY: Record<string, string> = {
 const MAJOR_RUNS = new Set(['Broadway', 'International'])
 
 // Named areas anchored to real OSM run geometry so they georeference
-// correctly without hand-traced coordinates.
+// correctly without hand-traced coordinates. Verified against the official
+// 2026 map: the chutes west of the summit (Chute 3, Whistle Bowl, Dog Leg)
+// belong to the South Face zone — Rakaia Saddle Chutes is a separate
+// off-map restricted area shown only as an inset on the official map.
 const AREA_ANCHOR_RUNS: Array<[string, string]> = [
   ['SOUTH FACE', 'Saddle Face'],
+  ['TOP TOWERS', "Jan's Face"],
   ['MID TOWERS', 'Mid Towers 2'],
   ['MUESLI BOWL', 'Muesli Bowl'],
   ['LOWER TRIPLE', 'Log Chute'],
-  ['RAKAIA SADDLE CHUTES', 'Chute 3'],
 ]
 
 function lineMidpoint(coords: number[][]) {

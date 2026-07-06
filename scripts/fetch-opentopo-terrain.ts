@@ -37,14 +37,23 @@ function sleep(ms: number) {
 }
 
 async function fetchBatch(locations: string[], attempt = 0): Promise<Array<number | null>> {
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    body: new URLSearchParams({ locations: locations.join('|'), interpolation: 'bilinear' }),
-    headers: {
-      'content-type': 'application/x-www-form-urlencoded',
-      'user-agent': 'mt-hutt-powder-map/0.2 (personal ski map; contact via repo owner)',
-    },
-  })
+  let response: Response
+  try {
+    response = await fetch(endpoint, {
+      method: 'POST',
+      body: new URLSearchParams({ locations: locations.join('|'), interpolation: 'bilinear' }),
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+        'user-agent': 'mt-hutt-powder-map/0.2 (personal ski map; contact via repo owner)',
+      },
+    })
+  } catch (error) {
+    if (attempt < 6) {
+      await sleep(4000 * (attempt + 1))
+      return fetchBatch(locations, attempt + 1)
+    }
+    throw error
+  }
 
   if (response.status === 429 && attempt < 5) {
     await sleep(5000 * (attempt + 1))

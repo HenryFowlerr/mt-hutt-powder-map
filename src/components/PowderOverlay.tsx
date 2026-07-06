@@ -40,8 +40,8 @@ const BAND_COLORS: Array<[number, [number, number, number]]> = [
   [5, [195, 229, 142]],
 ]
 
-const TEXTURE_WIDTH = 480
-const TEXTURE_HEIGHT = 560
+const TEXTURE_WIDTH = 720
+const TEXTURE_HEIGHT = 840
 
 // Bakes the powder cm field into a translucent banded texture draped over
 // a clone of the terrain mesh — irregular, terrain-following patches with
@@ -127,7 +127,9 @@ export function PowderOverlay({ terrain, analysis, field, weather }: Props) {
     for (const threshold of [10, 20, 30, 40]) {
       const rings = extractContours(displayGrid, field.width, field.height, threshold)
       rings.forEach((ring, ringIndex) => {
-        if (ringArea(ring) < 3) return
+        // Keep pockets down to ~1.5 grid cells so small terrain features
+        // (single gullies, short lee walls) still get an outline.
+        if (ringArea(ring) < 1.5) return
         const simplified = simplifyRing(ring, 0.3)
         if (simplified.length < 3) return
         const points = simplified.map(([x, y]) => {

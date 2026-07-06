@@ -1,14 +1,16 @@
-import { CloudSnow, Map, Mountain, RotateCcw, Route, Wind } from 'lucide-react'
+import { CloudSnow, CloudLightning, Map, Mountain, RotateCcw, Route, Wind } from 'lucide-react'
 import { useViewStore } from '../state/viewStore'
 
 export function Toolbar() {
   const {
     powderMode,
     showTrails,
+    showStorm,
     exaggeration,
     mapView,
     setPowderMode,
     toggleTrails,
+    toggleStorm,
     toggleExaggeration,
     toggleMapView,
     resetCamera,
@@ -33,6 +35,15 @@ export function Toolbar() {
         aria-label="Toggle forecast powder estimate"
       >
         <Wind size={19} />
+      </button>
+      <button
+        className={`tool-button ${showStorm ? 'active' : ''}`}
+        type="button"
+        onClick={toggleStorm}
+        title="3D storm layer (clouds, snowfall, wind)"
+        aria-label="Toggle 3D storm layer"
+      >
+        <CloudLightning size={19} />
       </button>
       <button
         className={`tool-button ${showTrails ? 'active' : ''}`}

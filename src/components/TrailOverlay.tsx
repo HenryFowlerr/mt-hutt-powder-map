@@ -66,6 +66,14 @@ function TrailLine({ feature, terrain }: { feature: TrailFeature; terrain: Terra
     return densifiedPoints(coords, terrain, exaggeration, isBoundary ? 0.02 : 0.014)
   }, [feature, terrain, exaggeration, isLift, isBoundary])
 
+  // Two Line2s on identical points z-fight per segment (renderOrder does
+  // not help), so casings sit a few metres below their colour line — depth
+  // then resolves consistently and the casing reads as an outline.
+  const casingPoints = useMemo(
+    () => points.map((point) => new THREE.Vector3(point.x, point.y - 0.006, point.z)),
+    [points],
+  )
+
   if (points.length < 2) return null
 
   // Casing and colour lines share identical positions, so explicit
@@ -86,12 +94,13 @@ function TrailLine({ feature, terrain }: { feature: TrailFeature; terrain: Terra
   }
 
   if (isLift) {
+    const tickPoints = points.map((point) => new THREE.Vector3(point.x, point.y + 0.006, point.z))
     return (
       <group>
-        <Line points={points} color={LIFT_CASING} lineWidth={5.4} renderOrder={6} />
+        <Line points={casingPoints} color={LIFT_CASING} lineWidth={5.4} renderOrder={6} />
         <Line points={points} color={LIFT_COLOR} lineWidth={3} renderOrder={7} />
         {/* Tower ticks along the cable, echoing the official map's lift styling. */}
-        <Line points={points} color="#23282c" lineWidth={5.2} dashed dashSize={0.012} gapSize={0.16} renderOrder={8} />
+        <Line points={tickPoints} color="#23282c" lineWidth={5.2} dashed dashSize={0.012} gapSize={0.16} renderOrder={8} />
       </group>
     )
   }
@@ -103,7 +112,7 @@ function TrailLine({ feature, terrain }: { feature: TrailFeature; terrain: Terra
 
   return (
     <group>
-      <Line points={points} color="#ffffff" lineWidth={casingWidth} renderOrder={4} />
+      <Line points={casingPoints} color="#ffffff" lineWidth={casingWidth} renderOrder={4} />
       <Line points={points} color={color} lineWidth={lineWidth} renderOrder={5} />
     </group>
   )

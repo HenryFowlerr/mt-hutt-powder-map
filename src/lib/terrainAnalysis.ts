@@ -99,6 +99,35 @@ function lonLatToMeters(lon: number, lat: number, centerLon: number, centerLat: 
 }
 
 export function buildSkiMask(terrain: TerrainData, trails: TrailCollection): Float32Array {
+  // Distance-to-segment over every cell is O(cells * segments); on high-res
+  // DEMs compute the mask on a coarse grid and bilinearly upsample — the
+  // mask is smooth by construction so nothing visible is lost.
+  const maxDimension = Math.max(terrain.width, terrain.height)
+  if (maxDimension > 160) {
+    const scale = Math.ceil(maxDimension / 140)
+    const coarseWidth = Math.ceil(terrain.width / scale)
+    const coarseHeight = Math.ceil(terrain.height / scale)
+    const coarseTerrain: TerrainData = {
+      ...terrain,
+      width: coarseWidth,
+      height: coarseHeight,
+      heights: new Array(coarseWidth * coarseHeight).fill(0),
+    }
+    const coarse = buildSkiMaskFull(coarseTerrain, trails)
+    const mask = new Float32Array(terrain.width * terrain.height)
+    for (let row = 0; row < terrain.height; row += 1) {
+      const cy = (row / (terrain.height - 1)) * (coarseHeight - 1)
+      for (let col = 0; col < terrain.width; col += 1) {
+        const cx = (col / (terrain.width - 1)) * (coarseWidth - 1)
+        mask[row * terrain.width + col] = sampleGrid(coarse, coarseWidth, coarseHeight, cx, cy)
+      }
+    }
+    return mask
+  }
+  return buildSkiMaskFull(terrain, trails)
+}
+
+function buildSkiMaskFull(terrain: TerrainData, trails: TrailCollection): Float32Array {
   const center = terrainCenter(terrain)
   const segments: Segment[] = []
   let boundaryPolygon: Array<[number, number]> | null = null

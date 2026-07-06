@@ -1,5 +1,5 @@
 import { formatDistanceToNow } from 'date-fns'
-import { fieldMaxCm, powderColorForCm, type PowderField } from '../lib/powderModel'
+import { fieldMaxCm, type PowderField } from '../lib/powderModel'
 import { useViewStore } from '../state/viewStore'
 import type { LatestData } from '../types'
 
@@ -12,14 +12,6 @@ function windCompass(degrees: number) {
   const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
   return directions[Math.round(degrees / 45) % 8]
 }
-
-const LEGEND_BANDS: Array<[string, number]> = [
-  ['40+ cm', 41],
-  ['30–40 cm', 31],
-  ['20–30 cm', 21],
-  ['10–20 cm', 11],
-  ['5–10 cm', 6],
-]
 
 export function WeatherPanel({ latest, field }: Props) {
   const powderMode = useViewStore((state) => state.powderMode)
@@ -48,65 +40,76 @@ export function WeatherPanel({ latest, field }: Props) {
       : latest.summary.temperatureMaxC
   const windFrom = windCompass(windDirection)
   const leeSide = windCompass((windDirection + 180) % 360)
+  const snowCm = mode === 'forecast' ? latest.summary.forecastSnowCm : latest.summary.recentSnowCm
 
   return (
     <aside className="weather-panel">
       <p className="panel-eyebrow">Mt Hutt powder model</p>
-      <h1>Best powder estimate</h1>
-      <p className="headline">{latest.summary.headline}</p>
 
-      <div className="metric-grid">
-        <div className="metric">
-          <span>Recent snow</span>
-          <strong>{Math.round(latest.summary.recentSnowCm)} cm</strong>
+      <div className="hero">
+        <div className="hero-number">
+          <strong>~{maxCm}</strong>
+          <span>cm</span>
         </div>
-        <div className="metric">
-          <span>Forecast snow</span>
-          <strong>{Math.round(latest.summary.forecastSnowCm)} cm</strong>
+        <div className="hero-caption">
+          <span>deepest {mode === 'forecast' ? 'forecast' : 'recent'} pocket</span>
+          <span className={`confidence-chip ${latest.summary.confidence}`}>
+            {latest.summary.confidence} confidence
+          </span>
         </div>
-        <div className="metric">
+      </div>
+
+      <div className="stat-row">
+        <div className="stat">
+          <span>{mode === 'forecast' ? 'Next 72 h' : 'Last 72 h'}</span>
+          <strong>{Math.round(snowCm)} cm</strong>
+        </div>
+        <div className="stat">
           <span>Wind</span>
           <strong>
             {windFrom} {Math.round(windSpeed)}
-            {windGust ? ` g${Math.round(windGust)}` : ''}
+            {windGust ? <em> g{Math.round(windGust)}</em> : null}
           </strong>
         </div>
-        <div className="metric">
+        <div className="stat">
           <span>Temp</span>
           <strong>
-            {Math.round(temperatureMin)}° to {Math.round(temperatureMax)}°
+            {Math.round(temperatureMin)}…{Math.round(temperatureMax)}°
           </strong>
         </div>
       </div>
 
-      <h2 className="section-title">Why it is scoring this way</h2>
-      <ul className="reason-list">
-        <li>
-          {mode === 'forecast' ? 'Forecast' : 'Recent'} {windFrom} wind transports snow onto sheltered{' '}
-          {leeSide}-facing terrain; exposed {windFrom}-facing ridges are more likely scoured.
-        </li>
-        {latest.summary.reasons.map((reason) => (
-          <li key={reason}>{reason}</li>
-        ))}
-      </ul>
+      <div className="legend-bar-wrap">
+        <div className="legend-bar" />
+        <div className="legend-ticks">
+          <span>5</span>
+          <span>10</span>
+          <span>20</span>
+          <span>30</span>
+          <span>40+ cm</span>
+        </div>
+      </div>
+      <p className="legend-hint">
+        {windFrom} wind loads sheltered {leeSide}-facing terrain. Hover a green patch for the local
+        estimate.
+      </p>
 
-      <h2 className="section-title">
-        Expected {mode} powder · max ~{maxCm} cm · confidence {latest.summary.confidence}
-      </h2>
-      <ul className="powder-legend">
-        {LEGEND_BANDS.map(([label, sampleCm]) => (
-          <li key={label}>
-            <span className="legend-swatch" style={{ background: powderColorForCm(sampleCm) }} />
-            {label}
+      <details className="why-details">
+        <summary>Why these patches?</summary>
+        <ul className="reason-list">
+          <li>
+            {mode === 'forecast' ? 'Forecast' : 'Recent'} {windFrom} wind transports snow onto sheltered{' '}
+            {leeSide}-facing gullies and bowls; exposed {windFrom}-facing ridges are more likely scoured.
           </li>
-        ))}
-      </ul>
-      <p className="legend-hint">Hover a green patch on the map for the local estimate and reason.</p>
+          {latest.summary.reasons.map((reason) => (
+            <li key={reason}>{reason}</li>
+          ))}
+        </ul>
+      </details>
 
       <p className="disclaimer">
-        Updated {formatDistanceToNow(generated, { addSuffix: true })}. Recreational estimate only — powder is
-        never guaranteed. Check Mt Hutt reports, patrol notices, closures, and avalanche information before
-        skiing.
+        Updated {formatDistanceToNow(generated, { addSuffix: true })} · recreational estimate only, powder
+        never guaranteed. Check Mt Hutt reports and avalanche advisories.
       </p>
     </aside>
   )

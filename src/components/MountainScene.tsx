@@ -8,6 +8,7 @@ import { TrailOverlay } from './TrailOverlay'
 import { PowderOverlay } from './PowderOverlay'
 import { MapDetails } from './MapDetails'
 import { MapLabels } from './MapLabels'
+import { StormLayer } from './StormLayer'
 import { terrainPoint } from '../lib/terrain'
 import type { PowderField, PowderWeather } from '../lib/powderModel'
 import type { TerrainAnalysis } from '../lib/terrainAnalysis'
@@ -108,6 +109,7 @@ export function MountainScene({ terrain, trails, analysis, field, weather }: Pro
       <TrailOverlay terrain={terrain} trails={trails} />
       <MapDetails terrain={terrain} trails={trails} />
       <MapLabels terrain={terrain} trails={trails} />
+      <StormLayer terrain={terrain} weather={weather} />
       <CameraRig terrain={terrain} trails={trails} />
     </Canvas>
   )
