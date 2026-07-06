@@ -164,13 +164,18 @@ function scoreCell(snowSignal: number, factors: CellFactors) {
   return clamp01(raw) * factors.skiable
 }
 
-function expectedCm(baseSnowCm: number, score: number, factors: CellFactors) {
-  // Per-cell snowfall first (orographic gain, rain line, sluffing), then
-  // wind redistribution on top of what actually fell there.
-  const cellSnowCm = baseSnowCm * factors.snowMultiplier
-  const windLoadedBonusCm = cellSnowCm * 0.7 * factors.leeFactor
-  const scourLossCm = cellSnowCm * 0.7 * factors.scourPenalty
-  const cm = cellSnowCm * (0.45 + 0.75 * score) + windLoadedBonusCm - scourLossCm
+function expectedCm(baseSnowCm: number, factors: CellFactors) {
+  // Physical accounting, no double counting:
+  //  1. what actually fell here  = storm total * orographic/rain/sluff
+  //  2. wind redistribution      = loaded pockets gain, scoured faces lose
+  //  3. settlement               = cold dry snow rides deeper
+  const fallenCm = baseSnowCm * factors.snowMultiplier
+  const redistribution = Math.max(
+    0.3,
+    Math.min(1.7, 1 + 0.8 * factors.leeFactor - 0.65 * factors.scourPenalty),
+  )
+  const settle = 0.85 + 0.15 * factors.coldFactor
+  const cm = fallenCm * redistribution * settle
   // Hard-mask non-skiable backside terrain so patches never appear there.
   return Math.max(0, cm) * smoothstep(0.25, 0.7, factors.skiable)
 }
@@ -195,8 +200,8 @@ export function buildPowderField(
     const forecastFactors = cellFactors(index, terrain, analysis, forecastModeWeather)
     recentScore[index] = scoreCell(recentSignal, recentFactors)
     forecastScore[index] = scoreCell(forecastSignal, forecastFactors)
-    recentCm[index] = expectedCm(weather.recentSnowCm, recentScore[index], recentFactors)
-    forecastCm[index] = expectedCm(weather.forecastSnowCm, forecastScore[index], forecastFactors)
+    recentCm[index] = expectedCm(weather.recentSnowCm, recentFactors)
+    forecastCm[index] = expectedCm(weather.forecastSnowCm, forecastFactors)
     // Below ~2 cm is not a powder signal worth showing.
     if (recentCm[index] < 2) recentCm[index] = 0
     if (forecastCm[index] < 2) forecastCm[index] = 0

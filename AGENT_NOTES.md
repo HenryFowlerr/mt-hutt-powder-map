@@ -37,8 +37,13 @@ Do not merge this branch into `main`. Open a PR or leave the branch pushed for C
   Heights carry one decimal. `scripts/fetch-opentopo-terrain.ts` caches
   batches in `.terrain-cache/` (gitignored) and resumes on failure.
 - `latest.json` summary also has `cloudLowPct`, `cloudMidPct`,
-  `cloudHighPct`, `freezingLevelM` (recent 6 h averages) driving the live
-  3D cloud/snow/wind layers.
+  `cloudHighPct`, `cloudMeanPct`, `freezingLevelM` (recent 6 h averages)
+  driving the live 3D cloud/snow/wind layers, plus ice-formation inputs
+  `meltFreezeCycles`, `recentRainMm`, `hoursAboveZero`, `hoursSinceSnow`.
+- `latest.json` gained a `daily` array: 14 days of aggregates (snowfallCm,
+  precipMm, rainMm, tempMin/MaxC, windMeanKph, gustMaxKph,
+  windDirectionDeg, cloudPct, freezingLevelM, weatherCode) for the
+  forecast panel. The hourly `forecast` array is capped at 7 days.
 - `public/data/map-overrides.geojson` (new, static, committed): real OSM
   carpark polygons, access road, and base buildings fetched once by
   `scripts/fetch-map-details.ts` (curl transport; Overpass rejects node

@@ -45,9 +45,10 @@ export function fbm(x: number, y: number, octaves = 4) {
 export function microRelief(lon: number, lat: number) {
   const nx = lon * 5200
   const ny = lat * 5200
+  // Kept small so the real DEM shape dominates — this is fine surface crunch,
+  // not invented terrain. Gentle rolling only; no synthetic ridge crests.
   const rolling = fbm(nx, ny, 4) - 0.5
-  const ridged = 1 - Math.abs(2 * fbm(nx * 1.7 + 13.1, ny * 1.7 + 5.7, 3) - 1)
-  return rolling * 5.5 + (ridged - 0.6) * 3.2
+  return rolling * 3.4
 }
 
 export function elevationToY(elevation: number, terrain: TerrainData, exaggeration: number) {
@@ -207,8 +208,8 @@ function mixColor(a: [number, number, number], b: [number, number, number], t: n
 const SNOW_LIT: [number, number, number] = [248, 251, 255] // #f8fbff
 const SNOW_SHADED: [number, number, number] = [207, 232, 245] // #cfe8f5
 const DEEP_SHADOW: [number, number, number] = [143, 184, 206] // #8fb8ce
-const ROCK_LIGHT: [number, number, number] = [111, 122, 128] // #6f7a80
-const ROCK_DARK: [number, number, number] = [32, 36, 40] // #202428
+const ROCK_LIGHT: [number, number, number] = [126, 136, 142] // lighter grey rock
+const ROCK_DARK: [number, number, number] = [74, 82, 88] // mid grey, not near-black
 const BACKSIDE_HAZE: [number, number, number] = [188, 205, 220] // muted far terrain
 const VALLEY_TINT: [number, number, number] = [210, 212, 205] // low valley floor, kept grey so powder green stands out
 
@@ -288,7 +289,9 @@ export function createTerrainTexture(terrain: TerrainData, analysis: TerrainAnal
       const lap =
         (at(px + 2, py) + at(px - 2, py) - 2 * elevation) / (4 * texelX * texelX) +
         (at(px, py + 2) + at(px, py - 2) - 2 * elevation) / (4 * texelY * texelY)
-      const curveShade = Math.max(-0.16, Math.min(0.16, lap * 55))
+      // Gentle curvature accent — enough to make each bump and dip read,
+      // but not so much it darkens the snow into a grey mess.
+      const curveShade = Math.max(-0.1, Math.min(0.1, lap * 42))
       shade = clamp01(shade + curveShade)
 
       const gully = sampleGrid(analysis.gullyFactor, width, height, gx, gy)
@@ -298,25 +301,29 @@ export function createTerrainTexture(terrain: TerrainData, analysis: TerrainAnal
       const fineNoise = fbm(lon * 16000 + 7.3, lat * 16000 + 3.1, 3) - 0.5
       const shadeDetailed = clamp01(shade + fineNoise * 0.08 * (0.3 + smoothstep(8, 30, slope) * 0.7))
 
-      // Snow palette from hillshade: lit snow -> shaded snow -> deep gully shadow.
-      const shadow = 1 - smoothstep(0.35, 0.95, shadeDetailed)
-      let color = mixColor(SNOW_LIT, SNOW_SHADED, clamp01(shadow * 1.35))
-      const deepShadow = clamp01((1 - smoothstep(0.1, 0.48, shadeDetailed)) * 0.95 + gully * 0.3 * shadow)
+      // Snow palette from hillshade: lit snow -> shaded snow -> deep gully
+      // shadow. Kept bright and clean so it reads as a snowy ski hill, with
+      // cool blue only in genuine deep shade, not across the whole face.
+      const shadow = 1 - smoothstep(0.4, 0.98, shadeDetailed)
+      let color = mixColor(SNOW_LIT, SNOW_SHADED, clamp01(shadow * 1.1))
+      const deepShadow = clamp01((1 - smoothstep(0.06, 0.4, shadeDetailed)) * 0.7 + gully * 0.22 * shadow)
       color = mixColor(color, DEEP_SHADOW, deepShadow)
 
       // Broken rock bands on steep terrain: directional strokes (stretched
       // noise down the fall line) plus speckle, and scattered outcrops on
       // moderately steep rolls so ribs and bluffs show at zoom.
-      const rockAmount = smoothstep(35, 48, slope)
-      const outcrop = smoothstep(0.8, 0.97, fbm(lon * 9000 + 41.7, lat * 9000 + 13.9, 3)) * smoothstep(31, 42, slope)
-      const rockMask = clamp01(rockAmount + outcrop * 0.7)
+      // Rock only on genuinely steep terrain, and lighter (grey rather than
+      // near-black) so the map stays a clean snowy hill, not a dark mountain.
+      const rockAmount = smoothstep(38, 50, slope)
+      const outcrop = smoothstep(0.84, 0.98, fbm(lon * 9000 + 41.7, lat * 9000 + 13.9, 3)) * smoothstep(34, 44, slope)
+      const rockMask = clamp01(rockAmount + outcrop * 0.6)
       if (rockMask > 0.02) {
         const stroke = fbm(lon * 26000, lat * 9500, 3) // elongated across the slope
         const speckle = hash2(px * 0.9, py * 0.9)
-        if (speckle < rockMask * 0.5 || stroke > 0.7 - rockMask * 0.15) {
+        if (speckle < rockMask * 0.42 || stroke > 0.74 - rockMask * 0.12) {
           const rockNoise = hash2(px * 0.23 + 31.7, py * 0.23 + 17.3)
-          const rock = mixColor(ROCK_LIGHT, ROCK_DARK, clamp01(rockNoise * 0.9 + rockMask * 0.35))
-          color = mixColor(color, rock, clamp01(rockMask * 1.2))
+          const rock = mixColor(ROCK_LIGHT, ROCK_DARK, clamp01(rockNoise * 0.7 + rockMask * 0.25))
+          color = mixColor(color, rock, clamp01(rockMask * 0.9))
         }
       }
 

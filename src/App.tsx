@@ -2,7 +2,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { MountainScene } from './components/MountainScene'
 import { Toolbar } from './components/Toolbar'
 import { WeatherPanel } from './components/WeatherPanel'
+import { ForecastPanel } from './components/ForecastPanel'
 import { buildPowderField, type PowderWeather } from './lib/powderModel'
+import { buildIceField, type IceWeather } from './lib/iceModel'
 import { analyzeTerrain } from './lib/terrainAnalysis'
 import { applyTrailOverrides } from './lib/trailOverrides'
 import type { LatestData, TerrainData, TrailCollection } from './types'
@@ -69,7 +71,17 @@ function App() {
       freezingLevelM: data.latest.summary.freezingLevelM,
     }
     const field = buildPowderField(data.terrain, analysis, weather)
-    return { analysis, weather, field }
+    const iceWeather: IceWeather = {
+      temperatureMaxC: data.latest.summary.temperatureMaxC,
+      temperatureMinC: data.latest.summary.temperatureMinC,
+      meltFreezeCycles: data.latest.summary.meltFreezeCycles ?? 0,
+      recentRainMm: data.latest.summary.recentRainMm ?? 0,
+      hoursAboveZero: data.latest.summary.hoursAboveZero ?? 0,
+      hoursSinceSnow: data.latest.summary.hoursSinceSnow ?? 999,
+      freezingLevelM: data.latest.summary.freezingLevelM,
+    }
+    const iceField = buildIceField(data.terrain, analysis, iceWeather)
+    return { analysis, weather, field, iceWeather, iceField }
   }, [data])
 
   return (
@@ -82,6 +94,8 @@ function App() {
             analysis={derived.analysis}
             field={derived.field}
             weather={derived.weather}
+            iceField={derived.iceField}
+            iceWeather={derived.iceWeather}
             overrides={overrides}
           />
         ) : (
@@ -92,6 +106,7 @@ function App() {
         )}
       </div>
       <Toolbar />
+      {data?.latest.daily ? <ForecastPanel daily={data.latest.daily} /> : null}
       {data && derived ? (
         <WeatherPanel
           latest={data.latest}
@@ -100,6 +115,7 @@ function App() {
           analysis={derived.analysis}
           trails={data.trails}
           weather={derived.weather}
+          iceField={derived.iceField}
         />
       ) : null}
     </main>

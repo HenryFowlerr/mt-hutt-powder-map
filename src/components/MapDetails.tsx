@@ -46,23 +46,15 @@ export function MapDetails({ terrain, trails, overrides }: Props) {
 
   const overrideLayers = useMemo(() => {
     if (!overrides) return null
-    const roads: THREE.Vector3[][] = []
     const parkingOutlines: THREE.Vector3[][] = []
     const parkingMarkers: Array<{ lon: number; lat: number }> = []
     const buildings: THREE.Vector3[][] = []
 
+    // Roads are intentionally not rendered: the Mt Hutt access road runs far
+    // off the mapped ski area and reads as a stray line, so only the base
+    // carparks and buildings are shown for orientation.
     for (const feature of overrides.features) {
       const kind = feature.properties.kind as unknown as string
-      if (kind === 'road' && feature.geometry.type === 'LineString') {
-        const coords = feature.geometry.coordinates as number[][]
-        roads.push(
-          coords.map(([lon, lat]) => {
-            const point = terrainPoint(lon, lat, terrain, exaggeration)
-            point.y += 0.01
-            return point
-          }),
-        )
-      }
       if (feature.geometry.type === 'Polygon') {
         const ring = (feature.geometry.coordinates as number[][][])[0]
         const points = ring.map(([lon, lat]) => {
@@ -71,15 +63,17 @@ export function MapDetails({ terrain, trails, overrides }: Props) {
           return point
         })
         if (kind === 'parking') {
-          parkingOutlines.push(points)
           const [lon, lat] = polygonCentroid(ring)
+          // Only the base-area carparks; skip pull-offs far down the road.
+          if (lat < -43.502) continue
+          parkingOutlines.push(points)
           parkingMarkers.push({ lon, lat })
         } else if (kind === 'building') {
           buildings.push(points)
         }
       }
     }
-    return { roads, parkingOutlines, parkingMarkers, buildings }
+    return { parkingOutlines, parkingMarkers, buildings }
   }, [overrides, terrain, exaggeration])
 
   const fallbackMarkers = useMemo(() => {
@@ -105,17 +99,6 @@ export function MapDetails({ terrain, trails, overrides }: Props) {
 
   return (
     <group>
-      {overrideLayers?.roads.map((points, index) => (
-        <Line
-          key={`road-${index}`}
-          points={points}
-          color="#8a8378"
-          lineWidth={2}
-          transparent
-          opacity={0.75}
-          renderOrder={3}
-        />
-      ))}
       {overrideLayers?.parkingOutlines.map((points, index) => (
         <Line
           key={`parking-${index}`}

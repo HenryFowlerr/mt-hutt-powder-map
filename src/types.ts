@@ -62,7 +62,12 @@ export type LatestData = {
     cloudLowPct?: number
     cloudMidPct?: number
     cloudHighPct?: number
+    cloudMeanPct?: number
     freezingLevelM?: number
+    meltFreezeCycles?: number
+    recentRainMm?: number
+    hoursAboveZero?: number
+    hoursSinceSnow?: number
     temperatureMinC: number
     temperatureMaxC: number
     confidence: 'low' | 'medium' | 'high'
@@ -71,7 +76,23 @@ export type LatestData = {
   }
   observations: WeatherHour[]
   forecast: WeatherHour[]
+  daily?: DailyForecast[]
   powderPolygons?: PowderPolygon[]
+}
+
+export type DailyForecast = {
+  date: string
+  snowfallCm: number
+  precipMm: number
+  rainMm: number
+  tempMinC: number
+  tempMaxC: number
+  windMeanKph: number
+  gustMaxKph: number
+  windDirectionDeg: number
+  cloudPct: number
+  freezingLevelM: number
+  weatherCode: number
 }
 
 export type WeatherHour = {

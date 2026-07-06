@@ -1,22 +1,39 @@
-import { CalendarClock, CloudSnow, Cloudy, Map, Mountain, RotateCcw, Route, Snowflake, Thermometer, Wind } from 'lucide-react'
+import {
+  CalendarClock,
+  CalendarDays,
+  CloudSnow,
+  Cloudy,
+  Map,
+  Mountain,
+  RotateCcw,
+  Route,
+  Snowflake,
+  Thermometer,
+  ThermometerSnowflake,
+  Wind,
+} from 'lucide-react'
 import { useViewStore } from '../state/viewStore'
 
 export function Toolbar() {
   const {
     powderMode,
+    showIce,
     showTrails,
     showClouds,
     showSnowfall,
     showWind,
     showFreezingLevel,
+    forecastOpen,
     exaggeration,
     mapView,
     setPowderMode,
+    toggleIce,
     toggleTrails,
     toggleClouds,
     toggleSnowfall,
     toggleWind,
     toggleFreezingLevel,
+    toggleForecast,
     toggleExaggeration,
     toggleMapView,
     resetCamera,
@@ -31,7 +48,7 @@ export function Toolbar() {
         title="Recent powder estimate"
         aria-label="Toggle recent powder estimate"
       >
-        <CloudSnow size={19} />
+        <Snowflake size={19} />
       </button>
       <button
         className={`tool-button ${powderMode === 'forecast' ? 'active' : ''}`}
@@ -42,6 +59,18 @@ export function Toolbar() {
       >
         <CalendarClock size={19} />
       </button>
+      <button
+        className={`tool-button ${showIce ? 'active' : ''}`}
+        type="button"
+        onClick={toggleIce}
+        title="Icy / hardpack patches"
+        aria-label="Toggle icy patch estimate"
+      >
+        <ThermometerSnowflake size={19} />
+      </button>
+
+      <span className="tool-divider" aria-hidden="true" />
+
       <button
         className={`tool-button ${showClouds ? 'active' : ''}`}
         type="button"
@@ -58,7 +87,7 @@ export function Toolbar() {
         title="Falling snow"
         aria-label="Toggle falling snow"
       >
-        <Snowflake size={19} />
+        <CloudSnow size={19} />
       </button>
       <button
         className={`tool-button ${showWind ? 'active' : ''}`}
@@ -77,6 +106,18 @@ export function Toolbar() {
         aria-label="Toggle live freezing level band"
       >
         <Thermometer size={19} />
+      </button>
+
+      <span className="tool-divider" aria-hidden="true" />
+
+      <button
+        className={`tool-button ${forecastOpen ? 'active' : ''}`}
+        type="button"
+        onClick={toggleForecast}
+        title="14-day forecast"
+        aria-label="Toggle 14-day forecast"
+      >
+        <CalendarDays size={19} />
       </button>
       <button
         className={`tool-button ${showTrails ? 'active' : ''}`}

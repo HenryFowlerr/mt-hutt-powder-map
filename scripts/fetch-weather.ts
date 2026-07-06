@@ -17,10 +17,12 @@ const hourly = [
   'wind_speed_10m',
   'wind_direction_10m',
   'wind_gusts_10m',
+  'cloud_cover',
   'cloud_cover_low',
   'cloud_cover_mid',
   'cloud_cover_high',
   'freezing_level_height',
+  'weather_code',
 ].join(',')
 
 const url = new URL('https://api.open-meteo.com/v1/forecast')
@@ -28,7 +30,7 @@ url.searchParams.set('latitude', String(lat))
 url.searchParams.set('longitude', String(lon))
 url.searchParams.set('hourly', hourly)
 url.searchParams.set('past_days', '3')
-url.searchParams.set('forecast_days', '5')
+url.searchParams.set('forecast_days', '14')
 url.searchParams.set('timezone', 'Pacific/Auckland')
 
 try {
@@ -102,6 +104,70 @@ try {
   const temperatureMaxC = maxValue('temperature_2m', recentIndexes, fallback.summary.temperatureMaxC ?? 0)
   const forecastTemperatureMinC = minValue('temperature_2m', forecastIndexes, temperatureMinC)
   const forecastTemperatureMaxC = maxValue('temperature_2m', forecastIndexes, temperatureMaxC)
+  const cloudMeanPct = avg('cloud_cover', nowIndexes)
+
+  // --- Ice-formation inputs (last 72 h) ---
+  // Melt-freeze cycles: count downward zero-crossings of temperature.
+  const recentTemps = values('temperature_2m', recentIndexes)
+  let meltFreezeCycles = 0
+  for (let i = 1; i < recentTemps.length; i += 1) {
+    if (recentTemps[i - 1] > 0.3 && recentTemps[i] <= 0) meltFreezeCycles += 1
+  }
+  const recentRainMm = sum('rain', recentIndexes)
+  const hoursAboveZero = recentTemps.filter((temperature) => temperature > 0).length
+  // Hours since the last hour of meaningful snowfall (fresh cover suppresses ice).
+  let hoursSinceSnow = 999
+  const recentSnowSeries = values('snowfall', recentIndexes)
+  for (let i = recentSnowSeries.length - 1; i >= 0; i -= 1) {
+    if (recentSnowSeries[i] > 0.2) {
+      hoursSinceSnow = recentSnowSeries.length - 1 - i
+      break
+    }
+  }
+
+  // --- 14-day daily aggregates, computed from the hourly series so we also
+  // get freezing level and cloud per day (Open-Meteo's daily API omits them).
+  const dailyMap = new Map<string, number[]>()
+  for (let index = 0; index < hours.length; index += 1) {
+    if (new Date(hours[index]).getTime() < now - 60 * 60 * 1000) continue // today onward
+    const day = hours[index].slice(0, 10)
+    const list = dailyMap.get(day)
+    if (list) list.push(index)
+    else dailyMap.set(day, [index])
+  }
+  const codeMode = (indexes: number[]) => {
+    const counts = new Map<number, number>()
+    for (const index of indexes) {
+      const code = Number(weather.hourly?.weather_code?.[index] ?? 0)
+      counts.set(code, (counts.get(code) ?? 0) + 1)
+    }
+    let best = 0
+    let bestCount = -1
+    for (const [code, count] of counts) {
+      if (count > bestCount) {
+        best = code
+        bestCount = count
+      }
+    }
+    return best
+  }
+  const daily = [...dailyMap.entries()]
+    .filter(([, indexes]) => indexes.length >= 6)
+    .slice(0, 14)
+    .map(([day, indexes]) => ({
+      date: day,
+      snowfallCm: Number(sum('snowfall', indexes).toFixed(1)),
+      precipMm: Number(sum('precipitation', indexes).toFixed(1)),
+      rainMm: Number(sum('rain', indexes).toFixed(1)),
+      tempMinC: Number(minValue('temperature_2m', indexes, 0).toFixed(1)),
+      tempMaxC: Number(maxValue('temperature_2m', indexes, 0).toFixed(1)),
+      windMeanKph: Number(avg('wind_speed_10m', indexes).toFixed(0)),
+      gustMaxKph: Number(maxValue('wind_gusts_10m', indexes, 0).toFixed(0)),
+      windDirectionDeg: Number(snowWeightedWindDirection(indexes, windDirection).toFixed(0)),
+      cloudPct: Number(avg('cloud_cover', indexes).toFixed(0)),
+      freezingLevelM: Number(avg('freezing_level_height', indexes).toFixed(0)),
+      weatherCode: codeMode(indexes),
+    }))
 
   const next = {
     ...fallback,
@@ -123,7 +189,12 @@ try {
       cloudLowPct: Number(cloudLowPct.toFixed(0)),
       cloudMidPct: Number(cloudMidPct.toFixed(0)),
       cloudHighPct: Number(cloudHighPct.toFixed(0)),
+      cloudMeanPct: Number(cloudMeanPct.toFixed(0)),
       freezingLevelM: Number(freezingLevelM.toFixed(0)),
+      meltFreezeCycles,
+      recentRainMm: Number(recentRainMm.toFixed(1)),
+      hoursAboveZero,
+      hoursSinceSnow,
       confidence: recentSnowCm > 4 || forecastSnowCm > 4 ? 'medium' : 'low',
       headline:
         recentSnowCm > 4
@@ -143,11 +214,11 @@ try {
       windKph: weather.hourly.wind_speed_10m[index],
       windDirectionDeg: weather.hourly.wind_direction_10m[index],
     })),
-    // The powder model uses the next 72 h; the outlook strip in the panel
-    // shows every future hour available (5 forecast days).
+    // The powder model uses the next 72 h; the outlook strip and timeline use
+    // the next 7 days of hourly data (14-day view uses the daily array below).
     forecast: hours
       .map((time, index) => ({ time: new Date(time).getTime(), index }))
-      .filter(({ time }) => time > now)
+      .filter(({ time }) => time > now && time <= now + 7 * 24 * 60 * 60 * 1000)
       .map(({ index }) => ({
         time: hours[index],
         temperatureC: weather.hourly.temperature_2m[index],
@@ -156,6 +227,7 @@ try {
         windDirectionDeg: weather.hourly.wind_direction_10m[index],
         freezingLevelM: weather.hourly.freezing_level_height?.[index],
       })),
+    daily,
   }
 
   // Never write garbage: if the API returned something unusable, keep the

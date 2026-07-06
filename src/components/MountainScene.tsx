@@ -10,8 +10,10 @@ import { MapDetails } from './MapDetails'
 import { MapLabels } from './MapLabels'
 import { StormLayer } from './StormLayer'
 import { FreezingLevelBand } from './FreezingLevelBand'
+import { IceOverlay } from './IceOverlay'
 import { terrainPoint } from '../lib/terrain'
 import type { PowderField, PowderWeather } from '../lib/powderModel'
+import type { IceField, IceWeather } from '../lib/iceModel'
 import type { TerrainAnalysis } from '../lib/terrainAnalysis'
 import { useViewStore } from '../state/viewStore'
 import type { TerrainData, TrailCollection } from '../types'
@@ -22,6 +24,8 @@ type Props = {
   analysis: TerrainAnalysis
   field: PowderField
   weather: PowderWeather
+  iceField: IceField
+  iceWeather: IceWeather
   overrides?: TrailCollection | null
 }
 
@@ -119,14 +123,34 @@ function CameraRig({ terrain, trails }: { terrain: TerrainData; trails: TrailCol
   )
 }
 
-export function MountainScene({ terrain, trails, analysis, field, weather, overrides }: Props) {
+export function MountainScene({
+  terrain,
+  trails,
+  analysis,
+  field,
+  weather,
+  iceField,
+  iceWeather,
+  overrides,
+}: Props) {
+  const clearFocus = useViewStore((state) => state.clearFocus)
+  const focusPoint = useViewStore((state) => state.focusPoint)
+
   return (
-    <Canvas dpr={[1, 1.9]} gl={{ antialias: true }}>
+    <Canvas
+      dpr={[1, 1.9]}
+      gl={{ antialias: true }}
+      onPointerMissed={() => {
+        // Clicking empty space (not the panel, not a zone) deselects a focus.
+        if (focusPoint) clearFocus()
+      }}
+    >
       {/* No fog and no scene lighting: the map look is baked into textures
           so labels and lines stay crisp at every distance. */}
       <color attach="background" args={['#dbe7f0']} />
       <TerrainMesh terrain={terrain} analysis={analysis} />
       <PowderOverlay terrain={terrain} analysis={analysis} field={field} weather={weather} />
+      <IceOverlay terrain={terrain} analysis={analysis} field={iceField} weather={iceWeather} />
       <TrailOverlay terrain={terrain} trails={trails} />
       <MapDetails terrain={terrain} trails={trails} overrides={overrides} />
       <MapLabels terrain={terrain} trails={trails} />

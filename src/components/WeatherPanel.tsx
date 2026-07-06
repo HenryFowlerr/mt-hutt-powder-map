@@ -1,7 +1,9 @@
 import { formatDistanceToNow } from 'date-fns'
 import { useMemo } from 'react'
 import { fieldMaxCm, powderColorForCm, type PowderField, type PowderWeather } from '../lib/powderModel'
+import { fieldMaxRisk, iceRiskLabel, type IceField } from '../lib/iceModel'
 import { buildAspectRose, buildElevationBands, buildSnowTimeline, pickBestDay } from '../lib/insights'
+import { conditionsAdvice } from '../lib/advice'
 import { buildZoneSummaries } from '../lib/zoneSummary'
 import type { TerrainAnalysis } from '../lib/terrainAnalysis'
 import { useViewStore } from '../state/viewStore'
@@ -14,6 +16,7 @@ type Props = {
   analysis: TerrainAnalysis
   trails: TrailCollection
   weather: PowderWeather
+  iceField: IceField
 }
 
 function windCompass(degrees: number) {
@@ -61,8 +64,9 @@ function snowlineSentence(freezingLevelM: number | undefined) {
   return `Freezing level ~${Math.round(freezingLevelM)} m — warm, rain risk on most of the mountain.`
 }
 
-export function WeatherPanel({ latest, field, terrain, analysis, trails, weather }: Props) {
+export function WeatherPanel({ latest, field, terrain, analysis, trails, weather, iceField }: Props) {
   const powderMode = useViewStore((state) => state.powderMode)
+  const showIce = useViewStore((state) => state.showIce)
   const focusOn = useViewStore((state) => state.focusOn)
   const generated = new Date(latest.generatedAt)
   const isStale = Date.now() - generated.getTime() > 24 * 60 * 60 * 1000
@@ -98,6 +102,19 @@ export function WeatherPanel({ latest, field, terrain, analysis, trails, weather
   )
   const outlook = useMemo(() => buildOutlook(latest.forecast ?? []), [latest.forecast])
   const snowline = snowlineSentence(latest.summary.freezingLevelM)
+  const advice = useMemo(
+    () =>
+      conditionsAdvice({
+        tempMinC: latest.summary.temperatureMinC,
+        tempMaxC: latest.summary.temperatureMaxC,
+        windKph: latest.summary.avgWindKph,
+        gustKph: latest.summary.maxGustKph,
+        cloudPct: latest.summary.cloudMeanPct ?? latest.summary.cloudLowPct ?? 60,
+        snowfallCm: latest.summary.recentSnowCm,
+        rainMm: latest.summary.recentRainMm,
+      }),
+    [latest.summary],
+  )
   const bestDay = useMemo(() => pickBestDay(outlook), [outlook])
   const timeline = useMemo(
     () => buildSnowTimeline(latest.observations ?? [], latest.forecast ?? []),
@@ -155,6 +172,26 @@ export function WeatherPanel({ latest, field, terrain, analysis, trails, weather
       </div>
 
       {snowline ? <p className="snowline">{snowline}</p> : null}
+
+      {showIce ? (
+        <p className={`ice-status ${fieldMaxRisk(iceField) < 0.2 ? 'low' : ''}`}>
+          {fieldMaxRisk(iceField) < 0.2
+            ? 'Ice layer on: little ice expected — fresh snow has covered old surfaces.'
+            : `Ice layer on: worst areas ${iceRiskLabel(fieldMaxRisk(iceField))}. Blue patches on the map show where.`}
+        </p>
+      ) : null}
+
+      <div className="conditions">
+        <p className="conditions-line">
+          <span className="conditions-icon">{advice.icon}</span>
+          <span>
+            <strong>{advice.sky}</strong> · {advice.feelsLike} · {advice.note}
+          </span>
+        </p>
+        <p className="conditions-wear">
+          <strong>Wear:</strong> {advice.layers.join(' · ')}
+        </p>
+      </div>
 
       <h2 className="panel-section">Best zones · {mode === 'forecast' ? 'next 72 h' : 'right now'}</h2>
       <ul className="zone-list">
