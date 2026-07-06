@@ -60,22 +60,25 @@ function createPowderTexture(field: PowderField, mode: 'recent' | 'forecast') {
       const cm = sampleGrid(grid, field.width, field.height, gx, gy)
       const offset = (py * TEXTURE_WIDTH + px) * 4
 
-      if (cm < 4) {
+      if (cm < 12) {
         image.data[offset + 3] = 0
         continue
       }
 
       let color: [number, number, number] = BAND_COLORS[BAND_COLORS.length - 1][1]
-      for (const [threshold, bandColor] of BAND_COLORS) {
-        if (cm >= threshold) {
-          color = bandColor
+      let bandAlpha = 0.24
+      for (let bandIndex = 0; bandIndex < BAND_COLORS.length; bandIndex += 1) {
+        if (cm >= BAND_COLORS[bandIndex][0]) {
+          color = BAND_COLORS[bandIndex][1]
+          bandAlpha = [0.7, 0.6, 0.48, 0.3, 0.14][bandIndex]
           break
         }
       }
 
-      // Feather the outer boundary and deepen opacity with depth.
-      const edge = smoothstep(4, 8, cm)
-      const alpha = edge * (0.34 + 0.3 * smoothstep(10, 40, cm))
+      // Keep low-confidence / shallow coverage off the map surface. The side
+      // panel still reports 5-10 cm, but rendered patches begin where the
+      // model has enough depth to suggest a useful skiable pocket.
+      const alpha = smoothstep(12, 18, cm) * bandAlpha
       image.data[offset] = color[0]
       image.data[offset + 1] = color[1]
       image.data[offset + 2] = color[2]
@@ -145,7 +148,7 @@ export function PowderOverlay({ terrain, analysis, field, weather }: Props) {
     const { lon, lat } = xzToLonLat(event.point.x, event.point.z, terrain)
     const gridPos = lonLatToGrid(lon, lat, terrain)
     const cm = sampleGrid(grid, field.width, field.height, gridPos.x, gridPos.y)
-    if (cm < 4) {
+    if (cm < 12) {
       setHover(null)
       return
     }

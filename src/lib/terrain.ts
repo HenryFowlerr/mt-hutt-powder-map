@@ -54,10 +54,62 @@ export function sampleElevation(lon: number, lat: number, terrain: TerrainData) 
   return catmullRom(rows[0], rows[1], rows[2], rows[3], sy)
 }
 
+// Elevation of the *rendered* surface: piecewise-linear interpolation over
+// the render grid using the same triangulation as createTerrainGeometry.
+// Overlay lines sampled with this hug the visible mesh exactly, so they
+// never chord underneath it on steep or convex terrain.
+export function renderSurfaceElevation(lon: number, lat: number, terrain: TerrainData) {
+  const gx =
+    ((lon - terrain.bounds.west) / (terrain.bounds.east - terrain.bounds.west)) * (RENDER_GRID_WIDTH - 1)
+  const gy =
+    ((terrain.bounds.north - lat) / (terrain.bounds.north - terrain.bounds.south)) * (RENDER_GRID_HEIGHT - 1)
+  const cx = Math.max(0, Math.min(RENDER_GRID_WIDTH - 1.001, gx))
+  const cy = Math.max(0, Math.min(RENDER_GRID_HEIGHT - 1.001, gy))
+  const col = Math.floor(cx)
+  const row = Math.floor(cy)
+  const u = cx - col
+  const v = cy - row
+
+  const vertexElevation = (c: number, r: number) => {
+    const vertexLon = terrain.bounds.west + (c / (RENDER_GRID_WIDTH - 1)) * (terrain.bounds.east - terrain.bounds.west)
+    const vertexLat = terrain.bounds.north - (r / (RENDER_GRID_HEIGHT - 1)) * (terrain.bounds.north - terrain.bounds.south)
+    return sampleElevation(vertexLon, vertexLat, terrain)
+  }
+
+  const a = vertexElevation(col, row)
+  const b = vertexElevation(col + 1, row)
+  const c = vertexElevation(col, row + 1)
+  const d = vertexElevation(col + 1, row + 1)
+
+  // Cells split along the b-c diagonal (triangles a,c,b and b,c,d).
+  if (u + v <= 1) return a + u * (b - a) + v * (c - a)
+  return d + (1 - u) * (c - d) + (1 - v) * (b - d)
+}
+
 export function terrainPoint(lon: number, lat: number, terrain: TerrainData, exaggeration: number) {
   const { x, z } = lonLatToXZ(lon, lat, terrain)
-  const y = elevationToY(sampleElevation(lon, lat, terrain), terrain, exaggeration)
+  const y = elevationToY(renderSurfaceElevation(lon, lat, terrain), terrain, exaggeration)
   return new THREE.Vector3(x, y, z)
+}
+
+// Centre of the ski area proper (mean of lift midpoints) — used as the
+// camera target and the zoom reference for label visibility.
+export function skiAreaCenter(
+  terrain: TerrainData,
+  trails: { features: Array<{ properties: { kind: string }; geometry: { type: string; coordinates: unknown } }> },
+  exaggeration: number,
+) {
+  const midpoints: Array<[number, number]> = []
+  for (const feature of trails.features) {
+    if (feature.properties.kind !== 'lift' || feature.geometry.type !== 'LineString') continue
+    const coords = feature.geometry.coordinates as number[][]
+    const [lon, lat] = coords[Math.floor(coords.length / 2)]
+    midpoints.push([lon, lat])
+  }
+  if (midpoints.length === 0) return new THREE.Vector3(0, 1.5, 0)
+  const lon = midpoints.reduce((total, point) => total + point[0], 0) / midpoints.length
+  const lat = midpoints.reduce((total, point) => total + point[1], 0) / midpoints.length
+  return terrainPoint(lon, lat, terrain, exaggeration)
 }
 
 export function createTerrainGeometry(terrain: TerrainData, exaggeration: number) {
@@ -116,7 +168,7 @@ const DEEP_SHADOW: [number, number, number] = [143, 184, 206] // #8fb8ce
 const ROCK_LIGHT: [number, number, number] = [111, 122, 128] // #6f7a80
 const ROCK_DARK: [number, number, number] = [32, 36, 40] // #202428
 const BACKSIDE_HAZE: [number, number, number] = [188, 205, 220] // muted far terrain
-const VALLEY_TINT: [number, number, number] = [214, 222, 216] // low tussock valley floor
+const VALLEY_TINT: [number, number, number] = [210, 212, 205] // low valley floor, kept grey so powder green stands out
 
 // Bakes the whole map look — hillshade, snow palette, rock bands, ski-area
 // emphasis — into one texture draped over the terrain mesh. Lighting is

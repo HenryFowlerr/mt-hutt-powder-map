@@ -54,7 +54,7 @@ function CameraRig({ terrain, trails }: { terrain: TerrainData; trails: TrailCol
 
   // The official map is viewed from the east-southeast; runs face the viewer.
   const perspectivePosition = useMemo(
-    () => target.clone().add(new THREE.Vector3(5.6, 3.4, 4.6)),
+    () => target.clone().add(new THREE.Vector3(4.3, 2.3, 3.5)),
     [target],
   )
   const orthoPosition = useMemo(

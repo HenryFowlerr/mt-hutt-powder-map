@@ -2,7 +2,7 @@ import { Html } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
-import { sampleElevation, terrainPoint } from '../lib/terrain'
+import { sampleElevation, skiAreaCenter, terrainPoint } from '../lib/terrain'
 import { useViewStore } from '../state/viewStore'
 import type { TerrainData, TrailCollection } from '../types'
 
@@ -142,13 +142,19 @@ export function MapLabels({ terrain, trails }: Props) {
     [terrain, trails, exaggeration],
   )
 
-  // Check zoom level a few times a second instead of every frame.
+  const center = useMemo(
+    () => skiAreaCenter(terrain, trails, exaggeration),
+    [terrain, trails, exaggeration],
+  )
+
+  // Check zoom level a few times a second instead of every frame. Minor
+  // labels appear only when the camera moves close to the ski area.
   useFrame(() => {
     frameCount.current += 1
     if (frameCount.current % 12 !== 0) return
-    const distance = camera.position.length()
+    const distance = camera.position.distanceTo(center)
     const zoomedIn =
-      camera instanceof THREE.OrthographicCamera ? camera.zoom > 95 : distance < 9.5
+      camera instanceof THREE.OrthographicCamera ? camera.zoom > 110 : distance < 4.4
     if (zoomedIn !== closeZoom) setCloseZoom(zoomedIn)
   })
 

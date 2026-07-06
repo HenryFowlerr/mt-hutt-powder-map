@@ -21,7 +21,7 @@ function densifiedPoints(
   heightOffset: number,
 ) {
   const mLon = metersPerDegreeLon((terrain.bounds.south + terrain.bounds.north) / 2)
-  const stepMeters = 35
+  const stepMeters = 25
   const points: THREE.Vector3[] = []
 
   for (let i = 0; i < coords.length - 1; i += 1) {
@@ -47,7 +47,7 @@ function densifiedPoints(
 function liftPoints(coords: number[][], terrain: TerrainData, exaggeration: number) {
   return coords.map(([lon, lat]) => {
     const point = terrainPoint(lon, lat, terrain, exaggeration)
-    point.y += 0.045
+    point.y += 0.06
     return point
   })
 }
@@ -63,22 +63,24 @@ function TrailLine({ feature, terrain }: { feature: TrailFeature; terrain: Terra
     const coords = feature.geometry.coordinates as number[][]
     if (coords.length < 2) return []
     if (isLift) return liftPoints(coords, terrain, exaggeration)
-    return densifiedPoints(coords, terrain, exaggeration, isBoundary ? 0.02 : 0.012)
+    return densifiedPoints(coords, terrain, exaggeration, isBoundary ? 0.02 : 0.014)
   }, [feature, terrain, exaggeration, isLift, isBoundary])
 
   if (points.length < 2) return null
 
+  // Casing and colour lines share identical positions, so explicit
+  // renderOrder (casing first, colour second) is what keeps the colour on
+  // top — transparent distance-sorting alone is unstable at equal depth.
   if (isBoundary) {
     return (
       <Line
         points={points}
         color={BOUNDARY_COLOR}
-        lineWidth={2.6}
+        lineWidth={3.2}
         dashed
-        dashSize={0.055}
-        gapSize={0.05}
-        transparent
-        opacity={0.95}
+        dashSize={0.05}
+        gapSize={0.042}
+        renderOrder={6}
       />
     )
   }
@@ -86,10 +88,10 @@ function TrailLine({ feature, terrain }: { feature: TrailFeature; terrain: Terra
   if (isLift) {
     return (
       <group>
-        <Line points={points} color={LIFT_CASING} lineWidth={5.4} transparent opacity={0.85} />
-        <Line points={points} color={LIFT_COLOR} lineWidth={3} opacity={1} />
+        <Line points={points} color={LIFT_CASING} lineWidth={5.4} renderOrder={6} />
+        <Line points={points} color={LIFT_COLOR} lineWidth={3} renderOrder={7} />
         {/* Tower ticks along the cable, echoing the official map's lift styling. */}
-        <Line points={points} color="#23282c" lineWidth={5.2} dashed dashSize={0.012} gapSize={0.16} />
+        <Line points={points} color="#23282c" lineWidth={5.2} dashed dashSize={0.012} gapSize={0.16} renderOrder={8} />
       </group>
     )
   }
@@ -101,8 +103,8 @@ function TrailLine({ feature, terrain }: { feature: TrailFeature; terrain: Terra
 
   return (
     <group>
-      <Line points={points} color="#ffffff" lineWidth={casingWidth} transparent opacity={0.85} />
-      <Line points={points} color={color} lineWidth={lineWidth} transparent opacity={0.95} />
+      <Line points={points} color="#ffffff" lineWidth={casingWidth} renderOrder={4} />
+      <Line points={points} color={color} lineWidth={lineWidth} renderOrder={5} />
     </group>
   )
 }

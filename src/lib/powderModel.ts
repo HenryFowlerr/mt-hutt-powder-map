@@ -101,7 +101,8 @@ function expectedCm(baseSnowCm: number, score: number, factors: CellFactors) {
   const windLoadedBonusCm = baseSnowCm * 0.6 * factors.leeFactor
   const scourLossCm = baseSnowCm * 0.7 * factors.scourPenalty
   const cm = baseSnowCm * (0.45 + 0.75 * score) + windLoadedBonusCm - scourLossCm
-  return Math.max(0, cm) * (0.25 + 0.75 * factors.skiable)
+  // Hard-mask non-skiable backside terrain so patches never appear there.
+  return Math.max(0, cm) * smoothstep(0.25, 0.7, factors.skiable)
 }
 
 export function buildPowderField(

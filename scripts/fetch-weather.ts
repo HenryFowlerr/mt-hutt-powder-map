@@ -53,8 +53,9 @@ try {
   const forecastSnowCm = sum('snowfall', forecastIndexes)
   const wind = avg('wind_speed_10m', recentIndexes)
   const temperatures = values('temperature_2m', recentIndexes)
-  const gusts = values('wind_gusts_10m', recentIndexes)
-  const maxGustKph = gusts.length ? Math.max(...gusts) : wind * 1.6
+  // 90th-percentile gust: robust against single-hour spikes in the model data.
+  const gusts = values('wind_gusts_10m', recentIndexes).sort((a, b) => a - b)
+  const maxGustKph = gusts.length ? gusts[Math.floor(gusts.length * 0.9)] : wind * 1.6
 
   // Storm wind direction: weight each hour's direction by its snowfall (plus
   // a small floor so windy-but-dry hours still count). A plain average of
