@@ -1,123 +1,110 @@
 import { readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { extractContours, ringArea, simplifyRing } from '../src/lib/marchingSquares'
+import {
+  buildPowderField,
+  buildPowderDisplayField,
+  describeCell,
+  POWDER_THRESHOLDS_CM,
+  type PowderWeather,
+} from '../src/lib/powderModel'
+import { analyzeTerrain } from '../src/lib/terrainAnalysis'
+import type { LatestData, PowderPolygon, TerrainData, TrailCollection } from '../src/types'
+
+// Builds terrain-following powder polygons from the dense powder field and
+// writes them into public/data/latest.json (powderPolygons). Replaces the
+// old grid-of-points output entirely.
 
 const dataDir = join(process.cwd(), 'public', 'data')
 const latestPath = join(dataDir, 'latest.json')
-const terrain = JSON.parse(readFileSync(join(dataDir, 'terrain.json'), 'utf8'))
-const latest = JSON.parse(readFileSync(latestPath, 'utf8'))
-const trails = JSON.parse(readFileSync(join(dataDir, 'trails.geojson'), 'utf8'))
+const terrain = JSON.parse(readFileSync(join(dataDir, 'terrain.json'), 'utf8')) as TerrainData
+const latest = JSON.parse(readFileSync(latestPath, 'utf8')) as LatestData & { powderGrid?: unknown }
+const trails = JSON.parse(readFileSync(join(dataDir, 'trails.geojson'), 'utf8')) as TrailCollection
 
-const terrainSize = 16
+const weather: PowderWeather = {
+  recentSnowCm: latest.summary.recentSnowCm,
+  forecastSnowCm: latest.summary.forecastSnowCm,
+  mainWindDirectionDeg: latest.summary.mainWindDirectionDeg,
+  avgWindKph: latest.summary.avgWindKph,
+  maxGustKph: latest.summary.maxGustKph,
+  temperatureMaxC: latest.summary.temperatureMaxC,
+  temperatureMinC: latest.summary.temperatureMinC,
+}
 
-function lonLatToXZ(lon: number, lat: number) {
-  return {
-    x: ((lon - terrain.bounds.west) / (terrain.bounds.east - terrain.bounds.west) - 0.5) * terrainSize,
-    z: ((terrain.bounds.north - lat) / (terrain.bounds.north - terrain.bounds.south) - 0.5) * terrainSize,
+const analysis = analyzeTerrain(terrain, trails)
+const field = buildPowderField(terrain, analysis, weather)
+
+function gridToLonLat(x: number, y: number) {
+  return [
+    Number((terrain.bounds.west + (x / (terrain.width - 1)) * (terrain.bounds.east - terrain.bounds.west)).toFixed(6)),
+    Number((terrain.bounds.north - (y / (terrain.height - 1)) * (terrain.bounds.north - terrain.bounds.south)).toFixed(6)),
+  ]
+}
+
+function ringCentroidIndex(ring: Array<[number, number]>) {
+  let cx = 0
+  let cy = 0
+  for (const [x, y] of ring) {
+    cx += x
+    cy += y
   }
+  cx /= ring.length
+  cy /= ring.length
+  const col = Math.round(Math.max(0, Math.min(terrain.width - 1, cx)))
+  const row = Math.round(Math.max(0, Math.min(terrain.height - 1, cy)))
+  return row * terrain.width + col
 }
 
-function distanceToSegment(px: number, pz: number, ax: number, az: number, bx: number, bz: number) {
-  const dx = bx - ax
-  const dz = bz - az
-  const lengthSq = dx * dx + dz * dz
-  if (lengthSq === 0) return Math.hypot(px - ax, pz - az)
-  const t = Math.max(0, Math.min(1, ((px - ax) * dx + (pz - az) * dz) / lengthSq))
-  return Math.hypot(px - (ax + t * dx), pz - (az + t * dz))
-}
+function buildPolygons(mode: 'recent' | 'forecast'): PowderPolygon[] {
+  const grid = mode === 'recent' ? field.recentCm : field.forecastCm
+  const displayGrid = buildPowderDisplayField(field, analysis, mode)
+  const scores = mode === 'recent' ? field.recentScore : field.forecastScore
+  const polygons: PowderPolygon[] = []
+  let counter = 0
 
-const skiSegments: Array<[number, number, number, number]> = []
-for (const feature of trails.features) {
-  if (feature.properties?.kind !== 'run' || feature.geometry?.type !== 'LineString') continue
-  const coords = feature.geometry.coordinates
-  for (let i = 1; i < coords.length; i += 1) {
-    const a = lonLatToXZ(coords[i - 1][0], coords[i - 1][1])
-    const b = lonLatToXZ(coords[i][0], coords[i][1])
-    skiSegments.push([a.x, a.z, b.x, b.z])
+  for (const threshold of POWDER_THRESHOLDS_CM.filter((cm) => cm >= 10)) {
+    const rings = extractContours(displayGrid, terrain.width, terrain.height, threshold)
+    for (const ring of rings) {
+      if (ringArea(ring) < 3) continue
+      const simplified = simplifyRing(ring, 0.3) as Array<[number, number]>
+      if (simplified.length < 3) continue
+
+      // Sample cm/score inside the region (at the ring centroid cell).
+      const index = ringCentroidIndex(simplified)
+      const { reason, dominantFactor } = describeCell(index, terrain, analysis, weather)
+      counter += 1
+
+      polygons.push({
+        id: `${mode}-${String(counter).padStart(3, '0')}`,
+        mode,
+        thresholdCm: threshold,
+        expectedSnowCm: Math.round(Math.max(grid[index], threshold)),
+        score: Number(scores[index].toFixed(2)),
+        reason,
+        dominantFactor,
+        coordinates: [simplified.map(([x, y]) => gridToLonLat(x, y))],
+      })
+    }
   }
+  return polygons
 }
 
-function skiableProximity(lon: number, lat: number) {
-  const point = lonLatToXZ(lon, lat)
-  const nearest = skiSegments.reduce(
-    (min, [ax, az, bx, bz]) => Math.min(min, distanceToSegment(point.x, point.z, ax, az, bx, bz)),
-    Number.POSITIVE_INFINITY,
+// A polygon-build failure must not break the scheduled data update: the app
+// computes its own overlay from the summary, so stale polygons are the
+// lesser evil versus a failed workflow.
+try {
+  const powderPolygons = [...buildPolygons('recent'), ...buildPolygons('forecast')]
+
+  // powderGrid (old schema) is intentionally dropped.
+  delete latest.powderGrid
+  const next = { ...latest, powderPolygons }
+
+  writeFileSync(latestPath, `${JSON.stringify(next, null, 2)}\n`)
+  console.log(
+    `Built ${powderPolygons.length} powder polygons (${powderPolygons.filter((p) => p.mode === 'recent').length} recent, ${powderPolygons.filter((p) => p.mode === 'forecast').length} forecast)`,
   )
-  return { nearest, factor: clamp(1 - nearest / 1.25) }
+} catch (error) {
+  console.warn(
+    `Powder polygon build failed, keeping previous polygons: ${error instanceof Error ? error.message : String(error)}`,
+  )
 }
-
-function sampleElevation(lon: number, lat: number) {
-  const xRatio = (lon - terrain.bounds.west) / (terrain.bounds.east - terrain.bounds.west)
-  const yRatio = (terrain.bounds.north - lat) / (terrain.bounds.north - terrain.bounds.south)
-  const x = Math.max(0, Math.min(terrain.width - 1, xRatio * (terrain.width - 1)))
-  const y = Math.max(0, Math.min(terrain.height - 1, yRatio * (terrain.height - 1)))
-  return terrain.heights[Math.round(y) * terrain.width + Math.round(x)]
-}
-
-function clamp(value: number) {
-  return Math.max(0, Math.min(1, value))
-}
-
-const windDeg = latest.summary.mainWindDirectionDeg
-const windRad = (windDeg * Math.PI) / 180
-const recentSnow = latest.summary.recentSnowCm
-const forecastSnow = latest.summary.forecastSnowCm
-const coldFactor = latest.summary.temperatureMaxC <= 1 ? 1 : latest.summary.temperatureMaxC <= 3 ? 0.55 : 0.18
-
-const powderGrid = []
-for (let y = 0; y < 22; y += 1) {
-  for (let x = 0; x < 22; x += 1) {
-    const lon = terrain.bounds.west + (x + 0.5) * ((terrain.bounds.east - terrain.bounds.west) / 22)
-    const lat = terrain.bounds.north - (y + 0.5) * ((terrain.bounds.north - terrain.bounds.south) / 22)
-    const proximity = skiableProximity(lon, lat)
-    if (proximity.factor <= 0.08) continue
-
-    const elevation = sampleElevation(lon, lat)
-    const elevationFactor = clamp((elevation - terrain.minElevation) / (terrain.maxElevation - terrain.minElevation))
-    const syntheticAspect = Math.atan2(y - 4.5, x - 4.5)
-    const leeAlignment = (1 - Math.cos(syntheticAspect - windRad)) / 2
-    const windLoading = clamp(leeAlignment * (latest.summary.avgWindKph / 55))
-    const concavity = clamp(0.5 + Math.sin(x * 1.8) * Math.cos(y * 1.35) * 0.4)
-    const recentSnowNormalized = clamp(recentSnow / 28)
-    const forecastSnowNormalized = clamp(forecastSnow / 24)
-    const rawRecentScore = clamp(
-      0.35 * recentSnowNormalized +
-        0.25 * windLoading +
-        0.15 * elevationFactor +
-        0.1 * coldFactor +
-        0.1 * concavity +
-        0.05 * forecastSnowNormalized,
-    )
-    const rawForecastScore = clamp(
-      0.25 * recentSnowNormalized +
-        0.25 * windLoading +
-        0.15 * elevationFactor +
-        0.1 * coldFactor +
-        0.1 * concavity +
-        0.15 * forecastSnowNormalized,
-    )
-
-    const recentScore = clamp(rawRecentScore * (0.48 + proximity.factor * 0.58))
-    const forecastScore = clamp(rawForecastScore * (0.48 + proximity.factor * 0.58))
-    const expectedSnowCm = Math.round((recentSnow * 0.55 + forecastSnow * 0.45) * recentScore)
-
-    if (expectedSnowCm < 2) continue
-
-    powderGrid.push({
-      lon: Number(lon.toFixed(6)),
-      lat: Number(lat.toFixed(6)),
-      score: Number(recentScore.toFixed(2)),
-      recentScore: Number(recentScore.toFixed(2)),
-      forecastScore: Number(forecastScore.toFixed(2)),
-      expectedSnowCm,
-      reason:
-        recentScore > 0.65
-          ? 'High score from upper elevation, cold snow, and lee loading.'
-          : recentScore > 0.42
-            ? 'Moderate score from elevation and sheltered terrain.'
-            : 'Lower score from exposure, warmth, or limited recent snow.',
-    })
-  }
-}
-
-writeFileSync(latestPath, `${JSON.stringify({ ...latest, powderGrid }, null, 2)}\n`)
-console.log(`Built ${powderGrid.length} powder grid points`)

@@ -1,16 +1,20 @@
-export function powderColor(score: number) {
-  if (score >= 0.82) return '#008f45'
-  if (score >= 0.66) return '#19b75a'
-  if (score >= 0.48) return '#73d37a'
-  if (score >= 0.3) return '#c5e879'
-  return '#f0d86b'
+// Colour language matched to the official Mt Hutt trail map PDF.
+
+export const RUN_COLORS: Record<string, string> = {
+  beginner: '#3faa47', // green circle runs
+  intermediate: '#2f9fe0', // light blue square runs
+  advanced: '#e6402f', // red runs
+  expert: '#15181a', // black diamond
+  extreme: '#15181a', // double black
 }
 
+export const LIFT_COLOR = '#4a5257'
+export const LIFT_CASING = '#ffffff'
+export const BOUNDARY_COLOR = '#f47b20'
+export const OFFPISTE_COLOR = '#15181a'
+
 export function trailColor(difficulty?: string, fallback?: string) {
+  if (difficulty && RUN_COLORS[difficulty]) return RUN_COLORS[difficulty]
   if (fallback) return fallback
-  if (difficulty === 'beginner') return '#35b64a'
-  if (difficulty === 'intermediate') return '#1c9fda'
-  if (difficulty === 'advanced') return '#ed1c24'
-  if (difficulty === 'expert' || difficulty === 'extreme') return '#111111'
-  return '#5f686d'
+  return '#7a848a' // unclassified
 }

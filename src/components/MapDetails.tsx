@@ -1,85 +1,148 @@
-import { Line } from '@react-three/drei'
+import { Html, Line } from '@react-three/drei'
+import { useMemo } from 'react'
 import * as THREE from 'three'
-import { terrainPoint } from '../lib/terrain'
+import { sampleElevation, terrainPoint } from '../lib/terrain'
 import { useViewStore } from '../state/viewStore'
-import type { TerrainData } from '../types'
+import type { TerrainData, TrailCollection } from '../types'
 
 type Props = {
   terrain: TerrainData
+  trails: TrailCollection
+  overrides?: TrailCollection | null
 }
 
-const rockBands = [
-  [
-    [171.523, -43.486],
-    [171.53, -43.494],
-    [171.535, -43.506],
-  ],
-  [
-    [171.516, -43.498],
-    [171.52, -43.509],
-    [171.522, -43.522],
-  ],
-  [
-    [171.574, -43.493],
-    [171.579, -43.505],
-    [171.582, -43.518],
-  ],
-]
+// Base-area details. When public/data/map-overrides.geojson (real OSM
+// parking polygons, access road, base buildings) is present it is rendered
+// directly; otherwise carparks fall back to offsets from the Norwest
+// Express bottom station toward the south-west, where the access road
+// actually arrives (verified against the official map).
 
-const carparkAnchors = [
-  [171.548, -43.519],
-  [171.553, -43.522],
-  [171.558, -43.524],
-]
+function liftBottom(trails: TrailCollection, name: string, terrain: TerrainData) {
+  const feature = trails.features.find(
+    (candidate) => candidate.properties.name === name && candidate.geometry.type === 'LineString',
+  )
+  if (!feature) return null
+  const coords = feature.geometry.coordinates as number[][]
+  const first = coords[0]
+  const last = coords[coords.length - 1]
+  return sampleElevation(first[0], first[1], terrain) < sampleElevation(last[0], last[1], terrain)
+    ? first
+    : last
+}
 
-export function MapDetails({ terrain }: Props) {
+function polygonCentroid(ring: number[][]) {
+  let lon = 0
+  let lat = 0
+  for (const [x, y] of ring) {
+    lon += x
+    lat += y
+  }
+  return [lon / ring.length, lat / ring.length]
+}
+
+export function MapDetails({ terrain, trails, overrides }: Props) {
   const exaggeration = useViewStore((state) => state.exaggeration)
+  const showTrails = useViewStore((state) => state.showTrails)
+
+  const overrideLayers = useMemo(() => {
+    if (!overrides) return null
+    const parkingOutlines: THREE.Vector3[][] = []
+    const parkingMarkers: Array<{ lon: number; lat: number }> = []
+    const buildings: THREE.Vector3[][] = []
+
+    // Roads are intentionally not rendered: the Mt Hutt access road runs far
+    // off the mapped ski area and reads as a stray line, so only the base
+    // carparks and buildings are shown for orientation.
+    for (const feature of overrides.features) {
+      const kind = feature.properties.kind as unknown as string
+      if (feature.geometry.type === 'Polygon') {
+        const ring = (feature.geometry.coordinates as number[][][])[0]
+        const points = ring.map(([lon, lat]) => {
+          const point = terrainPoint(lon, lat, terrain, exaggeration)
+          point.y += 0.012
+          return point
+        })
+        if (kind === 'parking') {
+          const [lon, lat] = polygonCentroid(ring)
+          // Only the base-area carparks; skip pull-offs far down the road.
+          if (lat < -43.502) continue
+          parkingOutlines.push(points)
+          parkingMarkers.push({ lon, lat })
+        } else if (kind === 'building') {
+          buildings.push(points)
+        }
+      }
+    }
+    return { parkingOutlines, parkingMarkers, buildings }
+  }, [overrides, terrain, exaggeration])
+
+  const fallbackMarkers = useMemo(() => {
+    if (overrideLayers && overrideLayers.parkingMarkers.length > 0) return []
+    const base = liftBottom(trails, 'Norwest Express', terrain) ?? liftBottom(trails, 'Summit Six Chair', terrain)
+    if (!base) return []
+    const [baseLon, baseLat] = base
+    return [
+      { lon: baseLon - 0.0006, lat: baseLat - 0.001 },
+      { lon: baseLon - 0.0018, lat: baseLat - 0.002 },
+    ]
+  }, [overrideLayers, trails, terrain])
+
+  const baseMarker = useMemo(() => {
+    const base = liftBottom(trails, 'Norwest Express', terrain) ?? liftBottom(trails, 'Summit Six Chair', terrain)
+    if (!base) return null
+    const position = terrainPoint(base[0], base[1], terrain, exaggeration)
+    position.y += 0.05
+    return position
+  }, [trails, terrain, exaggeration])
+
+  if (!showTrails) return null
 
   return (
     <group>
-      {rockBands.map((band, index) => (
+      {overrideLayers?.parkingOutlines.map((points, index) => (
         <Line
-          key={`rock-${index}`}
-          points={band.map(([lon, lat]) => {
-            const point = terrainPoint(lon, lat, terrain, exaggeration)
-            point.y += 0.09
-            return point
-          })}
-          color="#111111"
-          lineWidth={3}
-          dashed
-          dashSize={0.07}
-          gapSize={0.06}
+          key={`parking-${index}`}
+          points={[...points, points[0]]}
+          color="#4a6f96"
+          lineWidth={1.6}
           transparent
-          opacity={0.82}
+          opacity={0.8}
+          renderOrder={3}
         />
       ))}
-      {carparkAnchors.map(([lon, lat], index) => {
-        const position = terrainPoint(lon, lat, terrain, exaggeration)
-        position.y += 0.08
-        return (
-          <group key={`carpark-${index}`} position={position} rotation={[-Math.PI / 2, 0, 0.22]}>
-            <mesh>
-              <boxGeometry args={[0.48, 0.2, 0.02]} />
-              <meshBasicMaterial color="#7f8b90" transparent opacity={0.9} />
-            </mesh>
-            <lineSegments position={[0, 0, 0.02]}>
-              <bufferGeometry>
-                <bufferAttribute
-                  attach="attributes-position"
-                  args={[
-                    new Float32Array([
-                      -0.2, -0.06, 0, 0.2, -0.06, 0, -0.2, 0, 0, 0.2, 0, 0, -0.2, 0.06, 0, 0.2, 0.06, 0,
-                    ]),
-                    3,
-                  ]}
-                />
-              </bufferGeometry>
-              <lineBasicMaterial color={new THREE.Color('#d8e4e7')} transparent opacity={0.75} />
-            </lineSegments>
-          </group>
-        )
-      })}
+      {overrideLayers?.buildings.map((points, index) => (
+        <Line
+          key={`building-${index}`}
+          points={[...points, points[0]]}
+          color="#3d454b"
+          lineWidth={2.2}
+          transparent
+          opacity={0.85}
+          renderOrder={3}
+        />
+      ))}
+      {(overrideLayers?.parkingMarkers.length ? overrideLayers.parkingMarkers : fallbackMarkers).map(
+        (marker, index) => {
+          const position = terrainPoint(marker.lon, marker.lat, terrain, exaggeration)
+          position.y += 0.04
+          return (
+            <Html
+              key={`carpark-${index}`}
+              position={position}
+              center
+              zIndexRange={[3, 0]}
+              style={{ pointerEvents: 'none' }}
+            >
+              <span className="map-marker carpark">P</span>
+            </Html>
+          )
+        },
+      )}
+      {baseMarker ? (
+        <Html position={baseMarker} center zIndexRange={[3, 0]} style={{ pointerEvents: 'none' }}>
+          <span className="map-marker base">⌂</span>
+        </Html>
+      ) : null}
     </group>
   )
 }

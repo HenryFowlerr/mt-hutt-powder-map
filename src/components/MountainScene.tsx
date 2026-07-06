@@ -1,64 +1,162 @@
 import { Canvas } from '@react-three/fiber'
-import { Environment, OrbitControls, Sky } from '@react-three/drei'
-import { useEffect, useRef } from 'react'
+import { OrbitControls, OrthographicCamera, PerspectiveCamera } from '@react-three/drei'
+import { useEffect, useMemo, useRef } from 'react'
+import * as THREE from 'three'
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import { TerrainMesh } from './TerrainMesh'
 import { TrailOverlay } from './TrailOverlay'
 import { PowderOverlay } from './PowderOverlay'
 import { MapDetails } from './MapDetails'
+import { MapLabels } from './MapLabels'
+import { StormLayer } from './StormLayer'
+import { FreezingLevelBand } from './FreezingLevelBand'
+import { IceOverlay } from './IceOverlay'
+import { terrainPoint } from '../lib/terrain'
+import type { PowderField, PowderWeather } from '../lib/powderModel'
+import type { IceField, IceWeather } from '../lib/iceModel'
+import type { TerrainAnalysis } from '../lib/terrainAnalysis'
 import { useViewStore } from '../state/viewStore'
-import type { LatestData, TerrainData, TrailCollection } from '../types'
+import type { TerrainData, TrailCollection } from '../types'
 
 type Props = {
   terrain: TerrainData
   trails: TrailCollection
-  latest: LatestData
+  analysis: TerrainAnalysis
+  field: PowderField
+  weather: PowderWeather
+  iceField: IceField
+  iceWeather: IceWeather
+  overrides?: TrailCollection | null
 }
 
-const defaultCameraPosition: [number, number, number] = [-2.2, 4.5, 6.4]
-const defaultCameraTarget: [number, number, number] = [-2.2, 0.18, -0.55]
+// Camera target sits on the main ski area (mean of lift midpoints) so the
+// default view opens on the mountain proper, like the official map, not on
+// empty valley terrain.
+function skiAreaTarget(terrain: TerrainData, trails: TrailCollection, exaggeration: number) {
+  const midpoints: Array<[number, number]> = []
+  for (const feature of trails.features) {
+    if (feature.properties.kind !== 'lift' || feature.geometry.type !== 'LineString') continue
+    const coords = feature.geometry.coordinates as number[][]
+    const [lon, lat] = coords[Math.floor(coords.length / 2)]
+    midpoints.push([lon, lat])
+  }
+  if (midpoints.length === 0) {
+    return new THREE.Vector3(0, 1.5, 0)
+  }
+  const lon = midpoints.reduce((total, point) => total + point[0], 0) / midpoints.length
+  const lat = midpoints.reduce((total, point) => total + point[1], 0) / midpoints.length
+  return terrainPoint(lon, lat, terrain, exaggeration)
+}
 
-function CameraControls() {
+function CameraRig({ terrain, trails }: { terrain: TerrainData; trails: TrailCollection }) {
   const controlsRef = useRef<OrbitControlsImpl | null>(null)
   const resetCount = useViewStore((state) => state.resetCount)
+  const mapView = useViewStore((state) => state.mapView)
+  const exaggeration = useViewStore((state) => state.exaggeration)
+
+  const target = useMemo(
+    () => skiAreaTarget(terrain, trails, exaggeration),
+    [terrain, trails, exaggeration],
+  )
+
+  // The official map is viewed from the east-southeast; runs face the viewer.
+  const perspectivePosition = useMemo(
+    () => target.clone().add(new THREE.Vector3(4.3, 2.3, 3.5)),
+    [target],
+  )
+  const orthoPosition = useMemo(
+    () => target.clone().add(new THREE.Vector3(4.2, 8.5, 3.4)),
+    [target],
+  )
 
   useEffect(() => {
-    if (!controlsRef.current) return
-    controlsRef.current.object.position.set(...defaultCameraPosition)
-    controlsRef.current.target.set(...defaultCameraTarget)
-    controlsRef.current.update()
-  }, [resetCount])
+    const controls = controlsRef.current
+    if (!controls) return
+    const position = mapView ? orthoPosition : perspectivePosition
+    controls.object.position.copy(position)
+    if (mapView && controls.object instanceof THREE.OrthographicCamera) {
+      controls.object.zoom = 55
+      controls.object.updateProjectionMatrix()
+    }
+    controls.target.copy(target)
+    controls.update()
+  }, [resetCount, mapView, target, perspectivePosition, orthoPosition])
+
+  // Zone click in the panel flies the camera to that zone.
+  const focusPoint = useViewStore((state) => state.focusPoint)
+  const focusCount = useViewStore((state) => state.focusCount)
+  useEffect(() => {
+    const controls = controlsRef.current
+    if (!controls || !focusPoint) return
+    const zoneTarget = terrainPoint(focusPoint.lon, focusPoint.lat, terrain, exaggeration)
+    controls.target.copy(zoneTarget)
+    if (controls.object instanceof THREE.OrthographicCamera) {
+      controls.object.position.copy(zoneTarget.clone().add(new THREE.Vector3(2.2, 6, 1.8)))
+      controls.object.zoom = 160
+      controls.object.updateProjectionMatrix()
+    } else {
+      controls.object.position.copy(zoneTarget.clone().add(new THREE.Vector3(2.5, 2, 2)))
+    }
+    controls.update()
+    // focusCount retriggers the fly-to even for the same zone.
+  }, [focusCount, focusPoint, terrain, exaggeration])
 
   return (
-    <OrbitControls
-      ref={controlsRef}
-      enableDamping
-      dampingFactor={0.08}
-      maxPolarAngle={Math.PI * 0.48}
-      minDistance={3.2}
-      maxDistance={24}
-    />
+    <>
+      {mapView ? (
+        <OrthographicCamera makeDefault position={orthoPosition.toArray()} zoom={55} near={-50} far={100} />
+      ) : (
+        <PerspectiveCamera makeDefault position={perspectivePosition.toArray()} fov={40} near={0.1} far={120} />
+      )}
+      <OrbitControls
+        ref={controlsRef}
+        target={target.toArray()}
+        enableDamping
+        dampingFactor={0.09}
+        maxPolarAngle={Math.PI * 0.47}
+        minDistance={0.8}
+        maxDistance={26}
+        minZoom={22}
+        maxZoom={900}
+      />
+    </>
   )
 }
 
-export function MountainScene({ terrain, trails, latest }: Props) {
+export function MountainScene({
+  terrain,
+  trails,
+  analysis,
+  field,
+  weather,
+  iceField,
+  iceWeather,
+  overrides,
+}: Props) {
+  const clearFocus = useViewStore((state) => state.clearFocus)
+  const focusPoint = useViewStore((state) => state.focusPoint)
+
   return (
     <Canvas
-      camera={{ position: defaultCameraPosition, fov: 43, near: 0.1, far: 100 }}
-      dpr={[1, 1.8]}
+      dpr={[1, 1.9]}
       gl={{ antialias: true }}
+      onPointerMissed={() => {
+        // Clicking empty space (not the panel, not a zone) deselects a focus.
+        if (focusPoint) clearFocus()
+      }}
     >
-      <color attach="background" args={['#d8e8ed']} />
-      <fog attach="fog" args={['#d8e8ed', 18, 40]} />
-      <Sky sunPosition={[2, 8, 4]} turbidity={2.2} rayleigh={1.4} />
-      <ambientLight intensity={0.9} />
-      <directionalLight position={[5, 8, 3]} intensity={2.1} castShadow />
-      <TerrainMesh terrain={terrain} />
-      <MapDetails terrain={terrain} />
-      <PowderOverlay terrain={terrain} latest={latest} />
+      {/* No fog and no scene lighting: the map look is baked into textures
+          so labels and lines stay crisp at every distance. */}
+      <color attach="background" args={['#dbe7f0']} />
+      <TerrainMesh terrain={terrain} analysis={analysis} />
+      <PowderOverlay terrain={terrain} analysis={analysis} field={field} weather={weather} />
+      <IceOverlay terrain={terrain} analysis={analysis} field={iceField} weather={iceWeather} />
       <TrailOverlay terrain={terrain} trails={trails} />
-      <Environment preset="city" />
-      <CameraControls />
+      <MapDetails terrain={terrain} trails={trails} overrides={overrides} />
+      <MapLabels terrain={terrain} trails={trails} />
+      <StormLayer terrain={terrain} weather={weather} />
+      <FreezingLevelBand terrain={terrain} freezingLevelM={weather.freezingLevelM} />
+      <CameraRig terrain={terrain} trails={trails} />
     </Canvas>
   )
 }

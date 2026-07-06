@@ -1,63 +1,223 @@
-import { useMemo } from 'react'
+import { Html, Line } from '@react-three/drei'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
-import { powderColor } from '../lib/colors'
-import { terrainPoint } from '../lib/terrain'
+import type { ThreeEvent } from '@react-three/fiber'
+import { xzToLonLat } from '../lib/geo'
+import { createTerrainGeometry, terrainPoint } from '../lib/terrain'
+import { extractContours, ringArea, simplifyRing } from '../lib/marchingSquares'
+import {
+  buildPowderDisplayField,
+  describeCell,
+  powderColorForCm,
+  type PowderField,
+  type PowderMode,
+  type PowderWeather,
+} from '../lib/powderModel'
+import { lonLatToGrid, sampleGrid, smoothstep, type TerrainAnalysis } from '../lib/terrainAnalysis'
 import { useViewStore } from '../state/viewStore'
-import type { LatestData, TerrainData } from '../types'
+import type { TerrainData } from '../types'
 
 type Props = {
   terrain: TerrainData
-  latest: LatestData
+  analysis: TerrainAnalysis
+  field: PowderField
+  weather: PowderWeather
 }
 
-function createPatchGeometry(score: number, seed: number) {
-  const shape = new THREE.Shape()
-  const radius = 0.08 + score * 0.16
-  const points = 11
+type HoverInfo = {
+  position: THREE.Vector3
+  cm: number
+  score: number
+  reason: string
+  dominantFactor: string
+}
 
-  for (let i = 0; i <= points; i += 1) {
-    const angle = (i / points) * Math.PI * 2
-    const wobble = 0.78 + ((Math.sin(seed * 12.989 + i * 2.17) + 1) / 2) * 0.42
-    const x = Math.cos(angle) * radius * wobble * 1.45
-    const y = Math.sin(angle) * radius * (1.05 + score * 0.3)
-    if (i === 0) shape.moveTo(x, y)
-    else shape.lineTo(x, y)
+const BAND_COLORS: Array<[number, [number, number, number]]> = [
+  [40, [11, 122, 75]],
+  [30, [30, 158, 86]],
+  [20, [67, 185, 95]],
+  [10, [126, 208, 127]],
+  [5, [195, 229, 142]],
+]
+
+const TEXTURE_WIDTH = 720
+const TEXTURE_HEIGHT = 840
+
+// Bakes the powder cm field into a translucent banded texture draped over
+// a clone of the terrain mesh — irregular, terrain-following patches with
+// feathered edges instead of grid blobs.
+function createPowderTexture(field: PowderField, displayGrid: Float32Array, mode: PowderMode) {
+  const rawGrid = mode === 'recent' ? field.recentCm : field.forecastCm
+  const scoreGrid = mode === 'recent' ? field.recentScore : field.forecastScore
+  const canvas = document.createElement('canvas')
+  canvas.width = TEXTURE_WIDTH
+  canvas.height = TEXTURE_HEIGHT
+  const context = canvas.getContext('2d')
+  if (!context) throw new Error('Could not create powder texture context')
+  const image = context.createImageData(TEXTURE_WIDTH, TEXTURE_HEIGHT)
+
+  for (let py = 0; py < TEXTURE_HEIGHT; py += 1) {
+    const gy = (py / (TEXTURE_HEIGHT - 1)) * (field.height - 1)
+    for (let px = 0; px < TEXTURE_WIDTH; px += 1) {
+      const gx = (px / (TEXTURE_WIDTH - 1)) * (field.width - 1)
+      const displayCm = sampleGrid(displayGrid, field.width, field.height, gx, gy)
+      const offset = (py * TEXTURE_WIDTH + px) * 4
+
+      if (displayCm < 9) {
+        image.data[offset + 3] = 0
+        continue
+      }
+
+      const cm = sampleGrid(rawGrid, field.width, field.height, gx, gy)
+      const score = sampleGrid(scoreGrid, field.width, field.height, gx, gy)
+      let color: [number, number, number] = BAND_COLORS[BAND_COLORS.length - 1][1]
+      let bandAlpha = 0.24
+      for (let bandIndex = 0; bandIndex < BAND_COLORS.length; bandIndex += 1) {
+        if (cm >= BAND_COLORS[bandIndex][0]) {
+          color = BAND_COLORS[bandIndex][1]
+          bandAlpha = [0.85, 0.76, 0.64, 0.48, 0.3][bandIndex]
+          break
+        }
+      }
+
+      // Display field controls where the patch exists; score/depth control
+      // how strongly it reads. This keeps shallow background snow out while
+      // still showing light-green edges around genuinely loaded pockets.
+      const edgeFeather = smoothstep(9, 14, displayCm)
+      const confidence = smoothstep(0.18, 0.44, score)
+      const alpha = edgeFeather * (0.55 + 0.45 * confidence) * bandAlpha
+      image.data[offset] = color[0]
+      image.data[offset + 1] = color[1]
+      image.data[offset + 2] = color[2]
+      image.data[offset + 3] = Math.round(alpha * 255)
+    }
   }
 
-  return new THREE.ShapeGeometry(shape)
+  context.putImageData(image, 0, 0)
+  const texture = new THREE.CanvasTexture(canvas)
+  texture.colorSpace = THREE.SRGBColorSpace
+  texture.needsUpdate = true
+  return texture
 }
 
-export function PowderOverlay({ terrain, latest }: Props) {
-  const showRecent = useViewStore((state) => state.showRecent)
-  const showForecast = useViewStore((state) => state.showForecast)
+function gridToLonLat(x: number, y: number, terrain: TerrainData) {
+  return {
+    lon: terrain.bounds.west + (x / (terrain.width - 1)) * (terrain.bounds.east - terrain.bounds.west),
+    lat: terrain.bounds.north - (y / (terrain.height - 1)) * (terrain.bounds.north - terrain.bounds.south),
+  }
+}
+
+export function PowderOverlay({ terrain, analysis, field, weather }: Props) {
+  const powderMode = useViewStore((state) => state.powderMode)
   const exaggeration = useViewStore((state) => state.exaggeration)
+  const [hover, setHover] = useState<HoverInfo | null>(null)
+  const lastHoverTime = useRef(0)
 
-  const patches = useMemo(() => {
-    return latest.powderGrid
-      .map((point) => {
-        const score = showForecast ? point.forecastScore : point.recentScore
-        const position = terrainPoint(point.lon, point.lat, terrain, exaggeration)
-        position.y += 0.105
-        return { ...point, score, position, geometry: createPatchGeometry(score, point.lon + point.lat) }
+  const mode = powderMode === 'off' ? 'recent' : powderMode
+  const grid = mode === 'recent' ? field.recentCm : field.forecastCm
+  const displayGrid = useMemo(() => buildPowderDisplayField(field, analysis, mode), [field, analysis, mode])
+
+  const geometry = useMemo(() => createTerrainGeometry(terrain, exaggeration), [terrain, exaggeration])
+  const texture = useMemo(() => createPowderTexture(field, displayGrid, mode), [field, displayGrid, mode])
+
+  // Contour outlines from marching squares give the patches crisp,
+  // irregular, terrain-anchored edges like snow-depth isolines.
+  const contours = useMemo(() => {
+    const lines: Array<{ points: THREE.Vector3[]; color: string; key: string }> = []
+    for (const threshold of [10, 20, 30, 40]) {
+      const rings = extractContours(displayGrid, field.width, field.height, threshold)
+      rings.forEach((ring, ringIndex) => {
+        // Keep pockets down to ~1.5 grid cells so small terrain features
+        // (single gullies, short lee walls) still get an outline.
+        if (ringArea(ring) < 1.5) return
+        const simplified = simplifyRing(ring, 0.3)
+        if (simplified.length < 3) return
+        const points = simplified.map(([x, y]) => {
+          const { lon, lat } = gridToLonLat(x, y, terrain)
+          const point = terrainPoint(lon, lat, terrain, exaggeration)
+          point.y += 0.01
+          return point
+        })
+        points.push(points[0].clone())
+        lines.push({ points, color: powderColorForCm(threshold + 1), key: `${threshold}-${ringIndex}` })
       })
-      .filter((point) => point.score > 0.22)
-  }, [latest, terrain, exaggeration, showForecast])
+    }
+    return lines
+  }, [displayGrid, field, terrain, exaggeration])
 
-  if (!showRecent && !showForecast) return null
+  useEffect(() => () => geometry.dispose(), [geometry])
+  useEffect(() => () => texture.dispose(), [texture])
+
+  if (powderMode === 'off') return null
+
+  const handleMove = (event: ThreeEvent<PointerEvent>) => {
+    const now = performance.now()
+    if (now - lastHoverTime.current < 60) return
+    lastHoverTime.current = now
+
+    const { lon, lat } = xzToLonLat(event.point.x, event.point.z, terrain)
+    const gridPos = lonLatToGrid(lon, lat, terrain)
+    const displayCm = sampleGrid(displayGrid, field.width, field.height, gridPos.x, gridPos.y)
+    if (displayCm < 9) {
+      setHover(null)
+      return
+    }
+    const cm = sampleGrid(grid, field.width, field.height, gridPos.x, gridPos.y)
+    const scoreGrid = mode === 'recent' ? field.recentScore : field.forecastScore
+    const score = sampleGrid(scoreGrid, field.width, field.height, gridPos.x, gridPos.y)
+    const index =
+      Math.round(Math.min(terrain.height - 1, Math.max(0, gridPos.y))) * terrain.width +
+      Math.round(Math.min(terrain.width - 1, Math.max(0, gridPos.x)))
+    const { reason, dominantFactor } = describeCell(index, terrain, analysis, weather)
+    setHover({
+      position: event.point.clone().add(new THREE.Vector3(0, 0.06, 0)),
+      cm,
+      score,
+      reason,
+      dominantFactor,
+    })
+  }
 
   return (
     <group>
-      {patches.map((point, index) => (
-        <mesh key={`${point.lon}-${point.lat}-${index}`} position={point.position} rotation={[-Math.PI / 2, 0, 0]}>
-          <primitive object={point.geometry} attach="geometry" />
-          <meshBasicMaterial
-            color={new THREE.Color(powderColor(point.score))}
-            transparent
-            opacity={0.44 + point.score * 0.42}
-            depthWrite={false}
-          />
-        </mesh>
+      <mesh
+        geometry={geometry}
+        position={[0, 0.006, 0]}
+        renderOrder={2}
+        onPointerMove={handleMove}
+        onPointerOut={() => setHover(null)}
+      >
+        <meshBasicMaterial
+          map={texture}
+          transparent
+          depthWrite={false}
+          polygonOffset
+          polygonOffsetFactor={-2}
+          toneMapped={false}
+        />
+      </mesh>
+      {contours.map((contour) => (
+        <Line
+          key={contour.key}
+          points={contour.points}
+          color={contour.color}
+          lineWidth={1.6}
+          transparent
+          opacity={0.75}
+          renderOrder={3}
+        />
       ))}
+      {hover ? (
+        <Html position={hover.position} center zIndexRange={[4, 0]} style={{ pointerEvents: 'none' }}>
+          <div className="powder-tooltip">
+            <strong>~{Math.round(hover.cm)} cm {mode === 'forecast' ? 'forecast' : 'recent'} powder</strong>
+            <span>{hover.reason}</span>
+            <em>
+              Dominant factor: {hover.dominantFactor} · score {(hover.score * 100).toFixed(0)}%
+            </em>
+          </div>
+        </Html>
+      ) : null}
     </group>
   )
 }

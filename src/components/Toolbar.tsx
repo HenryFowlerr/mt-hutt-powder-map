@@ -1,38 +1,123 @@
-import { CloudSnow, Layers, Mountain, RotateCcw, Route, Wind } from 'lucide-react'
+import {
+  CalendarClock,
+  CalendarDays,
+  CloudSnow,
+  Cloudy,
+  Map,
+  Mountain,
+  RotateCcw,
+  Route,
+  Snowflake,
+  Thermometer,
+  ThermometerSnowflake,
+  Wind,
+} from 'lucide-react'
 import { useViewStore } from '../state/viewStore'
 
 export function Toolbar() {
   const {
-    showRecent,
-    showForecast,
+    powderMode,
+    showIce,
     showTrails,
+    showClouds,
+    showSnowfall,
+    showWind,
+    showFreezingLevel,
+    forecastOpen,
     exaggeration,
-    toggleRecent,
-    toggleForecast,
+    mapView,
+    setPowderMode,
+    toggleIce,
     toggleTrails,
+    toggleClouds,
+    toggleSnowfall,
+    toggleWind,
+    toggleFreezingLevel,
+    toggleForecast,
     toggleExaggeration,
+    toggleMapView,
     resetCamera,
   } = useViewStore()
 
   return (
     <nav className="toolbar" aria-label="Map controls">
       <button
-        className={`tool-button ${showRecent ? 'active' : ''}`}
+        className={`tool-button ${powderMode === 'recent' ? 'active' : ''}`}
         type="button"
-        onClick={toggleRecent}
+        onClick={() => setPowderMode('recent')}
         title="Recent powder estimate"
         aria-label="Toggle recent powder estimate"
+      >
+        <Snowflake size={19} />
+      </button>
+      <button
+        className={`tool-button ${powderMode === 'forecast' ? 'active' : ''}`}
+        type="button"
+        onClick={() => setPowderMode('forecast')}
+        title="Forecast powder estimate"
+        aria-label="Toggle forecast powder estimate"
+      >
+        <CalendarClock size={19} />
+      </button>
+      <button
+        className={`tool-button ${showIce ? 'active' : ''}`}
+        type="button"
+        onClick={toggleIce}
+        title="Icy / hardpack patches"
+        aria-label="Toggle icy patch estimate"
+      >
+        <ThermometerSnowflake size={19} />
+      </button>
+
+      <span className="tool-divider" aria-hidden="true" />
+
+      <button
+        className={`tool-button ${showClouds ? 'active' : ''}`}
+        type="button"
+        onClick={toggleClouds}
+        title="Live cloud layer"
+        aria-label="Toggle live cloud layer"
+      >
+        <Cloudy size={19} />
+      </button>
+      <button
+        className={`tool-button ${showSnowfall ? 'active' : ''}`}
+        type="button"
+        onClick={toggleSnowfall}
+        title="Falling snow"
+        aria-label="Toggle falling snow"
       >
         <CloudSnow size={19} />
       </button>
       <button
-        className={`tool-button ${showForecast ? 'active' : ''}`}
+        className={`tool-button ${showWind ? 'active' : ''}`}
         type="button"
-        onClick={toggleForecast}
-        title="Forecast loading estimate"
-        aria-label="Toggle forecast loading estimate"
+        onClick={toggleWind}
+        title="Wind streaks"
+        aria-label="Toggle wind streaks"
       >
         <Wind size={19} />
+      </button>
+      <button
+        className={`tool-button ${showFreezingLevel ? 'active' : ''}`}
+        type="button"
+        onClick={toggleFreezingLevel}
+        title="Live freezing level band"
+        aria-label="Toggle live freezing level band"
+      >
+        <Thermometer size={19} />
+      </button>
+
+      <span className="tool-divider" aria-hidden="true" />
+
+      <button
+        className={`tool-button ${forecastOpen ? 'active' : ''}`}
+        type="button"
+        onClick={toggleForecast}
+        title="14-day forecast"
+        aria-label="Toggle 14-day forecast"
+      >
+        <CalendarDays size={19} />
       </button>
       <button
         className={`tool-button ${showTrails ? 'active' : ''}`}
@@ -44,7 +129,7 @@ export function Toolbar() {
         <Route size={19} />
       </button>
       <button
-        className={`tool-button ${exaggeration > 1.5 ? 'active' : ''}`}
+        className={`tool-button ${exaggeration > 1.4 ? 'active' : ''}`}
         type="button"
         onClick={toggleExaggeration}
         title="Terrain exaggeration"
@@ -52,12 +137,18 @@ export function Toolbar() {
       >
         <Mountain size={19} />
       </button>
+      <button
+        className={`tool-button ${mapView ? 'active' : ''}`}
+        type="button"
+        onClick={toggleMapView}
+        title="Flat trail-map view"
+        aria-label="Toggle flat trail-map view"
+      >
+        <Map size={19} />
+      </button>
       <button className="tool-button" type="button" onClick={resetCamera} title="Reset camera" aria-label="Reset camera">
         <RotateCcw size={19} />
       </button>
-      <span aria-hidden="true" className="tool-button">
-        <Layers size={19} />
-      </span>
     </nav>
   )
 }

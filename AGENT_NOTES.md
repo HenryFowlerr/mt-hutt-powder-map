@@ -1,0 +1,73 @@
+# Agent Notes
+
+## Active Branch
+Fable is working on `fable-map-rebuild`.
+
+## Goal
+Rebuild the Mt Hutt map layers and powder model so the app looks like a real Mt Hutt ski map and gives useful terrain-aware powder estimates.
+
+## Fable Owns
+- Terrain rendering
+- Terrain analysis
+- Trail/lift map styling
+- Label system
+- Powder modelling
+- Powder polygon rendering
+- Map layer data/schema changes
+
+## Codex Owns
+- Deployment
+- GitHub Actions
+- Final review
+- Integration into main
+- Conflict resolution
+
+## Do Not Merge
+Do not merge this branch into `main`. Open a PR or leave the branch pushed for Codex to review.
+
+## Data Schema Changes (Fable)
+- `public/data/latest.json`: `powderGrid` (points) is removed. Replaced by
+  `powderPolygons` (marching-squares regions with `mode`, `thresholdCm`,
+  `expectedSnowCm`, `score`, `reason`, `dominantFactor`, `coordinates`).
+- `latest.json` `summary` gained `maxGustKph`, `forecastWindDirectionDeg`,
+  `forecastAvgWindKph`, `forecastMaxGustKph`, `forecastTemperatureMinC`,
+  `forecastTemperatureMaxC` (all optional; UI falls back to recent values).
+- `public/data/terrain.json`: now 240x280 grid (~31 m cells) from
+  OpenTopoData nzdem8m, tighter bbox (171.500-171.592, -43.535 - -43.455).
+  Heights carry one decimal. `scripts/fetch-opentopo-terrain.ts` caches
+  batches in `.terrain-cache/` (gitignored) and resumes on failure.
+- `latest.json` summary also has `cloudLowPct`, `cloudMidPct`,
+  `cloudHighPct`, `cloudMeanPct`, `freezingLevelM` (recent 6 h averages)
+  driving the live 3D cloud/snow/wind layers, plus ice-formation inputs
+  `meltFreezeCycles`, `recentRainMm`, `hoursAboveZero`, `hoursSinceSnow`.
+- `latest.json` gained a `daily` array: 14 days of aggregates (snowfallCm,
+  precipMm, rainMm, tempMin/MaxC, windMeanKph, gustMaxKph,
+  windDirectionDeg, cloudPct, freezingLevelM, weatherCode) for the
+  forecast panel. The hourly `forecast` array is capped at 7 days.
+- `public/data/map-overrides.geojson` (new, static, committed): real OSM
+  carpark polygons, access road, and base buildings fetched once by
+  `scripts/fetch-map-details.ts` (curl transport; Overpass rejects node
+  fetch on some networks). App renders it when present, falls back to
+  approximate markers otherwise.
+- Trail data corrections (names/difficulties vs the official 2026 PDF) are
+  applied at runtime by `src/lib/trailOverrides.ts`, not baked into
+  `trails.geojson`, so an OSM refetch will not lose them.
+
+## Update Pipeline Reliability (checked by Fable)
+- `update-data.yml` (cron every 6 h) runs `fetch-weather` then
+  `build-powder-grid`, commits `latest.json`, rebuilds, republishes gh-pages.
+- `fetch-weather` validates summary numbers and on any failure leaves
+  `latest.json` untouched (so `generatedAt` honestly reflects data age).
+- `build-powder-grid` catches its own failures and keeps old polygons.
+- The app tolerates missing optional fields (forecast*, cloud*, polygons)
+  and shows a "data may be stale" warning after 24 h.
+- Bot commits every 6 h keep the repo active, so GitHub will not disable
+  the scheduled workflow for inactivity.
+- Terrain is static (no scheduled refetch); `.terrain-cache/` is local-only.
+
+## Current Risks
+- Terrain is currently too generic.
+- Powder overlay currently appears grid-like.
+- Labels currently become too large/foggy.
+- Trail/lift styling does not match the official Mt Hutt PDF.
+- Deployment currently works from `gh-pages`; avoid breaking it.

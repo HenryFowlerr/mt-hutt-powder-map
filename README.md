@@ -6,9 +6,10 @@ A free, static web app for exploring Mt Hutt as a 3D ski map with trails, lifts,
 
 ```bash
 npm install
-npm run generate:data
 npm run dev
 ```
+
+Real terrain, trail, and weather data is committed in `public/data/`, so the app works straight from a fresh clone.
 
 ## Update Weather
 
@@ -16,7 +17,7 @@ npm run dev
 npm run update:data
 ```
 
-The updater calls Open-Meteo, writes `public/data/latest.json`, and rebuilds the powder grid. GitHub Actions can run this every six hours so the public app refreshes when visitors reload after an update.
+The updater calls Open-Meteo, writes `public/data/latest.json` (summary, 14-day daily forecast, hourly series, powder polygons), and never overwrites good data with a failed fetch. GitHub Actions runs this every six hours so the public app refreshes itself.
 
 ## Deploy
 
@@ -24,7 +25,10 @@ Push to GitHub, enable GitHub Pages for Actions, then run the `Deploy` workflow 
 
 ## Data Notes
 
-The current terrain and trail files are a working MVP dataset shaped around Mt Hutt. Replace `public/data/terrain.json` with a simplified mesh from LINZ/NZ elevation data, and refine `public/data/trails.geojson` against the official Mt Hutt/NZSki trail map for better accuracy.
+- `public/data/terrain.json`: 240x280 DEM (~31 m cells) from OpenTopoData `nzdem8m` (LINZ 8 m). Static; refetch manually with `npm run fetch:terrain` if ever needed.
+- `public/data/trails.geojson`: OSM runs/lifts/boundary (cached; `npm run fetch:trails` to refresh), with official-map name/difficulty corrections applied at runtime.
+- `public/data/map-overrides.geojson`: base-area carparks and buildings from OSM (`npx tsx scripts/fetch-map-details.ts` to refresh).
+- `public/data/latest.json`: the only file the scheduled updater touches.
 
 ## Attribution
 
