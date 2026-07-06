@@ -263,6 +263,50 @@ export function analyzeTerrain(terrain: TerrainData, trails?: TrailCollection): 
   }
 }
 
+// Winstral-style wind shelter parameter (Sx): for each cell, the maximum
+// upwind horizon angle to terrain within `distanceM`. Positive = the cell
+// sits behind higher upwind terrain (sheltered lee — snow deposits there),
+// negative = the cell overlooks open upwind ground (exposed — snow strips).
+// This puts deposition *behind ridge crests* where it belongs, which pure
+// aspect matching cannot do.
+export function computeWindShelter(
+  terrain: TerrainData,
+  windFromDeg: number,
+  distanceM = 300,
+): Float32Array {
+  const { width, height } = terrain
+  const center = terrainCenter(terrain)
+  const cellX = ((terrain.bounds.east - terrain.bounds.west) / (width - 1)) * metersPerDegreeLon(center.lat)
+  const cellY = ((terrain.bounds.north - terrain.bounds.south) / (height - 1)) * METERS_PER_DEGREE_LAT
+
+  // Unit step (in grid cells) pointing INTO the wind. Bearing 0 = north =
+  // -row; east = +col.
+  const bearing = (windFromDeg * Math.PI) / 180
+  const stepMeters = Math.min(cellX, cellY)
+  const stepCol = (Math.sin(bearing) * stepMeters) / cellX
+  const stepRow = (-Math.cos(bearing) * stepMeters) / cellY
+  const steps = Math.max(4, Math.round(distanceM / stepMeters))
+
+  const shelter = new Float32Array(width * height)
+  for (let row = 0; row < height; row += 1) {
+    for (let col = 0; col < width; col += 1) {
+      const base = terrain.heights[row * width + col]
+      let maxAngle = -Infinity
+      for (let step = 1; step <= steps; step += 1) {
+        const sampleCol = Math.round(col + stepCol * step)
+        const sampleRow = Math.round(row + stepRow * step)
+        if (sampleCol < 0 || sampleCol >= width || sampleRow < 0 || sampleRow >= height) break
+        const rise = terrain.heights[sampleRow * width + sampleCol] - base
+        const run = stepMeters * step
+        const angle = Math.atan2(rise, run)
+        if (angle > maxAngle) maxAngle = angle
+      }
+      shelter[row * width + col] = maxAngle === -Infinity ? 0 : (maxAngle * 180) / Math.PI
+    }
+  }
+  return boxBlur(shelter, width, height, 1)
+}
+
 // Bilinear sample of any analysis grid at fractional grid coordinates.
 export function sampleGrid(grid: Float32Array, width: number, height: number, x: number, y: number) {
   const cx = Math.max(0, Math.min(width - 1, x))

@@ -40,11 +40,14 @@ export function fbm(x: number, y: number, octaves = 4) {
 // Small deterministic relief (bumps, dips, wind features) layered on top of
 // the DEM so close zooms read as real snow surface rather than a smooth
 // interpolated sheet. Amplitude is a few metres — visual crunch, not fake
-// terrain.
+// terrain. The ridged component (1 - |2n-1|) carves sharp drift crests and
+// gully creases the way wind actually sculpts snow.
 export function microRelief(lon: number, lat: number) {
   const nx = lon * 5200
   const ny = lat * 5200
-  return (fbm(nx, ny, 4) - 0.5) * 7
+  const rolling = fbm(nx, ny, 4) - 0.5
+  const ridged = 1 - Math.abs(2 * fbm(nx * 1.7 + 13.1, ny * 1.7 + 5.7, 3) - 1)
+  return rolling * 5.5 + (ridged - 0.6) * 3.2
 }
 
 export function elevationToY(elevation: number, terrain: TerrainData, exaggeration: number) {
@@ -212,6 +215,10 @@ const VALLEY_TINT: [number, number, number] = [210, 212, 205] // low valley floo
 // Bakes the whole map look — hillshade, snow palette, rock bands, ski-area
 // emphasis — into one texture draped over the terrain mesh. Lighting is
 // baked so the material can be unlit and read like a printed trail map.
+//
+// Relief is computed per texel from the same displaced surface as the mesh
+// (bicubic DEM + micro-relief), so every real bump, dip and rib in the DEM
+// shades individually instead of being averaged into the coarse grid.
 export function createTerrainTexture(terrain: TerrainData, analysis: TerrainAnalysis) {
   const canvas = document.createElement('canvas')
   canvas.width = TEXTURE_WIDTH
@@ -221,27 +228,75 @@ export function createTerrainTexture(terrain: TerrainData, analysis: TerrainAnal
   const image = context.createImageData(TEXTURE_WIDTH, TEXTURE_HEIGHT)
 
   const { width, height } = analysis
+  const centerLat = (terrain.bounds.south + terrain.bounds.north) / 2
+  const texelX = ((terrain.bounds.east - terrain.bounds.west) / (TEXTURE_WIDTH - 1)) * 111_320 * Math.cos((centerLat * Math.PI) / 180)
+  const texelY = ((terrain.bounds.north - terrain.bounds.south) / (TEXTURE_HEIGHT - 1)) * 111_320
 
+  // Pass 1: displaced elevation at texture resolution.
+  const elev = new Float32Array(TEXTURE_WIDTH * TEXTURE_HEIGHT)
+  for (let py = 0; py < TEXTURE_HEIGHT; py += 1) {
+    const lat = terrain.bounds.north - (py / (TEXTURE_HEIGHT - 1)) * (terrain.bounds.north - terrain.bounds.south)
+    for (let px = 0; px < TEXTURE_WIDTH; px += 1) {
+      const lon = terrain.bounds.west + (px / (TEXTURE_WIDTH - 1)) * (terrain.bounds.east - terrain.bounds.west)
+      elev[py * TEXTURE_WIDTH + px] = sampleElevation(lon, lat, terrain) + microRelief(lon, lat)
+    }
+  }
+  const at = (x: number, y: number) =>
+    elev[Math.min(TEXTURE_HEIGHT - 1, Math.max(0, y)) * TEXTURE_WIDTH + Math.min(TEXTURE_WIDTH - 1, Math.max(0, x))]
+
+  // Dual light: main sun NW plus a soft W fill, the standard cartographic
+  // trick that keeps SE slopes from going flat black.
+  const lights: Array<[number, number, number]> = []
+  for (const [azimuthDeg, altitudeDeg, lightWeight] of [
+    [315, 42, 0.72],
+    [250, 38, 0.28],
+  ]) {
+    const azimuth = (azimuthDeg * Math.PI) / 180
+    const altitude = (altitudeDeg * Math.PI) / 180
+    lights.push([
+      Math.sin(azimuth) * Math.cos(altitude) * lightWeight,
+      Math.cos(azimuth) * Math.cos(altitude) * lightWeight,
+      Math.sin(altitude) * lightWeight,
+    ])
+  }
+
+  // Pass 2: per-texel shading.
   for (let py = 0; py < TEXTURE_HEIGHT; py += 1) {
     const gy = (py / (TEXTURE_HEIGHT - 1)) * (height - 1)
+    const lat = terrain.bounds.north - (py / (TEXTURE_HEIGHT - 1)) * (terrain.bounds.north - terrain.bounds.south)
     for (let px = 0; px < TEXTURE_WIDTH; px += 1) {
       const gx = (px / (TEXTURE_WIDTH - 1)) * (width - 1)
+      const lon = terrain.bounds.west + (px / (TEXTURE_WIDTH - 1)) * (terrain.bounds.east - terrain.bounds.west)
+      const index = py * TEXTURE_WIDTH + px
+      const elevation = elev[index]
 
-      const shade = sampleGrid(analysis.hillshade, width, height, gx, gy)
-      const slope = sampleGrid(analysis.slopeDeg, width, height, gx, gy)
+      // Central-difference gradients on the displaced surface.
+      const dzdx = (at(px + 1, py) - at(px - 1, py)) / (2 * texelX)
+      const dzdy = (at(px, py - 1) - at(px, py + 1)) / (2 * texelY)
+      const slope = (Math.atan(Math.hypot(dzdx, dzdy)) * 180) / Math.PI
+
+      const nx = -dzdx
+      const ny = -dzdy
+      const nLength = Math.hypot(nx, ny, 1)
+      let shade = 0
+      for (const [lx, ly, lz] of lights) {
+        shade += Math.max(0, (nx * lx + ny * ly + lz) / nLength)
+      }
+
+      // Laplacian curvature at texel scale: dips shade darker, humps and
+      // ribs catch light — this is what makes each real terrain feature pop.
+      const lap =
+        (at(px + 2, py) + at(px - 2, py) - 2 * elevation) / (4 * texelX * texelX) +
+        (at(px, py + 2) + at(px, py - 2) - 2 * elevation) / (4 * texelY * texelY)
+      const curveShade = Math.max(-0.16, Math.min(0.16, lap * 55))
+      shade = clamp01(shade + curveShade)
+
       const gully = sampleGrid(analysis.gullyFactor, width, height, gx, gy)
       const skiable = sampleGrid(analysis.skiMask, width, height, gx, gy)
-      const lon = terrain.bounds.west + (px / (TEXTURE_WIDTH - 1)) * (terrain.bounds.east - terrain.bounds.west)
-      const lat = terrain.bounds.north - (py / (TEXTURE_HEIGHT - 1)) * (terrain.bounds.north - terrain.bounds.south)
-      const elevation = sampleElevation(lon, lat, terrain)
 
-      // Micro-relief shading: fbm noise (matched to the mesh displacement
-      // scale) bumps the hillshade so zoomed-in snow reads as wind-worked
-      // surface with dips, humps and drift texture instead of flat white.
-      const microNoise = fbm(lon * 5200, lat * 5200, 4) - 0.5
+      // Fine wind texture on top (sastrugi-scale, too small for the DEM).
       const fineNoise = fbm(lon * 16000 + 7.3, lat * 16000 + 3.1, 3) - 0.5
-      const slopeBoost = 0.35 + smoothstep(8, 30, slope) * 0.65
-      const shadeDetailed = clamp01(shade + microNoise * 0.26 * slopeBoost + fineNoise * 0.1)
+      const shadeDetailed = clamp01(shade + fineNoise * 0.08 * (0.3 + smoothstep(8, 30, slope) * 0.7))
 
       // Snow palette from hillshade: lit snow -> shaded snow -> deep gully shadow.
       const shadow = 1 - smoothstep(0.35, 0.95, shadeDetailed)
@@ -252,8 +307,8 @@ export function createTerrainTexture(terrain: TerrainData, analysis: TerrainAnal
       // Broken rock bands on steep terrain: directional strokes (stretched
       // noise down the fall line) plus speckle, and scattered outcrops on
       // moderately steep rolls so ribs and bluffs show at zoom.
-      const rockAmount = smoothstep(34, 47, slope)
-      const outcrop = smoothstep(0.8, 0.97, fbm(lon * 9000 + 41.7, lat * 9000 + 13.9, 3)) * smoothstep(30, 40, slope)
+      const rockAmount = smoothstep(35, 48, slope)
+      const outcrop = smoothstep(0.8, 0.97, fbm(lon * 9000 + 41.7, lat * 9000 + 13.9, 3)) * smoothstep(31, 42, slope)
       const rockMask = clamp01(rockAmount + outcrop * 0.7)
       if (rockMask > 0.02) {
         const stroke = fbm(lon * 26000, lat * 9500, 3) // elongated across the slope
@@ -279,7 +334,7 @@ export function createTerrainTexture(terrain: TerrainData, analysis: TerrainAnal
       const emphasis = clamp01(0.3 + skiable * 0.7)
       color = mixColor(BACKSIDE_HAZE, color, 0.45 + emphasis * 0.55)
 
-      const offset = (py * TEXTURE_WIDTH + px) * 4
+      const offset = index * 4
       image.data[offset] = color[0]
       image.data[offset + 1] = color[1]
       image.data[offset + 2] = color[2]

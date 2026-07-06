@@ -2,10 +2,43 @@ import {
   angularDifference,
   boxBlur,
   clamp01,
+  computeWindShelter,
   smoothstep,
   type TerrainAnalysis,
 } from './terrainAnalysis'
 import type { TerrainData } from '../types'
+
+// Wind-shelter grids are expensive enough to memoise per terrain + wind
+// direction (rounded to 5 degrees; finer differences do not change the map).
+const shelterCache = new WeakMap<TerrainData, Map<number, Float32Array>>()
+
+function getWindShelter(terrain: TerrainData, windFromDeg: number) {
+  const key = Math.round(windFromDeg / 5) * 5
+  let byDirection = shelterCache.get(terrain)
+  if (!byDirection) {
+    byDirection = new Map()
+    shelterCache.set(terrain, byDirection)
+  }
+  let shelter = byDirection.get(key)
+  if (!shelter) {
+    shelter = computeWindShelter(terrain, key)
+    byDirection.set(key, shelter)
+  }
+  return shelter
+}
+
+// Open-Meteo's point forecast is roughly valid at mid-mountain; snowfall
+// and temperature are adjusted per cell from there.
+const REFERENCE_ELEVATION_M = 1600
+const LAPSE_RATE_C_PER_M = 0.0065
+
+// Per-cell snowfall multiplier: orographic enhancement with height, and a
+// rain cutoff below the freezing level (snow needs ~200 m of cold air).
+function snowfallMultiplier(elevation: number, freezingLevelM?: number) {
+  const orographic = Math.max(0.55, Math.min(1.6, 1 + ((elevation - REFERENCE_ELEVATION_M) / 100) * 0.055))
+  const rainLine = freezingLevelM ? smoothstep(freezingLevelM - 250, freezingLevelM + 100, elevation) : 1
+  return orographic * rainLine
+}
 
 // Terrain-aware powder deposition model shared by the browser overlay and
 // the data pipeline. Produces dense per-cell fields (same grid as the DEM)
@@ -44,10 +77,12 @@ export type PowderMode = 'recent' | 'forecast'
 
 type CellFactors = {
   leeFactor: number
+  shelterFactor: number
   scourPenalty: number
   elevationFactor: number
   concavityFactor: number
   coldFactor: number
+  snowMultiplier: number
   skiable: number
 }
 
@@ -60,6 +95,7 @@ function cellFactors(
   const elevation = terrain.heights[index]
   const slope = analysis.slopeDeg[index]
   const aspect = analysis.aspectDeg[index]
+  const shelterDeg = getWindShelter(terrain, weather.mainWindDirectionDeg)[index]
 
   // Wind direction is where wind comes FROM; lee slopes face away from it.
   const leeAspectDeg = (weather.mainWindDirectionDeg + 180) % 360
@@ -73,26 +109,46 @@ function cellFactors(
   const overScourFactor = smoothstep(55, 85, gustKph)
 
   const concavityFactor = analysis.gullyFactor[index]
-  const leeFactor = leeAlignment * aspectRelevance * transportFactor * (0.55 + 0.45 * concavityFactor)
 
-  // Exposed convex terrain loses snow to wind; worse in strong gusts.
+  // Upwind horizon (Winstral Sx): deposition behind ridge crests, stripping
+  // on open windward ground. This carries more weight than aspect alone —
+  // a NE face right behind a crest loads far more than an open NE face.
+  const shelterFactor = smoothstep(2, 13, shelterDeg)
+  const exposureFactor = smoothstep(1, 10, -shelterDeg)
+
+  const leeFactor =
+    (0.45 * leeAlignment * aspectRelevance + 0.55 * shelterFactor) *
+    transportFactor *
+    (0.55 + 0.45 * concavityFactor)
+
+  // Exposed convex/windward terrain loses snow to wind; worse in gusts.
   const windward = smoothstep(110, 20, angularDifference(aspect, weather.mainWindDirectionDeg)) * aspectRelevance
   const scourPenalty = clamp01(
-    analysis.ridgeExposure[index] * (0.35 + 0.65 * transportFactor) +
-      windward * transportFactor * 0.4 +
-      analysis.ridgeExposure[index] * overScourFactor * 0.5,
+    analysis.ridgeExposure[index] * (0.3 + 0.5 * transportFactor) +
+      exposureFactor * (0.3 + 0.5 * transportFactor) +
+      windward * transportFactor * 0.3 +
+      analysis.ridgeExposure[index] * overScourFactor * 0.4,
   )
 
   const elevationFactor = smoothstep(1450, 2050, elevation)
-  const coldFactor =
-    weather.temperatureMaxC <= 0 ? 1 : weather.temperatureMaxC <= 2 ? 0.55 : 0.1
+
+  // Temperature at the cell via lapse rate from the mid-mountain reading:
+  // high terrain keeps snow dry even on a marginal day.
+  const cellMaxC = weather.temperatureMaxC - (elevation - REFERENCE_ELEVATION_M) * LAPSE_RATE_C_PER_M
+  const coldFactor = cellMaxC <= 0 ? 1 : cellMaxC <= 2 ? 0.55 : 0.1
+
+  // Very steep terrain sheds new snow (sluffing) before it can pile up.
+  const sluff = smoothstep(48, 60, slope)
+  const snowMultiplier = snowfallMultiplier(elevation, weather.freezingLevelM) * (1 - 0.7 * sluff)
 
   return {
     leeFactor,
+    shelterFactor,
     scourPenalty,
     elevationFactor,
     concavityFactor,
     coldFactor,
+    snowMultiplier,
     skiable: analysis.skiMask[index],
   }
 }
@@ -109,9 +165,12 @@ function scoreCell(snowSignal: number, factors: CellFactors) {
 }
 
 function expectedCm(baseSnowCm: number, score: number, factors: CellFactors) {
-  const windLoadedBonusCm = baseSnowCm * 0.6 * factors.leeFactor
-  const scourLossCm = baseSnowCm * 0.7 * factors.scourPenalty
-  const cm = baseSnowCm * (0.45 + 0.75 * score) + windLoadedBonusCm - scourLossCm
+  // Per-cell snowfall first (orographic gain, rain line, sluffing), then
+  // wind redistribution on top of what actually fell there.
+  const cellSnowCm = baseSnowCm * factors.snowMultiplier
+  const windLoadedBonusCm = cellSnowCm * 0.7 * factors.leeFactor
+  const scourLossCm = cellSnowCm * 0.7 * factors.scourPenalty
+  const cm = cellSnowCm * (0.45 + 0.75 * score) + windLoadedBonusCm - scourLossCm
   // Hard-mask non-skiable backside terrain so patches never appear there.
   return Math.max(0, cm) * smoothstep(0.25, 0.7, factors.skiable)
 }
@@ -259,7 +318,15 @@ export function describeCell(
   const windFrom = compassLabel(weather.mainWindDirectionDeg)
   const facing = compassLabel(analysis.aspectDeg[index])
 
+  const rainAffected =
+    weather.freezingLevelM !== undefined && terrain.heights[index] < weather.freezingLevelM + 100
+
   const candidates: Array<[number, string, string]> = [
+    [
+      factors.shelterFactor * 1.05,
+      'ridge shelter',
+      `Deposits in the wind shadow just behind the crest upwind (${windFrom} wind).`,
+    ],
     [
       factors.leeFactor,
       'wind loading',
@@ -279,6 +346,11 @@ export function describeCell(
       factors.scourPenalty,
       'wind scour',
       `Exposed ${facing}-facing terrain likely scoured by ${windFrom} wind.`,
+    ],
+    [
+      rainAffected ? 0.6 : 0,
+      'rain line',
+      `Near or below the freezing level (~${Math.round(weather.freezingLevelM ?? 0)} m) — likely wet or rain-affected.`,
     ],
   ]
 
