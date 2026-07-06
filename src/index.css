@@ -282,6 +282,14 @@ button {
   background: rgba(31, 143, 82, 0.1);
 }
 
+.zone-row.static {
+  cursor: default;
+}
+
+.zone-row.static:hover {
+  background: none;
+}
+
 .wind-arrow {
   display: inline-block;
   font-size: 11px;

@@ -1,6 +1,6 @@
 import type { PowderField, PowderMode } from './powderModel'
 import type { TerrainAnalysis } from './terrainAnalysis'
-import type { WeatherHour } from '../types'
+import type { TerrainData, WeatherHour } from '../types'
 
 // Skier-facing insights derived from the model field and the hourly data:
 // which aspects are loaded, how the storm evolves hour by hour, and which
@@ -31,6 +31,43 @@ export function buildAspectRose(analysis: TerrainAnalysis, field: PowderField, m
     meanCm,
     maxCm: Math.max(1, ...meanCm),
   }
+}
+
+export type ElevationBand = {
+  label: string
+  meanCm: number
+}
+
+// Mean expected powder in three skiable elevation bands — answers "is it
+// worth staying high today?" at a glance.
+export function buildElevationBands(
+  terrain: TerrainData,
+  analysis: TerrainAnalysis,
+  field: PowderField,
+  mode: PowderMode,
+): ElevationBand[] {
+  const cmGrid = mode === 'recent' ? field.recentCm : field.forecastCm
+  const bands: Array<{ label: string; min: number; max: number; total: number; count: number }> = [
+    { label: 'Above 1900 m', min: 1900, max: Infinity, total: 0, count: 0 },
+    { label: '1650–1900 m', min: 1650, max: 1900, total: 0, count: 0 },
+    { label: 'Below 1650 m', min: 0, max: 1650, total: 0, count: 0 },
+  ]
+
+  for (let index = 0; index < cmGrid.length; index += 1) {
+    if (analysis.skiMask[index] < 0.5) continue
+    const elevation = terrain.heights[index]
+    for (const band of bands) {
+      if (elevation >= band.min && elevation < band.max) {
+        band.total += cmGrid[index]
+        band.count += 1
+        break
+      }
+    }
+  }
+
+  return bands
+    .filter((band) => band.count > 10)
+    .map((band) => ({ label: band.label, meanCm: Math.round(band.total / band.count) }))
 }
 
 export type TimelineBucket = {

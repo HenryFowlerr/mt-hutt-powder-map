@@ -1,7 +1,7 @@
 import { formatDistanceToNow } from 'date-fns'
 import { useMemo } from 'react'
 import { fieldMaxCm, powderColorForCm, type PowderField, type PowderWeather } from '../lib/powderModel'
-import { buildAspectRose, buildSnowTimeline, pickBestDay } from '../lib/insights'
+import { buildAspectRose, buildElevationBands, buildSnowTimeline, pickBestDay } from '../lib/insights'
 import { buildZoneSummaries } from '../lib/zoneSummary'
 import type { TerrainAnalysis } from '../lib/terrainAnalysis'
 import { useViewStore } from '../state/viewStore'
@@ -105,6 +105,10 @@ export function WeatherPanel({ latest, field, terrain, analysis, trails, weather
   )
   const timelineMax = Math.max(1, ...timeline.map((bucket) => bucket.snowCm))
   const rose = useMemo(() => buildAspectRose(analysis, field, mode), [analysis, field, mode])
+  const elevationBands = useMemo(
+    () => buildElevationBands(terrain, analysis, field, mode),
+    [terrain, analysis, field, mode],
+  )
 
   return (
     <aside className="weather-panel">
@@ -216,6 +220,25 @@ export function WeatherPanel({ latest, field, terrain, analysis, trails, weather
             <span>now</span>
             <span>+72 h</span>
           </div>
+        </>
+      ) : null}
+
+      {elevationBands.length > 0 ? (
+        <>
+          <h2 className="panel-section">By elevation</h2>
+          <ul className="zone-list elevation-bands">
+            {elevationBands.map((band) => (
+              <li key={band.label}>
+                <span className="zone-row static">
+                  <span className="zone-swatch" style={{ background: powderColorForCm(band.meanCm) }} />
+                  <span className="zone-name">{band.label}</span>
+                  <span className="zone-cm">
+                    ~{band.meanCm} <em>cm avg</em>
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ul>
         </>
       ) : null}
 
