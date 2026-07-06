@@ -52,8 +52,23 @@ try {
   const recentSnowCm = sum('snowfall', recentIndexes)
   const forecastSnowCm = sum('snowfall', forecastIndexes)
   const wind = avg('wind_speed_10m', recentIndexes)
-  const windDirection = avg('wind_direction_10m', recentIndexes)
   const temperatures = values('temperature_2m', recentIndexes)
+  const gusts = values('wind_gusts_10m', recentIndexes)
+  const maxGustKph = gusts.length ? Math.max(...gusts) : wind * 1.6
+
+  // Storm wind direction: weight each hour's direction by its snowfall (plus
+  // a small floor so windy-but-dry hours still count). A plain average of
+  // compass degrees is meaningless across the 0/360 wrap, so average the
+  // direction vectors instead.
+  let vx = 0
+  let vy = 0
+  for (const index of recentIndexes) {
+    const directionRad = (Number(weather.hourly?.wind_direction_10m?.[index] ?? 0) * Math.PI) / 180
+    const weight = Number(weather.hourly?.snowfall?.[index] ?? 0) + 0.05
+    vx += Math.sin(directionRad) * weight
+    vy += Math.cos(directionRad) * weight
+  }
+  const windDirection = ((Math.atan2(vx, vy) * 180) / Math.PI + 360) % 360
 
   const next = {
     ...fallback,
@@ -64,6 +79,7 @@ try {
       forecastSnowCm: Number(forecastSnowCm.toFixed(1)),
       mainWindDirectionDeg: Number(windDirection.toFixed(0)),
       avgWindKph: Number(wind.toFixed(0)),
+      maxGustKph: Number(maxGustKph.toFixed(0)),
       temperatureMinC: Number(Math.min(...temperatures).toFixed(1)),
       temperatureMaxC: Number(Math.max(...temperatures).toFixed(1)),
       confidence: recentSnowCm > 4 || forecastSnowCm > 4 ? 'medium' : 'low',

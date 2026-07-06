@@ -10,6 +10,8 @@ export type TerrainData = {
   minElevation: number
   maxElevation: number
   heights: number[]
+  source?: string
+  generatedAt?: string
 }
 
 export type TrailFeature = {
@@ -32,14 +34,15 @@ export type TrailCollection = {
   features: TrailFeature[]
 }
 
-export type PowderPoint = {
-  lon: number
-  lat: number
-  score: number
-  recentScore: number
-  forecastScore: number
+export type PowderPolygon = {
+  id: string
+  mode: 'recent' | 'forecast'
+  thresholdCm: number
   expectedSnowCm: number
+  score: number
   reason: string
+  dominantFactor: string
+  coordinates: number[][][] // [ring][vertex][lon, lat]
 }
 
 export type LatestData = {
@@ -50,6 +53,7 @@ export type LatestData = {
     forecastSnowCm: number
     mainWindDirectionDeg: number
     avgWindKph: number
+    maxGustKph?: number
     temperatureMinC: number
     temperatureMaxC: number
     confidence: 'low' | 'medium' | 'high'
@@ -58,5 +62,5 @@ export type LatestData = {
   }
   observations: unknown[]
   forecast: unknown[]
-  powderGrid: PowderPoint[]
+  powderPolygons?: PowderPolygon[]
 }

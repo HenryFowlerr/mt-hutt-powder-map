@@ -1,36 +1,36 @@
-import { CloudSnow, Layers, Mountain, RotateCcw, Route, Wind } from 'lucide-react'
+import { CloudSnow, Map, Mountain, RotateCcw, Route, Wind } from 'lucide-react'
 import { useViewStore } from '../state/viewStore'
 
 export function Toolbar() {
   const {
-    showRecent,
-    showForecast,
+    powderMode,
     showTrails,
     exaggeration,
-    toggleRecent,
-    toggleForecast,
+    mapView,
+    setPowderMode,
     toggleTrails,
     toggleExaggeration,
+    toggleMapView,
     resetCamera,
   } = useViewStore()
 
   return (
     <nav className="toolbar" aria-label="Map controls">
       <button
-        className={`tool-button ${showRecent ? 'active' : ''}`}
+        className={`tool-button ${powderMode === 'recent' ? 'active' : ''}`}
         type="button"
-        onClick={toggleRecent}
+        onClick={() => setPowderMode('recent')}
         title="Recent powder estimate"
         aria-label="Toggle recent powder estimate"
       >
         <CloudSnow size={19} />
       </button>
       <button
-        className={`tool-button ${showForecast ? 'active' : ''}`}
+        className={`tool-button ${powderMode === 'forecast' ? 'active' : ''}`}
         type="button"
-        onClick={toggleForecast}
-        title="Forecast loading estimate"
-        aria-label="Toggle forecast loading estimate"
+        onClick={() => setPowderMode('forecast')}
+        title="Forecast powder estimate"
+        aria-label="Toggle forecast powder estimate"
       >
         <Wind size={19} />
       </button>
@@ -44,7 +44,7 @@ export function Toolbar() {
         <Route size={19} />
       </button>
       <button
-        className={`tool-button ${exaggeration > 1.5 ? 'active' : ''}`}
+        className={`tool-button ${exaggeration > 1.4 ? 'active' : ''}`}
         type="button"
         onClick={toggleExaggeration}
         title="Terrain exaggeration"
@@ -52,12 +52,18 @@ export function Toolbar() {
       >
         <Mountain size={19} />
       </button>
+      <button
+        className={`tool-button ${mapView ? 'active' : ''}`}
+        type="button"
+        onClick={toggleMapView}
+        title="Flat trail-map view"
+        aria-label="Toggle flat trail-map view"
+      >
+        <Map size={19} />
+      </button>
       <button className="tool-button" type="button" onClick={resetCamera} title="Reset camera" aria-label="Reset camera">
         <RotateCcw size={19} />
       </button>
-      <span aria-hidden="true" className="tool-button">
-        <Layers size={19} />
-      </span>
     </nav>
   )
 }

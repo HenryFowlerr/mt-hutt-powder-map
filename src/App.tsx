@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { MountainScene } from './components/MountainScene'
 import { Toolbar } from './components/Toolbar'
 import { WeatherPanel } from './components/WeatherPanel'
+import { buildPowderField, type PowderWeather } from './lib/powderModel'
+import { analyzeTerrain } from './lib/terrainAnalysis'
 import type { LatestData, TerrainData, TrailCollection } from './types'
 import './index.css'
 
@@ -35,11 +37,35 @@ function App() {
       })
   }, [])
 
+  // Terrain analysis and the powder field are computed once per data load
+  // and shared by the 3D scene and the side panel.
+  const derived = useMemo(() => {
+    if (!data) return null
+    const analysis = analyzeTerrain(data.terrain, data.trails)
+    const weather: PowderWeather = {
+      recentSnowCm: data.latest.summary.recentSnowCm,
+      forecastSnowCm: data.latest.summary.forecastSnowCm,
+      mainWindDirectionDeg: data.latest.summary.mainWindDirectionDeg,
+      avgWindKph: data.latest.summary.avgWindKph,
+      maxGustKph: data.latest.summary.maxGustKph,
+      temperatureMaxC: data.latest.summary.temperatureMaxC,
+      temperatureMinC: data.latest.summary.temperatureMinC,
+    }
+    const field = buildPowderField(data.terrain, analysis, weather)
+    return { analysis, weather, field }
+  }, [data])
+
   return (
     <main className="app-shell">
       <div className="map-stage">
-        {data ? (
-          <MountainScene terrain={data.terrain} trails={data.trails} latest={data.latest} />
+        {data && derived ? (
+          <MountainScene
+            terrain={data.terrain}
+            trails={data.trails}
+            analysis={derived.analysis}
+            field={derived.field}
+            weather={derived.weather}
+          />
         ) : (
           <div className="loading-state">
             <h1>Mt Hutt Powder Map</h1>
@@ -48,7 +74,7 @@ function App() {
         )}
       </div>
       <Toolbar />
-      {data ? <WeatherPanel latest={data.latest} /> : null}
+      {data && derived ? <WeatherPanel latest={data.latest} field={derived.field} /> : null}
     </main>
   )
 }

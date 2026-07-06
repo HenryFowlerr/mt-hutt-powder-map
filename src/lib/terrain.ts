@@ -1,32 +1,57 @@
 import * as THREE from 'three'
-import { lonLatToXZ, TERRAIN_SIZE } from './geo'
+import { lonLatToXZ, WORLD_UNITS_PER_METER } from './geo'
+import { clamp01, sampleGrid, smoothstep, type TerrainAnalysis } from './terrainAnalysis'
 import type { TerrainData } from '../types'
 
-const RENDER_GRID_SIZE = 96
+export const RENDER_GRID_WIDTH = 200
+export const RENDER_GRID_HEIGHT = 220
+export const TEXTURE_WIDTH = 800
+export const TEXTURE_HEIGHT = 880
 
 export function elevationToY(elevation: number, terrain: TerrainData, exaggeration: number) {
-  const range = terrain.maxElevation - terrain.minElevation
-  return ((elevation - terrain.minElevation) / range - 0.5) * 3.2 * exaggeration
+  return (elevation - terrain.minElevation) * WORLD_UNITS_PER_METER * exaggeration
 }
 
+function catmullRom(p0: number, p1: number, p2: number, p3: number, t: number) {
+  const t2 = t * t
+  const t3 = t2 * t
+  return (
+    0.5 *
+    (2 * p1 + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2 + (-p0 + 3 * p1 - 3 * p2 + p3) * t3)
+  )
+}
+
+function heightAt(terrain: TerrainData, col: number, row: number) {
+  const c = Math.max(0, Math.min(terrain.width - 1, col))
+  const r = Math.max(0, Math.min(terrain.height - 1, row))
+  return terrain.heights[r * terrain.width + c]
+}
+
+// Bicubic (Catmull-Rom) elevation sampling so the render mesh is smooth
+// even where it is denser than the source DEM.
 export function sampleElevation(lon: number, lat: number, terrain: TerrainData) {
-  const xRatio = (lon - terrain.bounds.west) / (terrain.bounds.east - terrain.bounds.west)
-  const yRatio = (terrain.bounds.north - lat) / (terrain.bounds.north - terrain.bounds.south)
-  const x = Math.max(0, Math.min(terrain.width - 1, xRatio * (terrain.width - 1)))
-  const y = Math.max(0, Math.min(terrain.height - 1, yRatio * (terrain.height - 1)))
-  const x0 = Math.floor(x)
-  const y0 = Math.floor(y)
-  const x1 = Math.min(terrain.width - 1, x0 + 1)
-  const y1 = Math.min(terrain.height - 1, y0 + 1)
-  const sx = x - x0
-  const sy = y - y0
-  const h00 = terrain.heights[y0 * terrain.width + x0]
-  const h10 = terrain.heights[y0 * terrain.width + x1]
-  const h01 = terrain.heights[y1 * terrain.width + x0]
-  const h11 = terrain.heights[y1 * terrain.width + x1]
-  const top = h00 * (1 - sx) + h10 * sx
-  const bottom = h01 * (1 - sx) + h11 * sx
-  return top * (1 - sy) + bottom * sy
+  const x = ((lon - terrain.bounds.west) / (terrain.bounds.east - terrain.bounds.west)) * (terrain.width - 1)
+  const y = ((terrain.bounds.north - lat) / (terrain.bounds.north - terrain.bounds.south)) * (terrain.height - 1)
+  const cx = Math.max(0, Math.min(terrain.width - 1, x))
+  const cy = Math.max(0, Math.min(terrain.height - 1, y))
+  const x1 = Math.floor(cx)
+  const y1 = Math.floor(cy)
+  const sx = cx - x1
+  const sy = cy - y1
+
+  const rows: number[] = []
+  for (let dr = -1; dr <= 2; dr += 1) {
+    rows.push(
+      catmullRom(
+        heightAt(terrain, x1 - 1, y1 + dr),
+        heightAt(terrain, x1, y1 + dr),
+        heightAt(terrain, x1 + 1, y1 + dr),
+        heightAt(terrain, x1 + 2, y1 + dr),
+        sx,
+      ),
+    )
+  }
+  return catmullRom(rows[0], rows[1], rows[2], rows[3], sy)
 }
 
 export function terrainPoint(lon: number, lat: number, terrain: TerrainData, exaggeration: number) {
@@ -37,58 +62,132 @@ export function terrainPoint(lon: number, lat: number, terrain: TerrainData, exa
 
 export function createTerrainGeometry(terrain: TerrainData, exaggeration: number) {
   const geometry = new THREE.BufferGeometry()
-  const positions: number[] = []
-  const colors: number[] = []
+  const positions = new Float32Array(RENDER_GRID_WIDTH * RENDER_GRID_HEIGHT * 3)
+  const uvs = new Float32Array(RENDER_GRID_WIDTH * RENDER_GRID_HEIGHT * 2)
   const indices: number[] = []
-  const color = new THREE.Color()
-  const renderWidth = Math.max(terrain.width, RENDER_GRID_SIZE)
-  const renderHeight = Math.max(terrain.height, RENDER_GRID_SIZE)
 
-  for (let row = 0; row < renderHeight; row += 1) {
-    for (let col = 0; col < renderWidth; col += 1) {
-      const xRatio = col / (renderWidth - 1)
-      const zRatio = row / (renderHeight - 1)
-      const x = (xRatio - 0.5) * TERRAIN_SIZE
-      const z = (zRatio - 0.5) * TERRAIN_SIZE
+  let vertex = 0
+  for (let row = 0; row < RENDER_GRID_HEIGHT; row += 1) {
+    const zRatio = row / (RENDER_GRID_HEIGHT - 1)
+    const lat = terrain.bounds.north - zRatio * (terrain.bounds.north - terrain.bounds.south)
+    for (let col = 0; col < RENDER_GRID_WIDTH; col += 1) {
+      const xRatio = col / (RENDER_GRID_WIDTH - 1)
       const lon = terrain.bounds.west + xRatio * (terrain.bounds.east - terrain.bounds.west)
-      const lat = terrain.bounds.north - zRatio * (terrain.bounds.north - terrain.bounds.south)
-      const elevation = sampleElevation(lon, lat, terrain)
-      const y = elevationToY(elevation, terrain, exaggeration)
-      positions.push(x, y, z)
-
-      const normalized = (elevation - terrain.minElevation) / (terrain.maxElevation - terrain.minElevation)
-      const ridgeTexture = Math.sin(col * 0.72 + row * 0.16) * Math.cos(row * 0.42)
-      const fallLineShade = Math.sin(row * 0.27) * 0.05
-      const shadow = Math.max(0, Math.sin(col * 0.34 - row * 0.18)) * 0.18
-      const rockBand =
-        normalized > 0.7 &&
-        ridgeTexture > 0.78 &&
-        (col < renderWidth * 0.28 || row < renderHeight * 0.34 || row > renderHeight * 0.84)
-
-      if (rockBand) {
-        color.setStyle('#9cabb2')
-      } else {
-        const lightness = 0.91 - shadow * 0.55 - fallLineShade + normalized * 0.04
-        const saturation = 0.28 + shadow * 0.28
-        color.setHSL(0.55, saturation, Math.max(0.63, Math.min(0.96, lightness)))
-      }
-      colors.push(color.r, color.g, color.b)
+      const { x, z } = lonLatToXZ(lon, lat, terrain)
+      const y = elevationToY(sampleElevation(lon, lat, terrain), terrain, exaggeration)
+      positions[vertex * 3] = x
+      positions[vertex * 3 + 1] = y
+      positions[vertex * 3 + 2] = z
+      uvs[vertex * 2] = xRatio
+      uvs[vertex * 2 + 1] = 1 - zRatio
+      vertex += 1
     }
   }
 
-  for (let row = 0; row < renderHeight - 1; row += 1) {
-    for (let col = 0; col < renderWidth - 1; col += 1) {
-      const a = row * renderWidth + col
+  for (let row = 0; row < RENDER_GRID_HEIGHT - 1; row += 1) {
+    for (let col = 0; col < RENDER_GRID_WIDTH - 1; col += 1) {
+      const a = row * RENDER_GRID_WIDTH + col
       const b = a + 1
-      const c = a + renderWidth
+      const c = a + RENDER_GRID_WIDTH
       const d = c + 1
       indices.push(a, c, b, b, c, d)
     }
   }
 
-  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3))
-  geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+  geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2))
   geometry.setIndex(indices)
   geometry.computeVertexNormals()
   return geometry
+}
+
+function hash2(x: number, y: number) {
+  const h = Math.sin(x * 127.1 + y * 311.7) * 43758.5453
+  return h - Math.floor(h)
+}
+
+function mixColor(a: [number, number, number], b: [number, number, number], t: number): [number, number, number] {
+  return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]
+}
+
+const SNOW_LIT: [number, number, number] = [248, 251, 255] // #f8fbff
+const SNOW_SHADED: [number, number, number] = [207, 232, 245] // #cfe8f5
+const DEEP_SHADOW: [number, number, number] = [143, 184, 206] // #8fb8ce
+const ROCK_LIGHT: [number, number, number] = [111, 122, 128] // #6f7a80
+const ROCK_DARK: [number, number, number] = [32, 36, 40] // #202428
+const BACKSIDE_HAZE: [number, number, number] = [188, 205, 220] // muted far terrain
+const VALLEY_TINT: [number, number, number] = [214, 222, 216] // low tussock valley floor
+
+// Bakes the whole map look — hillshade, snow palette, rock bands, ski-area
+// emphasis — into one texture draped over the terrain mesh. Lighting is
+// baked so the material can be unlit and read like a printed trail map.
+export function createTerrainTexture(terrain: TerrainData, analysis: TerrainAnalysis) {
+  const canvas = document.createElement('canvas')
+  canvas.width = TEXTURE_WIDTH
+  canvas.height = TEXTURE_HEIGHT
+  const context = canvas.getContext('2d')
+  if (!context) throw new Error('Could not create terrain texture context')
+  const image = context.createImageData(TEXTURE_WIDTH, TEXTURE_HEIGHT)
+
+  const { width, height } = analysis
+
+  for (let py = 0; py < TEXTURE_HEIGHT; py += 1) {
+    const gy = (py / (TEXTURE_HEIGHT - 1)) * (height - 1)
+    for (let px = 0; px < TEXTURE_WIDTH; px += 1) {
+      const gx = (px / (TEXTURE_WIDTH - 1)) * (width - 1)
+
+      const shade = sampleGrid(analysis.hillshade, width, height, gx, gy)
+      const slope = sampleGrid(analysis.slopeDeg, width, height, gx, gy)
+      const gully = sampleGrid(analysis.gullyFactor, width, height, gx, gy)
+      const skiable = sampleGrid(analysis.skiMask, width, height, gx, gy)
+      const lon = terrain.bounds.west + (px / (TEXTURE_WIDTH - 1)) * (terrain.bounds.east - terrain.bounds.west)
+      const lat = terrain.bounds.north - (py / (TEXTURE_HEIGHT - 1)) * (terrain.bounds.north - terrain.bounds.south)
+      const elevation = sampleElevation(lon, lat, terrain)
+
+      // Snow palette from hillshade: lit snow -> shaded snow -> deep gully shadow.
+      const shadow = 1 - smoothstep(0.35, 0.95, shade)
+      let color = mixColor(SNOW_LIT, SNOW_SHADED, clamp01(shadow * 1.35))
+      const deepShadow = clamp01((1 - smoothstep(0.12, 0.5, shade)) * 0.85 + gully * 0.25 * shadow)
+      color = mixColor(color, DEEP_SHADOW, deepShadow)
+
+      // Broken rock bands on steep terrain; speckle so they read as
+      // painted rock texture rather than a solid mask.
+      const rockAmount = smoothstep(34, 48, slope)
+      if (rockAmount > 0.02) {
+        const speckle = hash2(px * 0.9, py * 0.9)
+        const rockNoise = hash2(px * 0.23 + 31.7, py * 0.23 + 17.3)
+        if (speckle < rockAmount * 0.9) {
+          const rock = mixColor(ROCK_LIGHT, ROCK_DARK, clamp01(rockNoise * 0.9 + rockAmount * 0.35))
+          color = mixColor(color, rock, clamp01(rockAmount * 1.15))
+        }
+      }
+
+      // Subtle 50 m contour lines inside the ski area for a map feel.
+      const contourPhase = Math.abs(((elevation % 50) + 50) % 50)
+      const contourStrength = (1 - smoothstep(0.6, 1.6, Math.min(contourPhase, 50 - contourPhase))) * 0.07 * skiable
+      color = mixColor(color, DEEP_SHADOW, contourStrength)
+
+      // Valley floor below the snowline gets a faint tussock tint.
+      const valley = 1 - smoothstep(950, 1250, elevation)
+      color = mixColor(color, VALLEY_TINT, valley * 0.55)
+
+      // Mute everything outside the skiable area toward pale haze so the
+      // ski area is visually emphasised like the official map.
+      const emphasis = clamp01(0.3 + skiable * 0.7)
+      color = mixColor(BACKSIDE_HAZE, color, 0.45 + emphasis * 0.55)
+
+      const offset = (py * TEXTURE_WIDTH + px) * 4
+      image.data[offset] = color[0]
+      image.data[offset + 1] = color[1]
+      image.data[offset + 2] = color[2]
+      image.data[offset + 3] = 255
+    }
+  }
+
+  context.putImageData(image, 0, 0)
+  const texture = new THREE.CanvasTexture(canvas)
+  texture.colorSpace = THREE.SRGBColorSpace
+  texture.anisotropy = 4
+  texture.needsUpdate = true
+  return texture
 }

@@ -1,85 +1,67 @@
-import { Line } from '@react-three/drei'
-import * as THREE from 'three'
-import { terrainPoint } from '../lib/terrain'
+import { Html } from '@react-three/drei'
+import { useMemo } from 'react'
+import { sampleElevation, terrainPoint } from '../lib/terrain'
 import { useViewStore } from '../state/viewStore'
-import type { TerrainData } from '../types'
+import type { TerrainData, TrailCollection } from '../types'
 
 type Props = {
   terrain: TerrainData
+  trails: TrailCollection
 }
 
-const rockBands = [
-  [
-    [171.523, -43.486],
-    [171.53, -43.494],
-    [171.535, -43.506],
-  ],
-  [
-    [171.516, -43.498],
-    [171.52, -43.509],
-    [171.522, -43.522],
-  ],
-  [
-    [171.574, -43.493],
-    [171.579, -43.505],
-    [171.582, -43.518],
-  ],
-]
+// Base-area orientation markers (carparks, base facilities), anchored off
+// the real bottom station of Norwest Express so they georeference without
+// hand-traced coordinates.
 
-const carparkAnchors = [
-  [171.548, -43.519],
-  [171.553, -43.522],
-  [171.558, -43.524],
-]
+function liftBottom(trails: TrailCollection, name: string, terrain: TerrainData) {
+  const feature = trails.features.find(
+    (candidate) => candidate.properties.name === name && candidate.geometry.type === 'LineString',
+  )
+  if (!feature) return null
+  const coords = feature.geometry.coordinates as number[][]
+  const first = coords[0]
+  const last = coords[coords.length - 1]
+  return sampleElevation(first[0], first[1], terrain) < sampleElevation(last[0], last[1], terrain)
+    ? first
+    : last
+}
 
-export function MapDetails({ terrain }: Props) {
+export function MapDetails({ terrain, trails }: Props) {
   const exaggeration = useViewStore((state) => state.exaggeration)
+  const showTrails = useViewStore((state) => state.showTrails)
+
+  const markers = useMemo(() => {
+    const base = liftBottom(trails, 'Norwest Express', terrain) ?? liftBottom(trails, 'Summit Six Chair', terrain)
+    if (!base) return []
+    const [baseLon, baseLat] = base
+
+    const items: Array<{ key: string; lon: number; lat: number; className: string; text: string; lift: number }> = [
+      { key: 'base', lon: baseLon, lat: baseLat, className: 'map-marker base', text: '⌂', lift: 0.05 },
+      { key: 'carpark-1', lon: baseLon + 0.0014, lat: baseLat - 0.001, className: 'map-marker carpark', text: 'P', lift: 0.04 },
+      { key: 'carpark-2', lon: baseLon + 0.0032, lat: baseLat - 0.0024, className: 'map-marker carpark', text: 'P', lift: 0.04 },
+    ]
+    return items.map((item) => {
+      const position = terrainPoint(item.lon, item.lat, terrain, exaggeration)
+      position.y += item.lift
+      return { ...item, position }
+    })
+  }, [trails, terrain, exaggeration])
+
+  if (!showTrails) return null
 
   return (
     <group>
-      {rockBands.map((band, index) => (
-        <Line
-          key={`rock-${index}`}
-          points={band.map(([lon, lat]) => {
-            const point = terrainPoint(lon, lat, terrain, exaggeration)
-            point.y += 0.09
-            return point
-          })}
-          color="#111111"
-          lineWidth={3}
-          dashed
-          dashSize={0.07}
-          gapSize={0.06}
-          transparent
-          opacity={0.82}
-        />
+      {markers.map((marker) => (
+        <Html
+          key={marker.key}
+          position={marker.position}
+          center
+          zIndexRange={[3, 0]}
+          style={{ pointerEvents: 'none' }}
+        >
+          <span className={marker.className}>{marker.text}</span>
+        </Html>
       ))}
-      {carparkAnchors.map(([lon, lat], index) => {
-        const position = terrainPoint(lon, lat, terrain, exaggeration)
-        position.y += 0.08
-        return (
-          <group key={`carpark-${index}`} position={position} rotation={[-Math.PI / 2, 0, 0.22]}>
-            <mesh>
-              <boxGeometry args={[0.48, 0.2, 0.02]} />
-              <meshBasicMaterial color="#7f8b90" transparent opacity={0.9} />
-            </mesh>
-            <lineSegments position={[0, 0, 0.02]}>
-              <bufferGeometry>
-                <bufferAttribute
-                  attach="attributes-position"
-                  args={[
-                    new Float32Array([
-                      -0.2, -0.06, 0, 0.2, -0.06, 0, -0.2, 0, 0, 0.2, 0, 0, -0.2, 0.06, 0, 0.2, 0.06, 0,
-                    ]),
-                    3,
-                  ]}
-                />
-              </bufferGeometry>
-              <lineBasicMaterial color={new THREE.Color('#d8e4e7')} transparent opacity={0.75} />
-            </lineSegments>
-          </group>
-        )
-      })}
     </group>
   )
 }
