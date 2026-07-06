@@ -3,10 +3,49 @@ import { lonLatToXZ, WORLD_UNITS_PER_METER } from './geo'
 import { clamp01, sampleGrid, smoothstep, type TerrainAnalysis } from './terrainAnalysis'
 import type { TerrainData } from '../types'
 
-export const RENDER_GRID_WIDTH = 260
-export const RENDER_GRID_HEIGHT = 300
-export const TEXTURE_WIDTH = 800
-export const TEXTURE_HEIGHT = 880
+export const RENDER_GRID_WIDTH = 300
+export const RENDER_GRID_HEIGHT = 340
+export const TEXTURE_WIDTH = 1200
+export const TEXTURE_HEIGHT = 1360
+
+// Deterministic value-noise fbm for micro-relief and texture detail.
+function valueNoise(x: number, y: number) {
+  const xi = Math.floor(x)
+  const yi = Math.floor(y)
+  const xf = x - xi
+  const yf = y - yi
+  const h = (ix: number, iy: number) => {
+    const n = Math.sin(ix * 127.1 + iy * 311.7) * 43758.5453
+    return n - Math.floor(n)
+  }
+  const sx = xf * xf * (3 - 2 * xf)
+  const sy = yf * yf * (3 - 2 * yf)
+  const top = h(xi, yi) * (1 - sx) + h(xi + 1, yi) * sx
+  const bottom = h(xi, yi + 1) * (1 - sx) + h(xi + 1, yi + 1) * sx
+  return top * (1 - sy) + bottom * sy
+}
+
+export function fbm(x: number, y: number, octaves = 4) {
+  let total = 0
+  let amplitude = 0.5
+  let frequency = 1
+  for (let octave = 0; octave < octaves; octave += 1) {
+    total += valueNoise(x * frequency, y * frequency) * amplitude
+    amplitude *= 0.5
+    frequency *= 2.1
+  }
+  return total // ~0..1
+}
+
+// Small deterministic relief (bumps, dips, wind features) layered on top of
+// the DEM so close zooms read as real snow surface rather than a smooth
+// interpolated sheet. Amplitude is a few metres — visual crunch, not fake
+// terrain.
+export function microRelief(lon: number, lat: number) {
+  const nx = lon * 5200
+  const ny = lat * 5200
+  return (fbm(nx, ny, 4) - 0.5) * 7
+}
 
 export function elevationToY(elevation: number, terrain: TerrainData, exaggeration: number) {
   return (elevation - terrain.minElevation) * WORLD_UNITS_PER_METER * exaggeration
@@ -73,7 +112,7 @@ export function renderSurfaceElevation(lon: number, lat: number, terrain: Terrai
   const vertexElevation = (c: number, r: number) => {
     const vertexLon = terrain.bounds.west + (c / (RENDER_GRID_WIDTH - 1)) * (terrain.bounds.east - terrain.bounds.west)
     const vertexLat = terrain.bounds.north - (r / (RENDER_GRID_HEIGHT - 1)) * (terrain.bounds.north - terrain.bounds.south)
-    return sampleElevation(vertexLon, vertexLat, terrain)
+    return sampleElevation(vertexLon, vertexLat, terrain) + microRelief(vertexLon, vertexLat)
   }
 
   const a = vertexElevation(col, row)
@@ -126,7 +165,7 @@ export function createTerrainGeometry(terrain: TerrainData, exaggeration: number
       const xRatio = col / (RENDER_GRID_WIDTH - 1)
       const lon = terrain.bounds.west + xRatio * (terrain.bounds.east - terrain.bounds.west)
       const { x, z } = lonLatToXZ(lon, lat, terrain)
-      const y = elevationToY(sampleElevation(lon, lat, terrain), terrain, exaggeration)
+      const y = elevationToY(sampleElevation(lon, lat, terrain) + microRelief(lon, lat), terrain, exaggeration)
       positions[vertex * 3] = x
       positions[vertex * 3 + 1] = y
       positions[vertex * 3 + 2] = z
@@ -196,21 +235,33 @@ export function createTerrainTexture(terrain: TerrainData, analysis: TerrainAnal
       const lat = terrain.bounds.north - (py / (TEXTURE_HEIGHT - 1)) * (terrain.bounds.north - terrain.bounds.south)
       const elevation = sampleElevation(lon, lat, terrain)
 
+      // Micro-relief shading: fbm noise (matched to the mesh displacement
+      // scale) bumps the hillshade so zoomed-in snow reads as wind-worked
+      // surface with dips, humps and drift texture instead of flat white.
+      const microNoise = fbm(lon * 5200, lat * 5200, 4) - 0.5
+      const fineNoise = fbm(lon * 16000 + 7.3, lat * 16000 + 3.1, 3) - 0.5
+      const slopeBoost = 0.35 + smoothstep(8, 30, slope) * 0.65
+      const shadeDetailed = clamp01(shade + microNoise * 0.26 * slopeBoost + fineNoise * 0.1)
+
       // Snow palette from hillshade: lit snow -> shaded snow -> deep gully shadow.
-      const shadow = 1 - smoothstep(0.35, 0.95, shade)
+      const shadow = 1 - smoothstep(0.35, 0.95, shadeDetailed)
       let color = mixColor(SNOW_LIT, SNOW_SHADED, clamp01(shadow * 1.35))
-      const deepShadow = clamp01((1 - smoothstep(0.12, 0.5, shade)) * 0.85 + gully * 0.25 * shadow)
+      const deepShadow = clamp01((1 - smoothstep(0.1, 0.48, shadeDetailed)) * 0.95 + gully * 0.3 * shadow)
       color = mixColor(color, DEEP_SHADOW, deepShadow)
 
-      // Broken rock bands on steep terrain; speckle so they read as
-      // painted rock texture rather than a solid mask.
-      const rockAmount = smoothstep(34, 48, slope)
-      if (rockAmount > 0.02) {
+      // Broken rock bands on steep terrain: directional strokes (stretched
+      // noise down the fall line) plus speckle, and scattered outcrops on
+      // moderately steep rolls so ribs and bluffs show at zoom.
+      const rockAmount = smoothstep(34, 47, slope)
+      const outcrop = smoothstep(0.8, 0.97, fbm(lon * 9000 + 41.7, lat * 9000 + 13.9, 3)) * smoothstep(30, 40, slope)
+      const rockMask = clamp01(rockAmount + outcrop * 0.7)
+      if (rockMask > 0.02) {
+        const stroke = fbm(lon * 26000, lat * 9500, 3) // elongated across the slope
         const speckle = hash2(px * 0.9, py * 0.9)
-        const rockNoise = hash2(px * 0.23 + 31.7, py * 0.23 + 17.3)
-        if (speckle < rockAmount * 0.9) {
-          const rock = mixColor(ROCK_LIGHT, ROCK_DARK, clamp01(rockNoise * 0.9 + rockAmount * 0.35))
-          color = mixColor(color, rock, clamp01(rockAmount * 1.15))
+        if (speckle < rockMask * 0.5 || stroke > 0.7 - rockMask * 0.15) {
+          const rockNoise = hash2(px * 0.23 + 31.7, py * 0.23 + 17.3)
+          const rock = mixColor(ROCK_LIGHT, ROCK_DARK, clamp01(rockNoise * 0.9 + rockMask * 0.35))
+          color = mixColor(color, rock, clamp01(rockMask * 1.2))
         }
       }
 
@@ -239,7 +290,7 @@ export function createTerrainTexture(terrain: TerrainData, analysis: TerrainAnal
   context.putImageData(image, 0, 0)
   const texture = new THREE.CanvasTexture(canvas)
   texture.colorSpace = THREE.SRGBColorSpace
-  texture.anisotropy = 4
+  texture.anisotropy = 8
   texture.needsUpdate = true
   return texture
 }

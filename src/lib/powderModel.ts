@@ -25,6 +25,10 @@ export type PowderWeather = {
   forecastTemperatureMinC?: number
   temperatureMaxC: number
   temperatureMinC: number
+  cloudLowPct?: number
+  cloudMidPct?: number
+  cloudHighPct?: number
+  freezingLevelM?: number
 }
 
 export type PowderField = {

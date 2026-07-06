@@ -17,6 +17,10 @@ const hourly = [
   'wind_speed_10m',
   'wind_direction_10m',
   'wind_gusts_10m',
+  'cloud_cover_low',
+  'cloud_cover_mid',
+  'cloud_cover_high',
+  'freezing_level_height',
 ].join(',')
 
 const url = new URL('https://api.open-meteo.com/v1/forecast')
@@ -86,6 +90,14 @@ try {
   // direction vectors instead.
   const windDirection = snowWeightedWindDirection(recentIndexes, fallback.summary.mainWindDirectionDeg ?? 0)
   const forecastWindDirection = snowWeightedWindDirection(forecastIndexes, windDirection)
+  // Current cloud picture: average of the last 6 available hours so the 3D
+  // cloud layer reflects what the mountain looks like right now.
+  const nowIndexes = recentIndexes.slice(-6)
+  const cloudLowPct = avg('cloud_cover_low', nowIndexes)
+  const cloudMidPct = avg('cloud_cover_mid', nowIndexes)
+  const cloudHighPct = avg('cloud_cover_high', nowIndexes)
+  const freezingLevelM = avg('freezing_level_height', nowIndexes)
+
   const temperatureMinC = minValue('temperature_2m', recentIndexes, fallback.summary.temperatureMinC ?? 0)
   const temperatureMaxC = maxValue('temperature_2m', recentIndexes, fallback.summary.temperatureMaxC ?? 0)
   const forecastTemperatureMinC = minValue('temperature_2m', forecastIndexes, temperatureMinC)
@@ -108,6 +120,10 @@ try {
       temperatureMaxC: Number(temperatureMaxC.toFixed(1)),
       forecastTemperatureMinC: Number(forecastTemperatureMinC.toFixed(1)),
       forecastTemperatureMaxC: Number(forecastTemperatureMaxC.toFixed(1)),
+      cloudLowPct: Number(cloudLowPct.toFixed(0)),
+      cloudMidPct: Number(cloudMidPct.toFixed(0)),
+      cloudHighPct: Number(cloudHighPct.toFixed(0)),
+      freezingLevelM: Number(freezingLevelM.toFixed(0)),
       confidence: recentSnowCm > 4 || forecastSnowCm > 4 ? 'medium' : 'low',
       headline:
         recentSnowCm > 4

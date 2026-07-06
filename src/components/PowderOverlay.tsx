@@ -75,7 +75,7 @@ function createPowderTexture(field: PowderField, displayGrid: Float32Array, mode
       for (let bandIndex = 0; bandIndex < BAND_COLORS.length; bandIndex += 1) {
         if (cm >= BAND_COLORS[bandIndex][0]) {
           color = BAND_COLORS[bandIndex][1]
-          bandAlpha = [0.7, 0.6, 0.48, 0.3, 0.14][bandIndex]
+          bandAlpha = [0.85, 0.76, 0.64, 0.48, 0.3][bandIndex]
           break
         }
       }
@@ -201,9 +201,9 @@ export function PowderOverlay({ terrain, analysis, field, weather }: Props) {
           key={contour.key}
           points={contour.points}
           color={contour.color}
-          lineWidth={1.1}
+          lineWidth={1.6}
           transparent
-          opacity={0.5}
+          opacity={0.75}
           renderOrder={3}
         />
       ))}

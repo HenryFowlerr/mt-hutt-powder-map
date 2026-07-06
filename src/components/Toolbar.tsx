@@ -1,16 +1,20 @@
-import { CloudSnow, CloudLightning, Map, Mountain, RotateCcw, Route, Wind } from 'lucide-react'
+import { CalendarClock, CloudSnow, Cloudy, Map, Mountain, RotateCcw, Route, Snowflake, Wind } from 'lucide-react'
 import { useViewStore } from '../state/viewStore'
 
 export function Toolbar() {
   const {
     powderMode,
     showTrails,
-    showStorm,
+    showClouds,
+    showSnowfall,
+    showWind,
     exaggeration,
     mapView,
     setPowderMode,
     toggleTrails,
-    toggleStorm,
+    toggleClouds,
+    toggleSnowfall,
+    toggleWind,
     toggleExaggeration,
     toggleMapView,
     resetCamera,
@@ -34,16 +38,34 @@ export function Toolbar() {
         title="Forecast powder estimate"
         aria-label="Toggle forecast powder estimate"
       >
-        <Wind size={19} />
+        <CalendarClock size={19} />
       </button>
       <button
-        className={`tool-button ${showStorm ? 'active' : ''}`}
+        className={`tool-button ${showClouds ? 'active' : ''}`}
         type="button"
-        onClick={toggleStorm}
-        title="3D storm layer (clouds, snowfall, wind)"
-        aria-label="Toggle 3D storm layer"
+        onClick={toggleClouds}
+        title="Live cloud layer"
+        aria-label="Toggle live cloud layer"
       >
-        <CloudLightning size={19} />
+        <Cloudy size={19} />
+      </button>
+      <button
+        className={`tool-button ${showSnowfall ? 'active' : ''}`}
+        type="button"
+        onClick={toggleSnowfall}
+        title="Falling snow"
+        aria-label="Toggle falling snow"
+      >
+        <Snowflake size={19} />
+      </button>
+      <button
+        className={`tool-button ${showWind ? 'active' : ''}`}
+        type="button"
+        onClick={toggleWind}
+        title="Wind streaks"
+        aria-label="Toggle wind streaks"
+      >
+        <Wind size={19} />
       </button>
       <button
         className={`tool-button ${showTrails ? 'active' : ''}`}

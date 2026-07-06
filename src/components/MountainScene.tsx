@@ -89,10 +89,10 @@ function CameraRig({ terrain, trails }: { terrain: TerrainData; trails: TrailCol
         enableDamping
         dampingFactor={0.09}
         maxPolarAngle={Math.PI * 0.47}
-        minDistance={2.4}
+        minDistance={0.8}
         maxDistance={26}
         minZoom={22}
-        maxZoom={320}
+        maxZoom={900}
       />
     </>
   )

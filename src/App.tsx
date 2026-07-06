@@ -58,6 +58,10 @@ function App() {
       forecastTemperatureMinC: data.latest.summary.forecastTemperatureMinC,
       temperatureMaxC: data.latest.summary.temperatureMaxC,
       temperatureMinC: data.latest.summary.temperatureMinC,
+      cloudLowPct: data.latest.summary.cloudLowPct,
+      cloudMidPct: data.latest.summary.cloudMidPct,
+      cloudHighPct: data.latest.summary.cloudHighPct,
+      freezingLevelM: data.latest.summary.freezingLevelM,
     }
     const field = buildPowderField(data.terrain, analysis, weather)
     return { analysis, weather, field }

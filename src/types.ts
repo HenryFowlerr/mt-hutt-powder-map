@@ -59,6 +59,10 @@ export type LatestData = {
     forecastMaxGustKph?: number
     forecastTemperatureMinC?: number
     forecastTemperatureMaxC?: number
+    cloudLowPct?: number
+    cloudMidPct?: number
+    cloudHighPct?: number
+    freezingLevelM?: number
     temperatureMinC: number
     temperatureMaxC: number
     confidence: 'low' | 'medium' | 'high'
