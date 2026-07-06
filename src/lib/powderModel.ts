@@ -31,6 +31,8 @@ export type PowderField = {
   forecastScore: Float32Array
 }
 
+export type PowderMode = 'recent' | 'forecast'
+
 type CellFactors = {
   leeFactor: number
   scourPenalty: number
@@ -138,6 +140,79 @@ export function buildPowderField(
     recentScore: boxBlur(recentScore, terrain.width, terrain.height, 1),
     forecastScore: boxBlur(forecastScore, terrain.width, terrain.height, 1),
   }
+}
+
+function neighborhoodMean(
+  grid: Float32Array,
+  width: number,
+  height: number,
+  col: number,
+  row: number,
+  radius: number,
+) {
+  let total = 0
+  let count = 0
+  for (let dr = -radius; dr <= radius; dr += 1) {
+    const r = row + dr
+    if (r < 0 || r >= height) continue
+    for (let dc = -radius; dc <= radius; dc += 1) {
+      const c = col + dc
+      if (c < 0 || c >= width) continue
+      total += grid[r * width + c]
+      count += 1
+    }
+  }
+  return count > 0 ? total / count : 0
+}
+
+// Converts the continuous cm model into the field actually painted on the map.
+// The model keeps background snowfall in the numbers, but the visible overlay
+// should show ski-useful loaded pockets: high scoring, locally concentrated,
+// ski-area terrain rather than a broad green wash over every snowy slope.
+export function buildPowderDisplayField(
+  field: PowderField,
+  analysis: TerrainAnalysis,
+  mode: PowderMode,
+) {
+  const cmGrid = mode === 'recent' ? field.recentCm : field.forecastCm
+  const scoreGrid = mode === 'recent' ? field.recentScore : field.forecastScore
+  const output = new Float32Array(cmGrid.length)
+
+  const shallowEdgeCm = mode === 'recent' ? 10 : 14
+  const usefulEdgeCm = mode === 'recent' ? 16 : 30
+  const scoreEdge = mode === 'recent' ? 0.22 : 0.3
+  const strongScore = mode === 'recent' ? 0.38 : 0.5
+
+  for (let row = 0; row < field.height; row += 1) {
+    for (let col = 0; col < field.width; col += 1) {
+      const index = row * field.width + col
+      const cm = cmGrid[index]
+      if (cm < shallowEdgeCm) continue
+
+      const score = scoreGrid[index]
+      const skiable = analysis.skiMask[index]
+      const gully = analysis.gullyFactor[index]
+      const ridge = analysis.ridgeExposure[index]
+      const localScore = score - neighborhoodMean(scoreGrid, field.width, field.height, col, row, 5)
+      const localDepth = cm - neighborhoodMean(cmGrid, field.width, field.height, col, row, 6)
+
+      const depthMask = smoothstep(shallowEdgeCm, usefulEdgeCm, cm)
+      const scoreMask = smoothstep(scoreEdge, strongScore, score)
+      const skiMask = smoothstep(0.52, 0.84, skiable)
+      const collectorMask = smoothstep(0.24, 0.68, 0.42 * gully + 0.42 * score + 0.16 * localScore - 0.22 * ridge)
+      const pocketMask =
+        0.45 * smoothstep(-0.015, 0.07, localScore) +
+        0.35 * smoothstep(-0.7, 2.7, localDepth) +
+        0.2 * gully
+      const combinedMask = depthMask * scoreMask * skiMask * collectorMask * clamp01(0.35 + 0.65 * pocketMask)
+
+      if (combinedMask >= 0.18) {
+        output[index] = cm
+      }
+    }
+  }
+
+  return output
 }
 
 function compassLabel(degrees: number) {

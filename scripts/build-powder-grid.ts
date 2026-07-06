@@ -3,6 +3,7 @@ import { join } from 'node:path'
 import { extractContours, ringArea, simplifyRing } from '../src/lib/marchingSquares'
 import {
   buildPowderField,
+  buildPowderDisplayField,
   describeCell,
   POWDER_THRESHOLDS_CM,
   type PowderWeather,
@@ -56,12 +57,13 @@ function ringCentroidIndex(ring: Array<[number, number]>) {
 
 function buildPolygons(mode: 'recent' | 'forecast'): PowderPolygon[] {
   const grid = mode === 'recent' ? field.recentCm : field.forecastCm
+  const displayGrid = buildPowderDisplayField(field, analysis, mode)
   const scores = mode === 'recent' ? field.recentScore : field.forecastScore
   const polygons: PowderPolygon[] = []
   let counter = 0
 
-  for (const threshold of POWDER_THRESHOLDS_CM) {
-    const rings = extractContours(grid, terrain.width, terrain.height, threshold)
+  for (const threshold of POWDER_THRESHOLDS_CM.filter((cm) => cm >= 10)) {
+    const rings = extractContours(displayGrid, terrain.width, terrain.height, threshold)
     for (const ring of rings) {
       if (ringArea(ring) < 3) continue
       const simplified = simplifyRing(ring, 0.3) as Array<[number, number]>

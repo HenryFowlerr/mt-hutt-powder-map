@@ -133,6 +133,7 @@ function buildLabels(terrain: TerrainData, trails: TrailCollection, exaggeration
 export function MapLabels({ terrain, trails }: Props) {
   const exaggeration = useViewStore((state) => state.exaggeration)
   const showTrails = useViewStore((state) => state.showTrails)
+  const mapView = useViewStore((state) => state.mapView)
   const camera = useThree((state) => state.camera)
   const [closeZoom, setCloseZoom] = useState(false)
   const frameCount = useRef(0)
@@ -163,7 +164,16 @@ export function MapLabels({ terrain, trails }: Props) {
   return (
     <group>
       {labels
-        .filter((label) => label.major || closeZoom)
+        .filter((label) => {
+          if (closeZoom) return true
+          if (!label.major) return false
+          if (!mapView) return true
+          return (
+            (label.className.includes('lift') && label.text !== 'TOWERS TRIPLE CHAIR') ||
+            label.className.includes('elevation') ||
+            label.text.startsWith('BASE')
+          )
+        })
         .map((label) => (
           <Html
             key={`${label.text}-${label.position.x.toFixed(3)}`}

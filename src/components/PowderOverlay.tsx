@@ -6,9 +6,11 @@ import { xzToLonLat } from '../lib/geo'
 import { createTerrainGeometry, terrainPoint } from '../lib/terrain'
 import { extractContours, ringArea, simplifyRing } from '../lib/marchingSquares'
 import {
+  buildPowderDisplayField,
   describeCell,
   powderColorForCm,
   type PowderField,
+  type PowderMode,
   type PowderWeather,
 } from '../lib/powderModel'
 import { lonLatToGrid, sampleGrid, smoothstep, type TerrainAnalysis } from '../lib/terrainAnalysis'
@@ -44,8 +46,9 @@ const TEXTURE_HEIGHT = 560
 // Bakes the powder cm field into a translucent banded texture draped over
 // a clone of the terrain mesh — irregular, terrain-following patches with
 // feathered edges instead of grid blobs.
-function createPowderTexture(field: PowderField, mode: 'recent' | 'forecast') {
-  const grid = mode === 'recent' ? field.recentCm : field.forecastCm
+function createPowderTexture(field: PowderField, displayGrid: Float32Array, mode: PowderMode) {
+  const rawGrid = mode === 'recent' ? field.recentCm : field.forecastCm
+  const scoreGrid = mode === 'recent' ? field.recentScore : field.forecastScore
   const canvas = document.createElement('canvas')
   canvas.width = TEXTURE_WIDTH
   canvas.height = TEXTURE_HEIGHT
@@ -57,14 +60,16 @@ function createPowderTexture(field: PowderField, mode: 'recent' | 'forecast') {
     const gy = (py / (TEXTURE_HEIGHT - 1)) * (field.height - 1)
     for (let px = 0; px < TEXTURE_WIDTH; px += 1) {
       const gx = (px / (TEXTURE_WIDTH - 1)) * (field.width - 1)
-      const cm = sampleGrid(grid, field.width, field.height, gx, gy)
+      const displayCm = sampleGrid(displayGrid, field.width, field.height, gx, gy)
       const offset = (py * TEXTURE_WIDTH + px) * 4
 
-      if (cm < 12) {
+      if (displayCm < 9) {
         image.data[offset + 3] = 0
         continue
       }
 
+      const cm = sampleGrid(rawGrid, field.width, field.height, gx, gy)
+      const score = sampleGrid(scoreGrid, field.width, field.height, gx, gy)
       let color: [number, number, number] = BAND_COLORS[BAND_COLORS.length - 1][1]
       let bandAlpha = 0.24
       for (let bandIndex = 0; bandIndex < BAND_COLORS.length; bandIndex += 1) {
@@ -75,10 +80,12 @@ function createPowderTexture(field: PowderField, mode: 'recent' | 'forecast') {
         }
       }
 
-      // Keep low-confidence / shallow coverage off the map surface. The side
-      // panel still reports 5-10 cm, but rendered patches begin where the
-      // model has enough depth to suggest a useful skiable pocket.
-      const alpha = smoothstep(12, 18, cm) * bandAlpha
+      // Display field controls where the patch exists; score/depth control
+      // how strongly it reads. This keeps shallow background snow out while
+      // still showing light-green edges around genuinely loaded pockets.
+      const edgeFeather = smoothstep(9, 14, displayCm)
+      const confidence = smoothstep(0.18, 0.44, score)
+      const alpha = edgeFeather * (0.55 + 0.45 * confidence) * bandAlpha
       image.data[offset] = color[0]
       image.data[offset + 1] = color[1]
       image.data[offset + 2] = color[2]
@@ -108,16 +115,17 @@ export function PowderOverlay({ terrain, analysis, field, weather }: Props) {
 
   const mode = powderMode === 'off' ? 'recent' : powderMode
   const grid = mode === 'recent' ? field.recentCm : field.forecastCm
+  const displayGrid = useMemo(() => buildPowderDisplayField(field, analysis, mode), [field, analysis, mode])
 
   const geometry = useMemo(() => createTerrainGeometry(terrain, exaggeration), [terrain, exaggeration])
-  const texture = useMemo(() => createPowderTexture(field, mode), [field, mode])
+  const texture = useMemo(() => createPowderTexture(field, displayGrid, mode), [field, displayGrid, mode])
 
   // Contour outlines from marching squares give the patches crisp,
   // irregular, terrain-anchored edges like snow-depth isolines.
   const contours = useMemo(() => {
     const lines: Array<{ points: THREE.Vector3[]; color: string; key: string }> = []
     for (const threshold of [10, 20, 30, 40]) {
-      const rings = extractContours(grid, field.width, field.height, threshold)
+      const rings = extractContours(displayGrid, field.width, field.height, threshold)
       rings.forEach((ring, ringIndex) => {
         if (ringArea(ring) < 3) return
         const simplified = simplifyRing(ring, 0.3)
@@ -133,7 +141,7 @@ export function PowderOverlay({ terrain, analysis, field, weather }: Props) {
       })
     }
     return lines
-  }, [grid, field, terrain, exaggeration])
+  }, [displayGrid, field, terrain, exaggeration])
 
   useEffect(() => () => geometry.dispose(), [geometry])
   useEffect(() => () => texture.dispose(), [texture])
@@ -147,11 +155,12 @@ export function PowderOverlay({ terrain, analysis, field, weather }: Props) {
 
     const { lon, lat } = xzToLonLat(event.point.x, event.point.z, terrain)
     const gridPos = lonLatToGrid(lon, lat, terrain)
-    const cm = sampleGrid(grid, field.width, field.height, gridPos.x, gridPos.y)
-    if (cm < 12) {
+    const displayCm = sampleGrid(displayGrid, field.width, field.height, gridPos.x, gridPos.y)
+    if (displayCm < 9) {
       setHover(null)
       return
     }
+    const cm = sampleGrid(grid, field.width, field.height, gridPos.x, gridPos.y)
     const scoreGrid = mode === 'recent' ? field.recentScore : field.forecastScore
     const score = sampleGrid(scoreGrid, field.width, field.height, gridPos.x, gridPos.y)
     const index =
