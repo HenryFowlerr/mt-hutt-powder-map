@@ -89,13 +89,22 @@ function buildPolygons(mode: 'recent' | 'forecast'): PowderPolygon[] {
   return polygons
 }
 
-const powderPolygons = [...buildPolygons('recent'), ...buildPolygons('forecast')]
+// A polygon-build failure must not break the scheduled data update: the app
+// computes its own overlay from the summary, so stale polygons are the
+// lesser evil versus a failed workflow.
+try {
+  const powderPolygons = [...buildPolygons('recent'), ...buildPolygons('forecast')]
 
-// powderGrid (old schema) is intentionally dropped.
-delete latest.powderGrid
-const next = { ...latest, powderPolygons }
+  // powderGrid (old schema) is intentionally dropped.
+  delete latest.powderGrid
+  const next = { ...latest, powderPolygons }
 
-writeFileSync(latestPath, `${JSON.stringify(next, null, 2)}\n`)
-console.log(
-  `Built ${powderPolygons.length} powder polygons (${powderPolygons.filter((p) => p.mode === 'recent').length} recent, ${powderPolygons.filter((p) => p.mode === 'forecast').length} forecast)`,
-)
+  writeFileSync(latestPath, `${JSON.stringify(next, null, 2)}\n`)
+  console.log(
+    `Built ${powderPolygons.length} powder polygons (${powderPolygons.filter((p) => p.mode === 'recent').length} recent, ${powderPolygons.filter((p) => p.mode === 'forecast').length} forecast)`,
+  )
+} catch (error) {
+  console.warn(
+    `Powder polygon build failed, keeping previous polygons: ${error instanceof Error ? error.message : String(error)}`,
+  )
+}

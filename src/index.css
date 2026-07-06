@@ -263,17 +263,33 @@ button {
   font-size: 12.5px;
 }
 
-.zone-list li {
+.zone-row {
   display: flex;
   align-items: center;
   gap: 8px;
+  width: 100%;
   padding: 4px 6px;
+  border: none;
   border-radius: 6px;
-  cursor: default;
+  background: none;
+  text-align: left;
+  font-size: inherit;
+  color: inherit;
+  cursor: pointer;
 }
 
-.zone-list li:hover {
-  background: rgba(31, 143, 82, 0.08);
+.zone-row:hover {
+  background: rgba(31, 143, 82, 0.1);
+}
+
+.wind-arrow {
+  display: inline-block;
+  font-size: 11px;
+  color: var(--green);
+}
+
+.stale-warning {
+  color: #a03530;
 }
 
 .zone-swatch {

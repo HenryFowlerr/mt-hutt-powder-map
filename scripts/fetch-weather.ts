@@ -158,9 +158,24 @@ try {
       })),
   }
 
+  // Never write garbage: if the API returned something unusable, keep the
+  // previous file (its generatedAt then honestly reflects the data age).
+  const criticalNumbers = [
+    next.summary.recentSnowCm,
+    next.summary.forecastSnowCm,
+    next.summary.mainWindDirectionDeg,
+    next.summary.avgWindKph,
+    next.summary.temperatureMinC,
+    next.summary.temperatureMaxC,
+  ]
+  if (criticalNumbers.some((value) => !Number.isFinite(value))) {
+    throw new Error('Open-Meteo response produced non-finite summary values')
+  }
+
   writeFileSync(latestPath, `${JSON.stringify(next, null, 2)}\n`)
   console.log(`Updated weather data from Open-Meteo: ${recentSnowCm.toFixed(1)} cm recent snow`)
 } catch (error) {
-  console.warn(`Weather update failed, keeping fallback data: ${error instanceof Error ? error.message : String(error)}`)
-  writeFileSync(latestPath, `${JSON.stringify({ ...fallback, generatedAt: new Date().toISOString() }, null, 2)}\n`)
+  // Keep the existing file untouched so the app's "updated X ago" stays
+  // honest about how old the data actually is.
+  console.warn(`Weather update failed, keeping previous data: ${error instanceof Error ? error.message : String(error)}`)
 }

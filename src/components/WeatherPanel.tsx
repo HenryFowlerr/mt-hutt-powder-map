@@ -62,7 +62,9 @@ function snowlineSentence(freezingLevelM: number | undefined) {
 
 export function WeatherPanel({ latest, field, terrain, analysis, trails, weather }: Props) {
   const powderMode = useViewStore((state) => state.powderMode)
+  const focusOn = useViewStore((state) => state.focusOn)
   const generated = new Date(latest.generatedAt)
+  const isStale = Date.now() - generated.getTime() > 24 * 60 * 60 * 1000
   const mode = powderMode === 'forecast' ? 'forecast' : 'recent'
   const maxCm = Math.round(fieldMaxCm(field, mode))
   const windDirection =
@@ -121,6 +123,13 @@ export function WeatherPanel({ latest, field, terrain, analysis, trails, weather
         <div className="stat">
           <span>Wind</span>
           <strong>
+            <span
+              className="wind-arrow"
+              style={{ transform: `rotate(${windDirection + 90}deg)` }}
+              aria-hidden="true"
+            >
+              ➤
+            </span>{' '}
             {windFrom} {Math.round(windSpeed)}
             {windGust ? <em> g{Math.round(windGust)}</em> : null}
           </strong>
@@ -138,12 +147,19 @@ export function WeatherPanel({ latest, field, terrain, analysis, trails, weather
       <h2 className="panel-section">Best zones · {mode === 'forecast' ? 'next 72 h' : 'right now'}</h2>
       <ul className="zone-list">
         {zones.map((zone) => (
-          <li key={zone.name} title={zone.reason}>
-            <span className="zone-swatch" style={{ background: powderColorForCm(zone.maxCm) }} />
-            <span className="zone-name">{zone.name}</span>
-            <span className="zone-cm">
-              ~{zone.maxCm} <em>cm</em>
-            </span>
+          <li key={zone.name}>
+            <button
+              type="button"
+              className="zone-row"
+              title={`${zone.reason} Click to fly there.`}
+              onClick={() => focusOn(zone.anchorLon, zone.anchorLat)}
+            >
+              <span className="zone-swatch" style={{ background: powderColorForCm(zone.maxCm) }} />
+              <span className="zone-name">{zone.name}</span>
+              <span className="zone-cm">
+                ~{zone.maxCm} <em>cm</em>
+              </span>
+            </button>
           </li>
         ))}
       </ul>
@@ -195,8 +211,9 @@ export function WeatherPanel({ latest, field, terrain, analysis, trails, weather
       </details>
 
       <p className="disclaimer">
-        Updated {formatDistanceToNow(generated, { addSuffix: true })} · recreational estimate only, powder
-        never guaranteed. Check Mt Hutt reports and avalanche advisories.
+        Updated {formatDistanceToNow(generated, { addSuffix: true })}
+        {isStale ? <strong className="stale-warning"> · data may be stale</strong> : null} · recreational
+        estimate only, powder never guaranteed. Check Mt Hutt reports and avalanche advisories.
       </p>
     </aside>
   )

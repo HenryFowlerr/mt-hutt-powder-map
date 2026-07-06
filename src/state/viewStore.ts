@@ -12,6 +12,8 @@ type ViewState = {
   exaggeration: number
   mapView: boolean
   resetCount: number
+  focusPoint: { lon: number; lat: number } | null
+  focusCount: number
   setPowderMode: (mode: PowderMode) => void
   toggleTrails: () => void
   toggleClouds: () => void
@@ -21,6 +23,7 @@ type ViewState = {
   toggleExaggeration: () => void
   toggleMapView: () => void
   resetCamera: () => void
+  focusOn: (lon: number, lat: number) => void
 }
 
 export const useViewStore = create<ViewState>((set) => ({
@@ -33,6 +36,8 @@ export const useViewStore = create<ViewState>((set) => ({
   exaggeration: 1.25,
   mapView: false,
   resetCount: 0,
+  focusPoint: null,
+  focusCount: 0,
   setPowderMode: (mode) =>
     set((state) => ({ powderMode: state.powderMode === mode ? 'off' : mode })),
   toggleTrails: () => set((state) => ({ showTrails: !state.showTrails })),
@@ -44,5 +49,6 @@ export const useViewStore = create<ViewState>((set) => ({
     set((state) => ({ exaggeration: state.exaggeration > 1.4 ? 1.25 : 1.75 })),
   toggleMapView: () =>
     set((state) => ({ mapView: !state.mapView, resetCount: state.resetCount + 1 })),
-  resetCamera: () => set((state) => ({ resetCount: state.resetCount + 1 })),
+  resetCamera: () => set((state) => ({ resetCount: state.resetCount + 1, focusPoint: null })),
+  focusOn: (lon, lat) => set((state) => ({ focusPoint: { lon, lat }, focusCount: state.focusCount + 1 })),
 }))

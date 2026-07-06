@@ -13,6 +13,8 @@ export type ZoneSummary = {
   meanCm: number
   score: number
   reason: string
+  anchorLon: number
+  anchorLat: number
 }
 
 // [display name, anchor run (post-override names), radius in metres]
@@ -96,6 +98,8 @@ export function buildZoneSummaries(
       meanCm: Math.round(total / count),
       score: maxIndex >= 0 ? Number(scoreGrid[maxIndex].toFixed(2)) : 0,
       reason,
+      anchorLon: anchor[0],
+      anchorLat: anchor[1],
     })
   }
 

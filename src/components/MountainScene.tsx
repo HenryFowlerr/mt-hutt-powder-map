@@ -77,6 +77,25 @@ function CameraRig({ terrain, trails }: { terrain: TerrainData; trails: TrailCol
     controls.update()
   }, [resetCount, mapView, target, perspectivePosition, orthoPosition])
 
+  // Zone click in the panel flies the camera to that zone.
+  const focusPoint = useViewStore((state) => state.focusPoint)
+  const focusCount = useViewStore((state) => state.focusCount)
+  useEffect(() => {
+    const controls = controlsRef.current
+    if (!controls || !focusPoint) return
+    const zoneTarget = terrainPoint(focusPoint.lon, focusPoint.lat, terrain, exaggeration)
+    controls.target.copy(zoneTarget)
+    if (controls.object instanceof THREE.OrthographicCamera) {
+      controls.object.position.copy(zoneTarget.clone().add(new THREE.Vector3(2.2, 6, 1.8)))
+      controls.object.zoom = 160
+      controls.object.updateProjectionMatrix()
+    } else {
+      controls.object.position.copy(zoneTarget.clone().add(new THREE.Vector3(2.5, 2, 2)))
+    }
+    controls.update()
+    // focusCount retriggers the fly-to even for the same zone.
+  }, [focusCount, focusPoint, terrain, exaggeration])
+
   return (
     <>
       {mapView ? (
