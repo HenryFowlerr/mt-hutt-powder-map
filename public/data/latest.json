@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-17T14:02:41.064Z",
+  "generatedAt": "2026-07-17T15:39:23.594Z",
   "location": "Mt Hutt",
   "summary": {
     "recentSnowCm": 0,
@@ -13,15 +13,15 @@
     "reasons": [
       "0 cm estimated snowfall in the last 72 hours from Open-Meteo.",
       "Mean recent wind around 6 km/h from 304 degrees.",
-      "Forecast wind trends 6 km/h from 304 degrees over the next 72 hours.",
+      "Forecast wind trends 6 km/h from 303 degrees over the next 72 hours.",
       "Terrain score favours cold upper mountain bowls, gullies, and lee-facing aspects."
     ],
     "maxGustKph": 59,
-    "forecastWindDirectionDeg": 304,
+    "forecastWindDirectionDeg": 303,
     "forecastAvgWindKph": 6,
     "forecastMaxGustKph": 49,
     "forecastTemperatureMinC": -7.1,
-    "forecastTemperatureMaxC": 0.1,
+    "forecastTemperatureMaxC": -0.3,
     "cloudLowPct": 0,
     "cloudMidPct": 0,
     "cloudHighPct": 0,
@@ -29,7 +29,7 @@
     "cloudMeanPct": 0,
     "meltFreezeCycles": 0,
     "recentRainMm": 2.7,
-    "hoursAboveZero": 3,
+    "hoursAboveZero": 4,
     "hoursSinceSnow": 999
   },
   "observations": [
@@ -473,17 +473,16 @@
       "snowfallCm": 0,
       "windKph": 8.3,
       "windDirectionDeg": 321
-    }
-  ],
-  "forecast": [
+    },
     {
       "time": "2026-07-17T15:00",
       "temperatureC": 0.1,
       "snowfallCm": 0,
       "windKph": 7.3,
-      "windDirectionDeg": 322,
-      "freezingLevelM": 2910
-    },
+      "windDirectionDeg": 322
+    }
+  ],
+  "forecast": [
     {
       "time": "2026-07-17T16:00",
       "temperatureC": -0.3,
@@ -1819,6 +1818,14 @@
       "windKph": 9.1,
       "windDirectionDeg": 319,
       "freezingLevelM": 1400
+    },
+    {
+      "time": "2026-07-24T15:00",
+      "temperatureC": -4.4,
+      "snowfallCm": 0,
+      "windKph": 10.8,
+      "windDirectionDeg": 318,
+      "freezingLevelM": 1450
     }
   ],
   "powderPolygons": [],
@@ -1829,12 +1836,12 @@
       "precipMm": 0,
       "rainMm": 0,
       "tempMinC": -5.4,
-      "tempMaxC": 0.2,
+      "tempMaxC": 0.1,
       "windMeanKph": 9,
       "gustMaxKph": 38,
-      "windDirectionDeg": 313,
-      "cloudPct": 6,
-      "freezingLevelM": 2891,
+      "windDirectionDeg": 312,
+      "cloudPct": 7,
+      "freezingLevelM": 2888,
       "weatherCode": 0
     },
     {
