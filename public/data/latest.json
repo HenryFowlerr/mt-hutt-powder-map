@@ -1,45 +1,38 @@
 {
-  "generatedAt": "2026-07-23T23:10:55.411Z",
+  "generatedAt": "2026-07-24T00:13:02.774Z",
   "location": "Mt Hutt",
   "summary": {
-    "recentSnowCm": 0,
-    "forecastSnowCm": 9.7,
-    "mainWindDirectionDeg": 309,
+    "recentSnowCm": 0.7,
+    "forecastSnowCm": 9.4,
+    "mainWindDirectionDeg": 311,
     "avgWindKph": 7,
     "temperatureMinC": -7.8,
     "temperatureMaxC": -0.3,
     "confidence": "medium",
     "headline": "Limited recent snow signal; sheltered upper terrain still scores best if snow stayed cold.",
     "reasons": [
-      "0 cm estimated snowfall in the last 72 hours from Open-Meteo.",
-      "Mean recent wind around 7 km/h from 309 degrees.",
-      "Forecast wind trends 5 km/h from 218 degrees over the next 72 hours.",
+      "1 cm estimated snowfall in the last 72 hours from Open-Meteo.",
+      "Mean recent wind around 7 km/h from 311 degrees.",
+      "Forecast wind trends 5 km/h from 212 degrees over the next 72 hours.",
       "Terrain score favours cold upper mountain bowls, gullies, and lee-facing aspects."
     ],
-    "maxGustKph": 79,
-    "forecastWindDirectionDeg": 218,
+    "maxGustKph": 82,
+    "forecastWindDirectionDeg": 212,
     "forecastAvgWindKph": 5,
     "forecastMaxGustKph": 64,
-    "forecastTemperatureMinC": -14.8,
-    "forecastTemperatureMaxC": -0.5,
-    "cloudLowPct": 97,
-    "cloudMidPct": 63,
+    "forecastTemperatureMinC": -15.5,
+    "forecastTemperatureMaxC": -0.7,
+    "cloudLowPct": 99,
+    "cloudMidPct": 70,
     "cloudHighPct": 50,
-    "freezingLevelM": 1967,
+    "freezingLevelM": 1980,
     "cloudMeanPct": 99,
     "meltFreezeCycles": 0,
-    "recentRainMm": 6.2,
+    "recentRainMm": 9.1,
     "hoursAboveZero": 0,
-    "hoursSinceSnow": 999
+    "hoursSinceSnow": 0
   },
   "observations": [
-    {
-      "time": "2026-07-21T00:00",
-      "temperatureC": -6.5,
-      "snowfallCm": 0,
-      "windKph": 6.4,
-      "windDirectionDeg": 308
-    },
     {
       "time": "2026-07-21T01:00",
       "temperatureC": -6.7,
@@ -536,17 +529,16 @@
       "snowfallCm": 0,
       "windKph": 12.9,
       "windDirectionDeg": 320
-    }
-  ],
-  "forecast": [
+    },
     {
       "time": "2026-07-24T00:00",
       "temperatureC": -0.5,
       "snowfallCm": 0.7,
       "windKph": 9,
-      "windDirectionDeg": 317,
-      "freezingLevelM": 1980
-    },
+      "windDirectionDeg": 317
+    }
+  ],
+  "forecast": [
     {
       "time": "2026-07-24T01:00",
       "temperatureC": -0.7,
@@ -589,7 +581,7 @@
     },
     {
       "time": "2026-07-24T06:00",
-      "temperatureC": -3.8,
+      "temperatureC": -2.3,
       "snowfallCm": 0,
       "windKph": 7.3,
       "windDirectionDeg": 300,
@@ -597,7 +589,7 @@
     },
     {
       "time": "2026-07-24T07:00",
-      "temperatureC": -4.8,
+      "temperatureC": -3.2,
       "snowfallCm": 0,
       "windKph": 7.2,
       "windDirectionDeg": 302,
@@ -605,7 +597,7 @@
     },
     {
       "time": "2026-07-24T08:00",
-      "temperatureC": -5.8,
+      "temperatureC": -3,
       "snowfallCm": 0,
       "windKph": 7.4,
       "windDirectionDeg": 299,
@@ -613,7 +605,7 @@
     },
     {
       "time": "2026-07-24T09:00",
-      "temperatureC": -4.8,
+      "temperatureC": -2.6,
       "snowfallCm": 0,
       "windKph": 7.4,
       "windDirectionDeg": 302,
@@ -621,7 +613,7 @@
     },
     {
       "time": "2026-07-24T10:00",
-      "temperatureC": -3.7,
+      "temperatureC": -2,
       "snowfallCm": 0,
       "windKph": 7.6,
       "windDirectionDeg": 315,
@@ -629,7 +621,7 @@
     },
     {
       "time": "2026-07-24T11:00",
-      "temperatureC": -2.7,
+      "temperatureC": -1.3,
       "snowfallCm": 0,
       "windKph": 6.8,
       "windDirectionDeg": 318,
@@ -637,7 +629,7 @@
     },
     {
       "time": "2026-07-24T12:00",
-      "temperatureC": -1.6,
+      "temperatureC": -0.9,
       "snowfallCm": 0,
       "windKph": 6.1,
       "windDirectionDeg": 313,
@@ -645,7 +637,7 @@
     },
     {
       "time": "2026-07-24T13:00",
-      "temperatureC": -1.1,
+      "temperatureC": -0.8,
       "snowfallCm": 0,
       "windKph": 5.5,
       "windDirectionDeg": 333,
@@ -653,23 +645,23 @@
     },
     {
       "time": "2026-07-24T14:00",
-      "temperatureC": -2.2,
-      "snowfallCm": 0.07,
+      "temperatureC": -2.1,
+      "snowfallCm": 0.21,
       "windKph": 6.3,
       "windDirectionDeg": 340,
       "freezingLevelM": 1740
     },
     {
       "time": "2026-07-24T15:00",
-      "temperatureC": -2.7,
-      "snowfallCm": 0.7,
+      "temperatureC": -2.8,
+      "snowfallCm": 0.77,
       "windKph": 3.1,
       "windDirectionDeg": 310,
       "freezingLevelM": 1690
     },
     {
       "time": "2026-07-24T16:00",
-      "temperatureC": -2.4,
+      "temperatureC": -2.7,
       "snowfallCm": 0,
       "windKph": 2.8,
       "windDirectionDeg": 297,
@@ -677,7 +669,7 @@
     },
     {
       "time": "2026-07-24T17:00",
-      "temperatureC": -3.4,
+      "temperatureC": -3.6,
       "snowfallCm": 0,
       "windKph": 3.8,
       "windDirectionDeg": 311,
@@ -685,7 +677,7 @@
     },
     {
       "time": "2026-07-24T18:00",
-      "temperatureC": -4.8,
+      "temperatureC": -4.4,
       "snowfallCm": 0,
       "windKph": 4.3,
       "windDirectionDeg": 318,
@@ -693,7 +685,7 @@
     },
     {
       "time": "2026-07-24T19:00",
-      "temperatureC": -6.3,
+      "temperatureC": -5.3,
       "snowfallCm": 0,
       "windKph": 4.5,
       "windDirectionDeg": 286,
@@ -701,7 +693,7 @@
     },
     {
       "time": "2026-07-24T20:00",
-      "temperatureC": -7.3,
+      "temperatureC": -6.2,
       "snowfallCm": 0,
       "windKph": 5.8,
       "windDirectionDeg": 292,
@@ -709,7 +701,7 @@
     },
     {
       "time": "2026-07-24T21:00",
-      "temperatureC": -8.7,
+      "temperatureC": -7.1,
       "snowfallCm": 0,
       "windKph": 5.9,
       "windDirectionDeg": 288,
@@ -717,7 +709,7 @@
     },
     {
       "time": "2026-07-24T22:00",
-      "temperatureC": -9.4,
+      "temperatureC": -7.5,
       "snowfallCm": 0,
       "windKph": 5.7,
       "windDirectionDeg": 281,
@@ -725,7 +717,7 @@
     },
     {
       "time": "2026-07-24T23:00",
-      "temperatureC": -9.5,
+      "temperatureC": -8.4,
       "snowfallCm": 0,
       "windKph": 5.5,
       "windDirectionDeg": 279,
@@ -733,7 +725,7 @@
     },
     {
       "time": "2026-07-25T00:00",
-      "temperatureC": -7.9,
+      "temperatureC": -9,
       "snowfallCm": 0,
       "windKph": 4.8,
       "windDirectionDeg": 281,
@@ -741,7 +733,7 @@
     },
     {
       "time": "2026-07-25T01:00",
-      "temperatureC": -7.8,
+      "temperatureC": -9.7,
       "snowfallCm": 0,
       "windKph": 4.2,
       "windDirectionDeg": 277,
@@ -749,7 +741,7 @@
     },
     {
       "time": "2026-07-25T02:00",
-      "temperatureC": -7.1,
+      "temperatureC": -9.3,
       "snowfallCm": 0,
       "windKph": 4.1,
       "windDirectionDeg": 285,
@@ -757,24 +749,24 @@
     },
     {
       "time": "2026-07-25T03:00",
-      "temperatureC": -5.6,
-      "snowfallCm": 0.28,
+      "temperatureC": -9.6,
+      "snowfallCm": 0,
       "windKph": 3.1,
       "windDirectionDeg": 273,
       "freezingLevelM": 1430
     },
     {
       "time": "2026-07-25T04:00",
-      "temperatureC": -5.8,
-      "snowfallCm": 0.63,
+      "temperatureC": -7.7,
+      "snowfallCm": 0.84,
       "windKph": 1.9,
       "windDirectionDeg": 209,
       "freezingLevelM": 1420
     },
     {
       "time": "2026-07-25T05:00",
-      "temperatureC": -5.3,
-      "snowfallCm": 0.63,
+      "temperatureC": -7,
+      "snowfallCm": 0.49,
       "windKph": 3.7,
       "windDirectionDeg": 169,
       "freezingLevelM": 1410
@@ -782,63 +774,63 @@
     {
       "time": "2026-07-25T06:00",
       "temperatureC": -5.4,
-      "snowfallCm": 0.49,
+      "snowfallCm": 0.56,
       "windKph": 6.3,
       "windDirectionDeg": 177,
       "freezingLevelM": 1300
     },
     {
       "time": "2026-07-25T07:00",
-      "temperatureC": -6.1,
-      "snowfallCm": 1.61,
+      "temperatureC": -6.5,
+      "snowfallCm": 2.1,
       "windKph": 7.6,
       "windDirectionDeg": 177,
       "freezingLevelM": 1160
     },
     {
       "time": "2026-07-25T08:00",
-      "temperatureC": -6.9,
-      "snowfallCm": 1.54,
+      "temperatureC": -7.1,
+      "snowfallCm": 1.47,
       "windKph": 9.9,
       "windDirectionDeg": 189,
       "freezingLevelM": 1080
     },
     {
       "time": "2026-07-25T09:00",
-      "temperatureC": -7.1,
-      "snowfallCm": 0.91,
+      "temperatureC": -7.2,
+      "snowfallCm": 1.05,
       "windKph": 7.7,
       "windDirectionDeg": 196,
       "freezingLevelM": 1020
     },
     {
       "time": "2026-07-25T10:00",
-      "temperatureC": -7,
-      "snowfallCm": 0.77,
+      "temperatureC": -7.3,
+      "snowfallCm": 0.7,
       "windKph": 6.9,
       "windDirectionDeg": 197,
       "freezingLevelM": 1020
     },
     {
       "time": "2026-07-25T11:00",
-      "temperatureC": -7,
-      "snowfallCm": 0.7,
+      "temperatureC": -7.1,
+      "snowfallCm": 0.28,
       "windKph": 6.4,
       "windDirectionDeg": 198,
       "freezingLevelM": 1030
     },
     {
       "time": "2026-07-25T12:00",
-      "temperatureC": -6.8,
-      "snowfallCm": 0.28,
+      "temperatureC": -7.1,
+      "snowfallCm": 0.35,
       "windKph": 6,
       "windDirectionDeg": 201,
       "freezingLevelM": 1020
     },
     {
       "time": "2026-07-25T13:00",
-      "temperatureC": -6.8,
-      "snowfallCm": 0.14,
+      "temperatureC": -7.2,
+      "snowfallCm": 0.28,
       "windKph": 4.8,
       "windDirectionDeg": 200,
       "freezingLevelM": 1020
@@ -846,14 +838,14 @@
     {
       "time": "2026-07-25T14:00",
       "temperatureC": -6.9,
-      "snowfallCm": 0.07,
+      "snowfallCm": 0.14,
       "windKph": 4.8,
       "windDirectionDeg": 200,
       "freezingLevelM": 1020
     },
     {
       "time": "2026-07-25T15:00",
-      "temperatureC": -6.9,
+      "temperatureC": -7.1,
       "snowfallCm": 0.07,
       "windKph": 4.7,
       "windDirectionDeg": 198,
@@ -861,7 +853,7 @@
     },
     {
       "time": "2026-07-25T16:00",
-      "temperatureC": -7,
+      "temperatureC": -7.1,
       "snowfallCm": 0.07,
       "windKph": 4.2,
       "windDirectionDeg": 192,
@@ -869,15 +861,15 @@
     },
     {
       "time": "2026-07-25T17:00",
-      "temperatureC": -7.4,
-      "snowfallCm": 0.07,
+      "temperatureC": -7.7,
+      "snowfallCm": 0,
       "windKph": 3,
       "windDirectionDeg": 194,
       "freezingLevelM": 980
     },
     {
       "time": "2026-07-25T18:00",
-      "temperatureC": -8.3,
+      "temperatureC": -8.7,
       "snowfallCm": 0,
       "windKph": 2.3,
       "windDirectionDeg": 203,
@@ -885,7 +877,7 @@
     },
     {
       "time": "2026-07-25T19:00",
-      "temperatureC": -9.5,
+      "temperatureC": -9.7,
       "snowfallCm": 0,
       "windKph": 2.1,
       "windDirectionDeg": 211,
@@ -901,7 +893,7 @@
     },
     {
       "time": "2026-07-25T21:00",
-      "temperatureC": -12.6,
+      "temperatureC": -11.9,
       "snowfallCm": 0,
       "windKph": 3.8,
       "windDirectionDeg": 262,
@@ -909,7 +901,7 @@
     },
     {
       "time": "2026-07-25T22:00",
-      "temperatureC": -13.4,
+      "temperatureC": -12.7,
       "snowfallCm": 0,
       "windKph": 4.2,
       "windDirectionDeg": 263,
@@ -917,7 +909,7 @@
     },
     {
       "time": "2026-07-25T23:00",
-      "temperatureC": -13.9,
+      "temperatureC": -12.9,
       "snowfallCm": 0,
       "windKph": 4.7,
       "windDirectionDeg": 270,
@@ -925,7 +917,7 @@
     },
     {
       "time": "2026-07-26T00:00",
-      "temperatureC": -14.1,
+      "temperatureC": -13,
       "snowfallCm": 0,
       "windKph": 5,
       "windDirectionDeg": 272,
@@ -933,7 +925,7 @@
     },
     {
       "time": "2026-07-26T01:00",
-      "temperatureC": -13.9,
+      "temperatureC": -13.6,
       "snowfallCm": 0,
       "windKph": 4.9,
       "windDirectionDeg": 274,
@@ -941,7 +933,7 @@
     },
     {
       "time": "2026-07-26T02:00",
-      "temperatureC": -14,
+      "temperatureC": -13.2,
       "snowfallCm": 0,
       "windKph": 4.8,
       "windDirectionDeg": 285,
@@ -949,7 +941,7 @@
     },
     {
       "time": "2026-07-26T03:00",
-      "temperatureC": -14.2,
+      "temperatureC": -12.8,
       "snowfallCm": 0,
       "windKph": 5.1,
       "windDirectionDeg": 293,
@@ -957,7 +949,7 @@
     },
     {
       "time": "2026-07-26T04:00",
-      "temperatureC": -14.3,
+      "temperatureC": -13.4,
       "snowfallCm": 0,
       "windKph": 5.6,
       "windDirectionDeg": 301,
@@ -965,7 +957,7 @@
     },
     {
       "time": "2026-07-26T05:00",
-      "temperatureC": -14.8,
+      "temperatureC": -15,
       "snowfallCm": 0,
       "windKph": 5.9,
       "windDirectionDeg": 293,
@@ -973,7 +965,7 @@
     },
     {
       "time": "2026-07-26T06:00",
-      "temperatureC": -14.8,
+      "temperatureC": -15.5,
       "snowfallCm": 0,
       "windKph": 5.5,
       "windDirectionDeg": 289,
@@ -981,7 +973,7 @@
     },
     {
       "time": "2026-07-26T07:00",
-      "temperatureC": -14.4,
+      "temperatureC": -14,
       "snowfallCm": 0,
       "windKph": 5.4,
       "windDirectionDeg": 290,
@@ -989,7 +981,7 @@
     },
     {
       "time": "2026-07-26T08:00",
-      "temperatureC": -13.5,
+      "temperatureC": -12.8,
       "snowfallCm": 0,
       "windKph": 5,
       "windDirectionDeg": 291,
@@ -997,7 +989,7 @@
     },
     {
       "time": "2026-07-26T09:00",
-      "temperatureC": -11.8,
+      "temperatureC": -11.3,
       "snowfallCm": 0,
       "windKph": 4.5,
       "windDirectionDeg": 293,
@@ -1005,7 +997,7 @@
     },
     {
       "time": "2026-07-26T10:00",
-      "temperatureC": -9.8,
+      "temperatureC": -9.2,
       "snowfallCm": 0,
       "windKph": 3.5,
       "windDirectionDeg": 294,
@@ -1013,7 +1005,7 @@
     },
     {
       "time": "2026-07-26T11:00",
-      "temperatureC": -7.6,
+      "temperatureC": -7.2,
       "snowfallCm": 0,
       "windKph": 2.2,
       "windDirectionDeg": 294,
@@ -1021,7 +1013,7 @@
     },
     {
       "time": "2026-07-26T12:00",
-      "temperatureC": -6.1,
+      "temperatureC": -5.8,
       "snowfallCm": 0,
       "windKph": 1.4,
       "windDirectionDeg": 247,
@@ -1029,7 +1021,7 @@
     },
     {
       "time": "2026-07-26T13:00",
-      "temperatureC": -5.3,
+      "temperatureC": -5.2,
       "snowfallCm": 0,
       "windKph": 1.4,
       "windDirectionDeg": 220,
@@ -1037,7 +1029,7 @@
     },
     {
       "time": "2026-07-26T14:00",
-      "temperatureC": -5,
+      "temperatureC": -4.9,
       "snowfallCm": 0,
       "windKph": 0.9,
       "windDirectionDeg": 233,
@@ -1045,7 +1037,7 @@
     },
     {
       "time": "2026-07-26T15:00",
-      "temperatureC": -5.4,
+      "temperatureC": -5.3,
       "snowfallCm": 0,
       "windKph": 0.4,
       "windDirectionDeg": 270,
@@ -1061,7 +1053,7 @@
     },
     {
       "time": "2026-07-26T17:00",
-      "temperatureC": -8.7,
+      "temperatureC": -8.6,
       "snowfallCm": 0,
       "windKph": 3,
       "windDirectionDeg": 287,
@@ -1069,7 +1061,7 @@
     },
     {
       "time": "2026-07-26T18:00",
-      "temperatureC": -10.2,
+      "temperatureC": -10.3,
       "snowfallCm": 0,
       "windKph": 4.3,
       "windDirectionDeg": 275,
@@ -1077,7 +1069,7 @@
     },
     {
       "time": "2026-07-26T19:00",
-      "temperatureC": -10.6,
+      "temperatureC": -10.9,
       "snowfallCm": 0,
       "windKph": 4.2,
       "windDirectionDeg": 277,
@@ -1085,7 +1077,7 @@
     },
     {
       "time": "2026-07-26T20:00",
-      "temperatureC": -10.5,
+      "temperatureC": -11.4,
       "snowfallCm": 0,
       "windKph": 3.2,
       "windDirectionDeg": 270,
@@ -1093,7 +1085,7 @@
     },
     {
       "time": "2026-07-26T21:00",
-      "temperatureC": -10.5,
+      "temperatureC": -11.5,
       "snowfallCm": 0,
       "windKph": 2.5,
       "windDirectionDeg": 262,
@@ -1101,7 +1093,7 @@
     },
     {
       "time": "2026-07-26T22:00",
-      "temperatureC": -10.6,
+      "temperatureC": -11.8,
       "snowfallCm": 0,
       "windKph": 2.7,
       "windDirectionDeg": 266,
@@ -1109,7 +1101,7 @@
     },
     {
       "time": "2026-07-26T23:00",
-      "temperatureC": -10.7,
+      "temperatureC": -12,
       "snowfallCm": 0,
       "windKph": 2.6,
       "windDirectionDeg": 258,
@@ -1117,7 +1109,7 @@
     },
     {
       "time": "2026-07-27T00:00",
-      "temperatureC": -11,
+      "temperatureC": -12.1,
       "snowfallCm": 0,
       "windKph": 2.7,
       "windDirectionDeg": 250,
@@ -1125,7 +1117,7 @@
     },
     {
       "time": "2026-07-27T01:00",
-      "temperatureC": -11.4,
+      "temperatureC": -12.1,
       "snowfallCm": 0,
       "windKph": 3.1,
       "windDirectionDeg": 267,
@@ -1133,7 +1125,7 @@
     },
     {
       "time": "2026-07-27T02:00",
-      "temperatureC": -11.6,
+      "temperatureC": -12,
       "snowfallCm": 0,
       "windKph": 3.4,
       "windDirectionDeg": 270,
@@ -1141,7 +1133,7 @@
     },
     {
       "time": "2026-07-27T03:00",
-      "temperatureC": -11.9,
+      "temperatureC": -11.8,
       "snowfallCm": 0,
       "windKph": 3.5,
       "windDirectionDeg": 261,
@@ -1149,7 +1141,7 @@
     },
     {
       "time": "2026-07-27T04:00",
-      "temperatureC": -12,
+      "temperatureC": -11.8,
       "snowfallCm": 0,
       "windKph": 3.6,
       "windDirectionDeg": 261,
@@ -1157,7 +1149,7 @@
     },
     {
       "time": "2026-07-27T05:00",
-      "temperatureC": -12.1,
+      "temperatureC": -11.5,
       "snowfallCm": 0,
       "windKph": 3.8,
       "windDirectionDeg": 265,
@@ -1165,7 +1157,7 @@
     },
     {
       "time": "2026-07-27T06:00",
-      "temperatureC": -12.1,
+      "temperatureC": -11.6,
       "snowfallCm": 0,
       "windKph": 4,
       "windDirectionDeg": 252,
@@ -1173,7 +1165,7 @@
     },
     {
       "time": "2026-07-27T07:00",
-      "temperatureC": -11.9,
+      "temperatureC": -11.6,
       "snowfallCm": 0,
       "windKph": 4,
       "windDirectionDeg": 234,
@@ -1181,7 +1173,7 @@
     },
     {
       "time": "2026-07-27T08:00",
-      "temperatureC": -11.6,
+      "temperatureC": -11.5,
       "snowfallCm": 0,
       "windKph": 3.7,
       "windDirectionDeg": 235,
@@ -1197,7 +1189,7 @@
     },
     {
       "time": "2026-07-27T10:00",
-      "temperatureC": -8.8,
+      "temperatureC": -8.9,
       "snowfallCm": 0,
       "windKph": 3.6,
       "windDirectionDeg": 290,
@@ -1205,7 +1197,7 @@
     },
     {
       "time": "2026-07-27T11:00",
-      "temperatureC": -6.4,
+      "temperatureC": -7,
       "snowfallCm": 0,
       "windKph": 2.7,
       "windDirectionDeg": 302,
@@ -1213,7 +1205,7 @@
     },
     {
       "time": "2026-07-27T12:00",
-      "temperatureC": -4.8,
+      "temperatureC": -5.5,
       "snowfallCm": 0,
       "windKph": 1.2,
       "windDirectionDeg": 243,
@@ -1221,7 +1213,7 @@
     },
     {
       "time": "2026-07-27T13:00",
-      "temperatureC": -4,
+      "temperatureC": -4.5,
       "snowfallCm": 0,
       "windKph": 1.8,
       "windDirectionDeg": 186,
@@ -1229,7 +1221,7 @@
     },
     {
       "time": "2026-07-27T14:00",
-      "temperatureC": -3.7,
+      "temperatureC": -4.1,
       "snowfallCm": 0,
       "windKph": 1.2,
       "windDirectionDeg": 207,
@@ -1237,7 +1229,7 @@
     },
     {
       "time": "2026-07-27T15:00",
-      "temperatureC": -4,
+      "temperatureC": -4.4,
       "snowfallCm": 0,
       "windKph": 1.9,
       "windDirectionDeg": 287,
@@ -1245,7 +1237,7 @@
     },
     {
       "time": "2026-07-27T16:00",
-      "temperatureC": -4.9,
+      "temperatureC": -5.4,
       "snowfallCm": 0,
       "windKph": 1.5,
       "windDirectionDeg": 249,
@@ -1253,7 +1245,7 @@
     },
     {
       "time": "2026-07-27T17:00",
-      "temperatureC": -6.9,
+      "temperatureC": -7.4,
       "snowfallCm": 0,
       "windKph": 3.4,
       "windDirectionDeg": 276,
@@ -1261,7 +1253,7 @@
     },
     {
       "time": "2026-07-27T18:00",
-      "temperatureC": -8.4,
+      "temperatureC": -8.6,
       "snowfallCm": 0,
       "windKph": 4.7,
       "windDirectionDeg": 277,
@@ -1269,7 +1261,7 @@
     },
     {
       "time": "2026-07-27T19:00",
-      "temperatureC": -8.5,
+      "temperatureC": -8.4,
       "snowfallCm": 0,
       "windKph": 4.9,
       "windDirectionDeg": 274,
@@ -1277,7 +1269,7 @@
     },
     {
       "time": "2026-07-27T20:00",
-      "temperatureC": -8.1,
+      "temperatureC": -7.8,
       "snowfallCm": 0,
       "windKph": 4.5,
       "windDirectionDeg": 270,
@@ -1285,7 +1277,7 @@
     },
     {
       "time": "2026-07-27T21:00",
-      "temperatureC": -7.6,
+      "temperatureC": -7.2,
       "snowfallCm": 0,
       "windKph": 4.1,
       "windDirectionDeg": 268,
@@ -1293,7 +1285,7 @@
     },
     {
       "time": "2026-07-27T22:00",
-      "temperatureC": -7.3,
+      "temperatureC": -6.8,
       "snowfallCm": 0,
       "windKph": 3.8,
       "windDirectionDeg": 267,
@@ -1301,7 +1293,7 @@
     },
     {
       "time": "2026-07-27T23:00",
-      "temperatureC": -7.1,
+      "temperatureC": -6.4,
       "snowfallCm": 0,
       "windKph": 3.2,
       "windDirectionDeg": 270,
@@ -1309,7 +1301,7 @@
     },
     {
       "time": "2026-07-28T00:00",
-      "temperatureC": -6.9,
+      "temperatureC": -6.3,
       "snowfallCm": 0,
       "windKph": 2.9,
       "windDirectionDeg": 274,
@@ -1317,7 +1309,7 @@
     },
     {
       "time": "2026-07-28T01:00",
-      "temperatureC": -6.8,
+      "temperatureC": -6.1,
       "snowfallCm": 0,
       "windKph": 2.9,
       "windDirectionDeg": 277,
@@ -1325,7 +1317,7 @@
     },
     {
       "time": "2026-07-28T02:00",
-      "temperatureC": -6.9,
+      "temperatureC": -6.1,
       "snowfallCm": 0,
       "windKph": 3.3,
       "windDirectionDeg": 276,
@@ -1333,7 +1325,7 @@
     },
     {
       "time": "2026-07-28T03:00",
-      "temperatureC": -6.9,
+      "temperatureC": -6,
       "snowfallCm": 0,
       "windKph": 3.5,
       "windDirectionDeg": 279,
@@ -1341,7 +1333,7 @@
     },
     {
       "time": "2026-07-28T04:00",
-      "temperatureC": -6.9,
+      "temperatureC": -5.9,
       "snowfallCm": 0,
       "windKph": 3.8,
       "windDirectionDeg": 281,
@@ -1349,7 +1341,7 @@
     },
     {
       "time": "2026-07-28T05:00",
-      "temperatureC": -6.9,
+      "temperatureC": -5.8,
       "snowfallCm": 0,
       "windKph": 4.1,
       "windDirectionDeg": 285,
@@ -1357,7 +1349,7 @@
     },
     {
       "time": "2026-07-28T06:00",
-      "temperatureC": -6.7,
+      "temperatureC": -5.6,
       "snowfallCm": 0,
       "windKph": 4.3,
       "windDirectionDeg": 287,
@@ -1365,7 +1357,7 @@
     },
     {
       "time": "2026-07-28T07:00",
-      "temperatureC": -6.5,
+      "temperatureC": -5.3,
       "snowfallCm": 0,
       "windKph": 4.3,
       "windDirectionDeg": 287,
@@ -1373,7 +1365,7 @@
     },
     {
       "time": "2026-07-28T08:00",
-      "temperatureC": -6.1,
+      "temperatureC": -4.9,
       "snowfallCm": 0,
       "windKph": 4.2,
       "windDirectionDeg": 288,
@@ -1381,7 +1373,7 @@
     },
     {
       "time": "2026-07-28T09:00",
-      "temperatureC": -5.3,
+      "temperatureC": -4.2,
       "snowfallCm": 0,
       "windKph": 3.8,
       "windDirectionDeg": 289,
@@ -1389,7 +1381,7 @@
     },
     {
       "time": "2026-07-28T10:00",
-      "temperatureC": -3.9,
+      "temperatureC": -2.9,
       "snowfallCm": 0,
       "windKph": 3.5,
       "windDirectionDeg": 298,
@@ -1397,7 +1389,7 @@
     },
     {
       "time": "2026-07-28T11:00",
-      "temperatureC": -2.1,
+      "temperatureC": -1.4,
       "snowfallCm": 0,
       "windKph": 3.1,
       "windDirectionDeg": 315,
@@ -1405,7 +1397,7 @@
     },
     {
       "time": "2026-07-28T12:00",
-      "temperatureC": -0.8,
+      "temperatureC": -0.3,
       "snowfallCm": 0,
       "windKph": 3,
       "windDirectionDeg": 322,
@@ -1413,7 +1405,7 @@
     },
     {
       "time": "2026-07-28T13:00",
-      "temperatureC": -0.3,
+      "temperatureC": 0.2,
       "snowfallCm": 0,
       "windKph": 2.8,
       "windDirectionDeg": 320,
@@ -1421,7 +1413,7 @@
     },
     {
       "time": "2026-07-28T14:00",
-      "temperatureC": -0.3,
+      "temperatureC": 0.3,
       "snowfallCm": 0,
       "windKph": 2.8,
       "windDirectionDeg": 310,
@@ -1429,7 +1421,7 @@
     },
     {
       "time": "2026-07-28T15:00",
-      "temperatureC": -0.8,
+      "temperatureC": -0.1,
       "snowfallCm": 0,
       "windKph": 3.1,
       "windDirectionDeg": 298,
@@ -1437,7 +1429,7 @@
     },
     {
       "time": "2026-07-28T16:00",
-      "temperatureC": -2,
+      "temperatureC": -1.3,
       "snowfallCm": 0,
       "windKph": 3.7,
       "windDirectionDeg": 293,
@@ -1445,7 +1437,7 @@
     },
     {
       "time": "2026-07-28T17:00",
-      "temperatureC": -3.7,
+      "temperatureC": -2.9,
       "snowfallCm": 0,
       "windKph": 4.6,
       "windDirectionDeg": 288,
@@ -1453,7 +1445,7 @@
     },
     {
       "time": "2026-07-28T18:00",
-      "temperatureC": -5,
+      "temperatureC": -4.1,
       "snowfallCm": 0,
       "windKph": 5.1,
       "windDirectionDeg": 288,
@@ -1461,7 +1453,7 @@
     },
     {
       "time": "2026-07-28T19:00",
-      "temperatureC": -5.4,
+      "temperatureC": -4.7,
       "snowfallCm": 0,
       "windKph": 5.2,
       "windDirectionDeg": 290,
@@ -1469,7 +1461,7 @@
     },
     {
       "time": "2026-07-28T20:00",
-      "temperatureC": -5.4,
+      "temperatureC": -4.8,
       "snowfallCm": 0,
       "windKph": 5,
       "windDirectionDeg": 291,
@@ -1477,7 +1469,7 @@
     },
     {
       "time": "2026-07-28T21:00",
-      "temperatureC": -5.5,
+      "temperatureC": -5,
       "snowfallCm": 0,
       "windKph": 5.2,
       "windDirectionDeg": 295,
@@ -1485,7 +1477,7 @@
     },
     {
       "time": "2026-07-28T22:00",
-      "temperatureC": -5.8,
+      "temperatureC": -5.1,
       "snowfallCm": 0,
       "windKph": 5.6,
       "windDirectionDeg": 299,
@@ -1493,7 +1485,7 @@
     },
     {
       "time": "2026-07-28T23:00",
-      "temperatureC": -6.1,
+      "temperatureC": -5.3,
       "snowfallCm": 0,
       "windKph": 6.4,
       "windDirectionDeg": 302,
@@ -1501,7 +1493,7 @@
     },
     {
       "time": "2026-07-29T00:00",
-      "temperatureC": -6.3,
+      "temperatureC": -5.5,
       "snowfallCm": 0,
       "windKph": 6.8,
       "windDirectionDeg": 305,
@@ -1509,7 +1501,7 @@
     },
     {
       "time": "2026-07-29T01:00",
-      "temperatureC": -6.1,
+      "temperatureC": -5.9,
       "snowfallCm": 0,
       "windKph": 7.1,
       "windDirectionDeg": 308,
@@ -1517,7 +1509,7 @@
     },
     {
       "time": "2026-07-29T02:00",
-      "temperatureC": -5.8,
+      "temperatureC": -6.4,
       "snowfallCm": 0,
       "windKph": 6.9,
       "windDirectionDeg": 311,
@@ -1525,7 +1517,7 @@
     },
     {
       "time": "2026-07-29T03:00",
-      "temperatureC": -5.5,
+      "temperatureC": -6.7,
       "snowfallCm": 0,
       "windKph": 7,
       "windDirectionDeg": 312,
@@ -1533,7 +1525,7 @@
     },
     {
       "time": "2026-07-29T04:00",
-      "temperatureC": -5.2,
+      "temperatureC": -6.6,
       "snowfallCm": 0,
       "windKph": 7.4,
       "windDirectionDeg": 313,
@@ -1541,7 +1533,7 @@
     },
     {
       "time": "2026-07-29T05:00",
-      "temperatureC": -4.9,
+      "temperatureC": -6.3,
       "snowfallCm": 0,
       "windKph": 8,
       "windDirectionDeg": 312,
@@ -1549,7 +1541,7 @@
     },
     {
       "time": "2026-07-29T06:00",
-      "temperatureC": -4.6,
+      "temperatureC": -6,
       "snowfallCm": 0,
       "windKph": 8.4,
       "windDirectionDeg": 313,
@@ -1557,7 +1549,7 @@
     },
     {
       "time": "2026-07-29T07:00",
-      "temperatureC": -4.3,
+      "temperatureC": -6.1,
       "snowfallCm": 0,
       "windKph": 8.4,
       "windDirectionDeg": 313,
@@ -1565,7 +1557,7 @@
     },
     {
       "time": "2026-07-29T08:00",
-      "temperatureC": -4,
+      "temperatureC": -6.2,
       "snowfallCm": 0,
       "windKph": 8.3,
       "windDirectionDeg": 314,
@@ -1573,7 +1565,7 @@
     },
     {
       "time": "2026-07-29T09:00",
-      "temperatureC": -3.6,
+      "temperatureC": -5.8,
       "snowfallCm": 0,
       "windKph": 8.5,
       "windDirectionDeg": 316,
@@ -1581,7 +1573,7 @@
     },
     {
       "time": "2026-07-29T10:00",
-      "temperatureC": -2.9,
+      "temperatureC": -4.4,
       "snowfallCm": 0,
       "windKph": 8.9,
       "windDirectionDeg": 320,
@@ -1589,7 +1581,7 @@
     },
     {
       "time": "2026-07-29T11:00",
-      "temperatureC": -2.1,
+      "temperatureC": -2.5,
       "snowfallCm": 0,
       "windKph": 9.8,
       "windDirectionDeg": 324,
@@ -1597,7 +1589,7 @@
     },
     {
       "time": "2026-07-29T12:00",
-      "temperatureC": -1.4,
+      "temperatureC": -1.1,
       "snowfallCm": 0,
       "windKph": 10.8,
       "windDirectionDeg": 327,
@@ -1605,7 +1597,7 @@
     },
     {
       "time": "2026-07-29T13:00",
-      "temperatureC": -1.1,
+      "temperatureC": -0.7,
       "snowfallCm": 0,
       "windKph": 11.8,
       "windDirectionDeg": 327,
@@ -1613,7 +1605,7 @@
     },
     {
       "time": "2026-07-29T14:00",
-      "temperatureC": -1,
+      "temperatureC": -0.9,
       "snowfallCm": 0,
       "windKph": 13.1,
       "windDirectionDeg": 326,
@@ -1621,7 +1613,7 @@
     },
     {
       "time": "2026-07-29T15:00",
-      "temperatureC": -0.9,
+      "temperatureC": -1.2,
       "snowfallCm": 0,
       "windKph": 14.2,
       "windDirectionDeg": 324,
@@ -1629,7 +1621,7 @@
     },
     {
       "time": "2026-07-29T16:00",
-      "temperatureC": -0.9,
+      "temperatureC": -1.3,
       "snowfallCm": 0,
       "windKph": 14.9,
       "windDirectionDeg": 324,
@@ -1637,7 +1629,7 @@
     },
     {
       "time": "2026-07-29T17:00",
-      "temperatureC": -0.9,
+      "temperatureC": -1.5,
       "snowfallCm": 0,
       "windKph": 15.7,
       "windDirectionDeg": 322,
@@ -1645,7 +1637,7 @@
     },
     {
       "time": "2026-07-29T18:00",
-      "temperatureC": -0.9,
+      "temperatureC": -1.5,
       "snowfallCm": 0,
       "windKph": 16.7,
       "windDirectionDeg": 323,
@@ -1653,7 +1645,7 @@
     },
     {
       "time": "2026-07-29T19:00",
-      "temperatureC": -0.8,
+      "temperatureC": -1.3,
       "snowfallCm": 0,
       "windKph": 18.8,
       "windDirectionDeg": 324,
@@ -1661,7 +1653,7 @@
     },
     {
       "time": "2026-07-29T20:00",
-      "temperatureC": -0.8,
+      "temperatureC": -1,
       "snowfallCm": 0,
       "windKph": 21.4,
       "windDirectionDeg": 326,
@@ -1669,7 +1661,7 @@
     },
     {
       "time": "2026-07-29T21:00",
-      "temperatureC": -0.8,
+      "temperatureC": -0.7,
       "snowfallCm": 0,
       "windKph": 22.7,
       "windDirectionDeg": 327,
@@ -1677,7 +1669,7 @@
     },
     {
       "time": "2026-07-29T22:00",
-      "temperatureC": -1.1,
+      "temperatureC": -0.7,
       "snowfallCm": 0,
       "windKph": 18.8,
       "windDirectionDeg": 326,
@@ -1685,7 +1677,7 @@
     },
     {
       "time": "2026-07-29T23:00",
-      "temperatureC": -1.2,
+      "temperatureC": -0.7,
       "snowfallCm": 0,
       "windKph": 18.7,
       "windDirectionDeg": 326,
@@ -1693,7 +1685,7 @@
     },
     {
       "time": "2026-07-30T00:00",
-      "temperatureC": -1.3,
+      "temperatureC": -0.7,
       "snowfallCm": 0,
       "windKph": 18.2,
       "windDirectionDeg": 326,
@@ -1701,7 +1693,7 @@
     },
     {
       "time": "2026-07-30T01:00",
-      "temperatureC": -1.4,
+      "temperatureC": -0.6,
       "snowfallCm": 0,
       "windKph": 17.1,
       "windDirectionDeg": 326,
@@ -1709,7 +1701,7 @@
     },
     {
       "time": "2026-07-30T02:00",
-      "temperatureC": -1.5,
+      "temperatureC": -0.5,
       "snowfallCm": 0,
       "windKph": 15.5,
       "windDirectionDeg": 325,
@@ -1717,7 +1709,7 @@
     },
     {
       "time": "2026-07-30T03:00",
-      "temperatureC": -1.6,
+      "temperatureC": -0.5,
       "snowfallCm": 0,
       "windKph": 13.5,
       "windDirectionDeg": 324,
@@ -1725,7 +1717,7 @@
     },
     {
       "time": "2026-07-30T04:00",
-      "temperatureC": -1.6,
+      "temperatureC": -0.8,
       "snowfallCm": 0,
       "windKph": 11.6,
       "windDirectionDeg": 323,
@@ -1733,7 +1725,7 @@
     },
     {
       "time": "2026-07-30T05:00",
-      "temperatureC": -1.7,
+      "temperatureC": -1.2,
       "snowfallCm": 0,
       "windKph": 9.7,
       "windDirectionDeg": 321,
@@ -1741,7 +1733,7 @@
     },
     {
       "time": "2026-07-30T06:00",
-      "temperatureC": -1.7,
+      "temperatureC": -1.5,
       "snowfallCm": 0,
       "windKph": 8.3,
       "windDirectionDeg": 319,
@@ -1882,49 +1874,57 @@
       "windKph": 6.9,
       "windDirectionDeg": 307,
       "freezingLevelM": 1850
+    },
+    {
+      "time": "2026-07-31T00:00",
+      "temperatureC": -6.8,
+      "snowfallCm": 0,
+      "windKph": 7.5,
+      "windDirectionDeg": 307,
+      "freezingLevelM": 1820
     }
   ],
   "powderPolygons": [],
   "daily": [
     {
       "date": "2026-07-24",
-      "snowfallCm": 1.5,
-      "precipMm": 16.3,
-      "rainMm": 8.9,
-      "tempMinC": -9.5,
+      "snowfallCm": 1.7,
+      "precipMm": 16.8,
+      "rainMm": 8.5,
+      "tempMinC": -8.4,
       "tempMaxC": -0.5,
       "windMeanKph": 7,
       "gustMaxKph": 107,
-      "windDirectionDeg": 311,
-      "cloudPct": 94,
+      "windDirectionDeg": 312,
+      "cloudPct": 90,
       "freezingLevelM": 1803,
       "weatherCode": 3
     },
     {
       "date": "2026-07-25",
-      "snowfallCm": 8.3,
-      "precipMm": 11.8,
-      "rainMm": 0,
-      "tempMinC": -13.9,
-      "tempMaxC": -5.3,
+      "snowfallCm": 8.4,
+      "precipMm": 12.1,
+      "rainMm": 0.1,
+      "tempMinC": -12.9,
+      "tempMaxC": -5.4,
       "windMeanKph": 5,
       "gustMaxKph": 57,
-      "windDirectionDeg": 194,
-      "cloudPct": 83,
+      "windDirectionDeg": 192,
+      "cloudPct": 84,
       "freezingLevelM": 1109,
-      "weatherCode": 71
+      "weatherCode": 1
     },
     {
       "date": "2026-07-26",
       "snowfallCm": 0,
       "precipMm": 0,
       "rainMm": 0,
-      "tempMinC": -14.8,
-      "tempMaxC": -5,
+      "tempMinC": -15.5,
+      "tempMaxC": -4.9,
       "windMeanKph": 4,
       "gustMaxKph": 20,
       "windDirectionDeg": 277,
-      "cloudPct": 15,
+      "cloudPct": 20,
       "freezingLevelM": 989,
       "weatherCode": 0
     },
@@ -1934,11 +1934,11 @@
       "precipMm": 0,
       "rainMm": 0,
       "tempMinC": -12.1,
-      "tempMaxC": -3.7,
+      "tempMaxC": -4.1,
       "windMeanKph": 3,
       "gustMaxKph": 19,
       "windDirectionDeg": 260,
-      "cloudPct": 4,
+      "cloudPct": 12,
       "freezingLevelM": 1210,
       "weatherCode": 0
     },
@@ -1947,36 +1947,36 @@
       "snowfallCm": 0,
       "precipMm": 0,
       "rainMm": 0,
-      "tempMinC": -6.9,
-      "tempMaxC": -0.3,
+      "tempMinC": -6.3,
+      "tempMaxC": 0.3,
       "windMeanKph": 4,
       "gustMaxKph": 26,
       "windDirectionDeg": 293,
-      "cloudPct": 0,
+      "cloudPct": 2,
       "freezingLevelM": 2056,
       "weatherCode": 0
     },
     {
       "date": "2026-07-29",
       "snowfallCm": 0,
-      "precipMm": 4.4,
-      "rainMm": 4.4,
-      "tempMinC": -6.3,
-      "tempMaxC": -0.8,
+      "precipMm": 0.5,
+      "rainMm": 0.5,
+      "tempMinC": -6.7,
+      "tempMaxC": -0.7,
       "windMeanKph": 12,
       "gustMaxKph": 123,
       "windDirectionDeg": 319,
-      "cloudPct": 68,
+      "cloudPct": 56,
       "freezingLevelM": 2145,
       "weatherCode": 1
     },
     {
       "date": "2026-07-30",
       "snowfallCm": 0,
-      "precipMm": 4,
-      "rainMm": 4,
+      "precipMm": 10,
+      "rainMm": 10,
       "tempMinC": -6.3,
-      "tempMaxC": -0.9,
+      "tempMaxC": -0.5,
       "windMeanKph": 7,
       "gustMaxKph": 124,
       "windDirectionDeg": 317,
