@@ -11,10 +11,12 @@ import { MapLabels } from './MapLabels'
 import { StormLayer } from './StormLayer'
 import { FreezingLevelBand } from './FreezingLevelBand'
 import { IceOverlay } from './IceOverlay'
-import { terrainPoint } from '../lib/terrain'
+import { FocusMarker } from './FocusMarker'
+import { createTerrainGeometry, terrainPoint } from '../lib/terrain'
 import type { PowderField, PowderWeather } from '../lib/powderModel'
 import type { IceField, IceWeather } from '../lib/iceModel'
 import type { TerrainAnalysis } from '../lib/terrainAnalysis'
+import { useWebglRuntimeBudget } from '../lib/webglRuntime'
 import { useViewStore } from '../state/viewStore'
 import type { TerrainData, TrailCollection } from '../types'
 
@@ -135,10 +137,18 @@ export function MountainScene({
 }: Props) {
   const clearFocus = useViewStore((state) => state.clearFocus)
   const focusPoint = useViewStore((state) => state.focusPoint)
+  const exaggeration = useViewStore((state) => state.exaggeration)
+  const { animate, dpr, lowPower } = useWebglRuntimeBudget()
+  const terrainGeometry = useMemo(
+    () => createTerrainGeometry(terrain, exaggeration),
+    [terrain, exaggeration],
+  )
+
+  useEffect(() => () => terrainGeometry.dispose(), [terrainGeometry])
 
   return (
     <Canvas
-      dpr={[1, 1.9]}
+      dpr={dpr}
       gl={{ antialias: true }}
       onPointerMissed={() => {
         // Clicking empty space (not the panel, not a zone) deselects a focus.
@@ -148,13 +158,26 @@ export function MountainScene({
       {/* No fog and no scene lighting: the map look is baked into textures
           so labels and lines stay crisp at every distance. */}
       <color attach="background" args={['#dce9ef']} />
-      <TerrainMesh terrain={terrain} analysis={analysis} />
-      <PowderOverlay terrain={terrain} analysis={analysis} field={field} weather={weather} />
-      <IceOverlay terrain={terrain} analysis={analysis} field={iceField} weather={iceWeather} />
+      <TerrainMesh terrain={terrain} analysis={analysis} geometry={terrainGeometry} />
+      <PowderOverlay
+        terrain={terrain}
+        analysis={analysis}
+        field={field}
+        weather={weather}
+        geometry={terrainGeometry}
+      />
+      <IceOverlay
+        terrain={terrain}
+        analysis={analysis}
+        field={iceField}
+        weather={iceWeather}
+        geometry={terrainGeometry}
+      />
       <TrailOverlay terrain={terrain} trails={trails} />
       <MapDetails terrain={terrain} trails={trails} overrides={overrides} />
       <MapLabels terrain={terrain} trails={trails} />
-      <StormLayer terrain={terrain} weather={weather} />
+      <FocusMarker terrain={terrain} />
+      <StormLayer terrain={terrain} weather={weather} animate={animate} lowPower={lowPower} />
       <FreezingLevelBand terrain={terrain} freezingLevelM={weather.freezingLevelM} />
       <CameraRig terrain={terrain} trails={trails} />
     </Canvas>

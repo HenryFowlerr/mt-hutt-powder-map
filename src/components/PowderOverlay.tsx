@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
 import type { ThreeEvent } from '@react-three/fiber'
 import { xzToLonLat } from '../lib/geo'
-import { createTerrainGeometry, terrainPoint } from '../lib/terrain'
+import { terrainPoint } from '../lib/terrain'
 import { extractContours, ringArea, simplifyRing } from '../lib/marchingSquares'
 import {
   buildPowderDisplayField,
@@ -24,6 +24,7 @@ type Props = {
   analysis: TerrainAnalysis
   field: PowderField
   weather: PowderWeather
+  geometry: THREE.BufferGeometry
 }
 
 type HoverInfo = {
@@ -117,18 +118,32 @@ function gridToLonLat(x: number, y: number, terrain: TerrainData) {
   }
 }
 
-export function PowderOverlay({ terrain, analysis, field, weather }: Props) {
+function formatPowderCm(value: number) {
+  return value > 0 && value < 1 ? value.toFixed(1) : String(Math.round(value))
+}
+
+export function PowderOverlay(props: Props) {
   const powderMode = useViewStore((state) => state.powderMode)
+  if (powderMode === 'off') return null
+  return <VisiblePowderOverlay {...props} mode={powderMode} />
+}
+
+function VisiblePowderOverlay({
+  terrain,
+  analysis,
+  field,
+  weather,
+  geometry,
+  mode,
+}: Props & { mode: Exclude<PowderMode, 'off'> }) {
   const exaggeration = useViewStore((state) => state.exaggeration)
   const [hover, setHover] = useState<HoverInfo | null>(null)
   const lastHoverTime = useRef(0)
 
-  const mode = powderMode === 'off' ? 'recent' : powderMode
   const grid = mode === 'recent' ? field.recentCm : field.forecastCm
   const displayScale = useMemo(() => powderDisplayScale(field, mode), [field, mode])
   const displayGrid = useMemo(() => buildPowderDisplayField(field, analysis, mode), [field, analysis, mode])
 
-  const geometry = useMemo(() => createTerrainGeometry(terrain, exaggeration), [terrain, exaggeration])
   const texture = useMemo(
     () => createPowderTexture(field, displayGrid, mode, displayScale),
     [field, displayGrid, mode, displayScale],
@@ -159,10 +174,7 @@ export function PowderOverlay({ terrain, analysis, field, weather }: Props) {
     return lines
   }, [displayGrid, displayScale, field, terrain, exaggeration])
 
-  useEffect(() => () => geometry.dispose(), [geometry])
   useEffect(() => () => texture.dispose(), [texture])
-
-  if (powderMode === 'off') return null
 
   const handleMove = (event: ThreeEvent<PointerEvent>) => {
     const now = performance.now()
@@ -196,6 +208,7 @@ export function PowderOverlay({ terrain, analysis, field, weather }: Props) {
     <group>
       <mesh
         geometry={geometry}
+        dispose={null}
         position={[0, 0.006, 0]}
         renderOrder={2}
         onPointerMove={handleMove}
@@ -224,7 +237,9 @@ export function PowderOverlay({ terrain, analysis, field, weather }: Props) {
       {hover ? (
         <Html position={hover.position} center zIndexRange={[4, 0]} style={{ pointerEvents: 'none' }}>
           <div className="powder-tooltip">
-            <strong>~{Math.round(hover.cm)} cm {mode === 'forecast' ? 'forecast' : 'recent'} powder</strong>
+            <strong>
+              ~{formatPowderCm(hover.cm)} cm {mode === 'forecast' ? 'forecast' : 'recent'} powder
+            </strong>
             <span>{hover.reason}</span>
             <em>
               Dominant factor: {hover.dominantFactor} · score {(hover.score * 100).toFixed(0)}%

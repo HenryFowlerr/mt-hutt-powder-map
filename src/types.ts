@@ -45,9 +45,31 @@ export type PowderPolygon = {
   coordinates: number[][][] // [ring][vertex][lon, lat]
 }
 
+export type EnsembleSnowfallSummary = {
+  source: 'Open-Meteo Ensemble API'
+  model: 'gfs_seamless'
+  generatedAt: string
+  windowStartAt: string
+  windowEndAt: string
+  windowHours: number
+  memberCount: number
+  snowfallCm: {
+    p10: number
+    p50: number
+    p90: number
+    mean: number
+  }
+  probabilityPct: {
+    atLeast1Cm: number
+    atLeast5Cm: number
+    atLeast10Cm: number
+  }
+}
+
 export type LatestData = {
   generatedAt: string
   location: string
+  ensemble?: EnsembleSnowfallSummary
   summary: {
     recentSnowCm: number
     forecastSnowCm: number

@@ -12,6 +12,9 @@ type Props = {
   trails: TrailCollection
 }
 
+const PRIMARY_LIFTS = new Set(['Summit Six Chair', 'Towers Triple Chair', 'Norwest Express'])
+const PRIMARY_RUNS = new Set(['Broadway', 'International'])
+
 // Densify sparse OSM linestrings (~every 35 m) so lines drape along the
 // terrain surface instead of cutting through rolls and gullies.
 function densifiedPoints(
@@ -56,6 +59,9 @@ function TrailLine({ feature, terrain }: { feature: TrailFeature; terrain: Terra
   const exaggeration = useViewStore((state) => state.exaggeration)
   const isLift = feature.properties.kind === 'lift'
   const isBoundary = feature.properties.kind === 'boundary'
+  const isPrimaryLift = isLift && PRIMARY_LIFTS.has(feature.properties.name)
+  const isPrimaryRun =
+    feature.properties.kind === 'run' && PRIMARY_RUNS.has(feature.properties.name)
   const isNamed = Boolean(feature.properties.name) && !/^(Run|Lift) \d+$/.test(feature.properties.name)
 
   const points = useMemo(() => {
@@ -84,10 +90,12 @@ function TrailLine({ feature, terrain }: { feature: TrailFeature; terrain: Terra
       <Line
         points={points}
         color={BOUNDARY_COLOR}
-        lineWidth={3.2}
+        lineWidth={2.2}
         dashed
         dashSize={0.05}
-        gapSize={0.042}
+        gapSize={0.05}
+        transparent
+        opacity={0.86}
         renderOrder={6}
       />
     )
@@ -97,22 +105,42 @@ function TrailLine({ feature, terrain }: { feature: TrailFeature; terrain: Terra
     const tickPoints = points.map((point) => new THREE.Vector3(point.x, point.y + 0.006, point.z))
     return (
       <group>
-        <Line points={casingPoints} color={LIFT_CASING} lineWidth={5.4} renderOrder={6} />
-        <Line points={points} color={LIFT_COLOR} lineWidth={3} renderOrder={7} />
-        {/* Tower ticks along the cable, echoing the official map's lift styling. */}
-        <Line points={tickPoints} color="#23282c" lineWidth={5.2} dashed dashSize={0.012} gapSize={0.16} renderOrder={8} />
+        <Line
+          points={casingPoints}
+          color={LIFT_CASING}
+          lineWidth={isPrimaryLift ? 4.4 : 2.8}
+          renderOrder={6}
+        />
+        <Line
+          points={points}
+          color={LIFT_COLOR}
+          lineWidth={isPrimaryLift ? 2.4 : 1.4}
+          renderOrder={7}
+        />
+        {isPrimaryLift ? (
+          <Line
+            points={tickPoints}
+            color="#23282c"
+            lineWidth={3.8}
+            dashed
+            dashSize={0.01}
+            gapSize={0.18}
+            renderOrder={8}
+          />
+        ) : null}
       </group>
     )
   }
 
   const color = trailColor(feature.properties.difficulty, feature.properties.color)
-  // Unnamed OSM fragments render thin and quiet so named runs dominate.
-  const casingWidth = isNamed ? 4.4 : 2.6
-  const lineWidth = isNamed ? 2.3 : 1.3
+  // The line hierarchy mirrors the label hierarchy: destination runs are
+  // strongest, named connectors remain legible, and raw OSM fragments recede.
+  const casingWidth = isPrimaryRun ? 4.2 : isNamed ? 3.3 : 1.9
+  const lineWidth = isPrimaryRun ? 2.2 : isNamed ? 1.65 : 0.85
 
   return (
     <group>
-      <Line points={casingPoints} color="#ffffff" lineWidth={casingWidth} renderOrder={4} />
+      <Line points={casingPoints} color="#f8fbfc" lineWidth={casingWidth} renderOrder={4} />
       <Line points={points} color={color} lineWidth={lineWidth} renderOrder={5} />
     </group>
   )

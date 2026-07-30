@@ -104,6 +104,19 @@ summary:focus-visible {
   font-size: 14px;
 }
 
+.loading-state button {
+  justify-self: center;
+  min-height: 34px;
+  padding: 0 16px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 8px;
+  color: var(--ink);
+  background: rgba(248, 251, 252, 0.88);
+  font-size: 11px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
 .brand-mark {
   display: grid;
   width: 48px;
@@ -262,6 +275,47 @@ summary:focus-visible {
   color: var(--ink-soft);
   font-size: 12px;
   line-height: 1.35;
+}
+
+.depth-reading.range-reading strong {
+  font-size: clamp(54px, 5.5vw, 70px);
+  letter-spacing: -0.075em;
+}
+
+.forecast-confidence-read {
+  display: grid;
+  gap: 5px;
+  margin-top: 15px;
+  padding-top: 12px;
+  border-top: 1px solid var(--hairline);
+}
+
+.forecast-confidence-read > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.forecast-confidence-read strong {
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 670;
+  text-transform: capitalize;
+}
+
+.forecast-confidence-read span,
+.forecast-confidence-read small {
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.forecast-confidence-read p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 1.4;
 }
 
 .ski-window {
@@ -873,6 +927,7 @@ summary:focus-visible {
 
 .brief-footer > div {
   display: flex;
+  flex-wrap: wrap;
   gap: 13px;
 }
 

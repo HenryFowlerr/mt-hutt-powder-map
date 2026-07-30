@@ -3,7 +3,6 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
 import type { ThreeEvent } from '@react-three/fiber'
 import { xzToLonLat } from '../lib/geo'
-import { createTerrainGeometry } from '../lib/terrain'
 import { describeIce, iceRiskLabel, type IceField, type IceWeather } from '../lib/iceModel'
 import { lonLatToGrid, sampleGrid, smoothstep, type TerrainAnalysis } from '../lib/terrainAnalysis'
 import { useViewStore } from '../state/viewStore'
@@ -14,6 +13,7 @@ type Props = {
   analysis: TerrainAnalysis
   field: IceField
   weather: IceWeather
+  geometry: THREE.BufferGeometry
 }
 
 const TEXTURE_WIDTH = 720
@@ -69,19 +69,19 @@ function createIceTexture(field: IceField) {
   return texture
 }
 
-export function IceOverlay({ terrain, analysis, field, weather }: Props) {
+export function IceOverlay(props: Props) {
   const showIce = useViewStore((state) => state.showIce)
-  const exaggeration = useViewStore((state) => state.exaggeration)
+  if (!showIce) return null
+  return <VisibleIceOverlay {...props} />
+}
+
+function VisibleIceOverlay({ terrain, analysis, field, weather, geometry }: Props) {
   const [hover, setHover] = useState<{ position: THREE.Vector3; risk: number; reason: string } | null>(null)
   const lastHover = useRef(0)
 
-  const geometry = useMemo(() => createTerrainGeometry(terrain, exaggeration), [terrain, exaggeration])
   const texture = useMemo(() => createIceTexture(field), [field])
 
-  useEffect(() => () => geometry.dispose(), [geometry])
   useEffect(() => () => texture.dispose(), [texture])
-
-  if (!showIce) return null
 
   const handleMove = (event: ThreeEvent<PointerEvent>) => {
     const now = performance.now()
@@ -108,6 +108,7 @@ export function IceOverlay({ terrain, analysis, field, weather }: Props) {
     <group>
       <mesh
         geometry={geometry}
+        dispose={null}
         position={[0, 0.008, 0]}
         renderOrder={2}
         onPointerMove={handleMove}

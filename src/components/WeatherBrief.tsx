@@ -2,13 +2,20 @@ import { formatDistanceToNow } from 'date-fns'
 import { useMemo } from 'react'
 import { ChevronRight, ExternalLink, Info, ShieldAlert } from 'lucide-react'
 import { conditionsAdvice } from '../lib/advice'
+import { assessForecastConfidence } from '../lib/forecastConfidence'
 import { fieldMaxRisk, iceRiskLabel, type IceField } from '../lib/iceModel'
 import { buildAspectRose, buildElevationBands, buildSnowTimeline, pickBestDay } from '../lib/insights'
 import { fieldMaxCm, powderColorForCm, type PowderField, type PowderWeather } from '../lib/powderModel'
 import type { TerrainAnalysis } from '../lib/terrainAnalysis'
 import { buildZoneSummaries } from '../lib/zoneSummary'
 import { useViewStore } from '../state/viewStore'
-import type { LatestData, TerrainData, TrailCollection, WeatherHour } from '../types'
+import type {
+  EnsembleSnowfallSummary,
+  LatestData,
+  TerrainData,
+  TrailCollection,
+  WeatherHour,
+} from '../types'
 import { WindArcIcon } from './AlpineIcons'
 import { Meteocon } from './Meteocon'
 
@@ -38,6 +45,30 @@ function windCompass(degrees: number) {
 function formatSnowDepth(value: number) {
   if (value > 0 && value < 1) return value.toFixed(1)
   return String(Math.round(value))
+}
+
+function formatSnowRange(range: { min: number; max: number }) {
+  return `${formatSnowDepth(range.min)}–${formatSnowDepth(range.max)}`
+}
+
+function ensembleAgreementCopy(
+  ensemble: EnsembleSnowfallSummary | undefined,
+  primarySnowCm: number,
+) {
+  if (!ensemble) return null
+  const medianCm = ensemble.snowfallCm.p50
+  const relativeGap =
+    Math.abs(primarySnowCm - medianCm) / Math.max(1, primarySnowCm, medianCm)
+  const agreement =
+    relativeGap <= 0.25 ? 'Close model agreement' : relativeGap <= 0.6 ? 'Mixed model agreement' : 'Low model agreement'
+  const probability =
+    medianCm >= 10
+      ? { threshold: 10, value: ensemble.probabilityPct.atLeast10Cm }
+      : medianCm >= 5
+        ? { threshold: 5, value: ensemble.probabilityPct.atLeast5Cm }
+        : { threshold: 1, value: ensemble.probabilityPct.atLeast1Cm }
+
+  return `${agreement} · ensemble median ${formatSnowDepth(medianCm)} cm · ${Math.round(probability.value)}% chance of at least ${probability.threshold} cm mountain-wide`
 }
 
 function stormTime(value: string | undefined) {
@@ -174,15 +205,65 @@ export function WeatherBrief({ latest, field, terrain, analysis, trails, weather
     maxC: Math.round(temperatureAtElevation(temperatureMax, point.elevation)),
     surface: surfaceLabel(point.elevation, effectiveFreezingLevel, temperatureMax),
   }))
+  const forecastAssessment =
+    mode === 'forecast'
+      ? assessForecastConfidence({
+          forecastSnowCm: maxCm,
+          ensembleSnowfallCm: latest.ensemble
+            ? {
+                ...latest.ensemble.snowfallCm,
+                memberCount: latest.ensemble.memberCount,
+              }
+            : undefined,
+          generatedAt: latest.ensemble?.generatedAt ?? latest.generatedAt,
+          forecastHours: latest.forecast,
+          expectedHorizonHours: latest.ensemble?.windowHours,
+          forecastTemperatureMaxC: latest.summary.forecastTemperatureMaxC,
+          forecastFreezingLevelM:
+            latest.summary.forecastFreezingLevelM ?? latest.summary.freezingLevelM,
+          forecastRainMm: latest.summary.forecastRainMm,
+          forecastHoursAboveZero: latest.summary.forecastHoursAboveZero,
+          forecastAvgWindKph:
+            latest.summary.forecastAvgWindKph ?? latest.summary.avgWindKph,
+          forecastMaxGustKph:
+            latest.summary.forecastMaxGustKph ?? latest.summary.maxGustKph,
+          windDirectionSpreadDeg: latest.summary.windDirectionSpreadDeg,
+        })
+      : null
+  const forecastRange =
+    forecastAssessment?.rangeCm ?? (mode === 'forecast' ? { min: maxCm, max: maxCm } : null)
+  const confidenceDrivers =
+    forecastAssessment?.drivers
+      .filter((driver) => driver.effect === 'limits' && driver.code !== 'ensemble')
+      .slice(0, 2) ?? []
+  const confidenceDriverCopy =
+    confidenceDrivers.length > 0
+      ? confidenceDrivers.map((driver) => driver.message).join(' ')
+      : forecastAssessment?.drivers[0]?.message
+  const ensembleAgreement = ensembleAgreementCopy(
+    latest.ensemble,
+    latest.summary.forecastSnowCm,
+  )
+  const displayConfidence =
+    mode === 'forecast' ? (forecastAssessment?.level ?? 'low') : latest.summary.confidence
 
   return (
     <section className="brief-view" aria-label="Mt Hutt snow brief">
       <div className="brief-content">
         <div className="brief-topline">
           <span>Snow brief</span>
-          <span className={`model-status ${latest.summary.confidence}`}>
+          <span
+            className={`model-status ${displayConfidence}`}
+            aria-label={
+              mode === 'forecast'
+                ? `Forecast confidence ${displayConfidence}`
+                : `Terrain signal ${displayConfidence}`
+            }
+          >
             <i />
-            Terrain signal · {latest.summary.confidence}
+            {mode === 'forecast'
+              ? `Forecast · ${displayConfidence} confidence`
+              : `Terrain signal · ${displayConfidence}`}
           </span>
         </div>
 
@@ -209,19 +290,44 @@ export function WeatherBrief({ latest, field, terrain, analysis, trails, weather
           </button>
         </div>
 
-        <section className="depth-hero">
-          <p>Deepest modelled pocket</p>
-          <div className="depth-reading">
-            <strong>{formatSnowDepth(maxCm)}</strong>
+        <section className="depth-hero" aria-live="polite">
+          <p>{mode === 'forecast' ? 'Likely deepest modelled pocket' : 'Deepest modelled pocket'}</p>
+          <div
+            className={`depth-reading ${mode === 'forecast' ? 'range-reading' : ''}`}
+            aria-label={
+              forecastRange
+                ? `Likely deepest modelled pocket ${formatSnowRange(forecastRange)} centimetres, centred on ${formatSnowDepth(maxCm)} centimetres`
+                : `Deepest modelled pocket ${formatSnowDepth(maxCm)} centimetres`
+            }
+          >
+            <strong>
+              {forecastRange ? formatSnowRange(forecastRange) : formatSnowDepth(maxCm)}
+            </strong>
             <span>cm</span>
           </div>
           <p className="depth-context">
             {maxCm > 0
-              ? `${formatSnowDepth(snowCm)} cm mountain-wide · ${leeSide}-facing terrain favoured`
+              ? `About ${formatSnowDepth(snowCm)} cm mountain-wide · ${leeSide}-facing terrain favoured`
               : mode === 'recent'
                 ? 'No meaningful fresh accumulation yet'
                 : 'No meaningful accumulation in this window'}
           </p>
+          {forecastAssessment ? (
+            <div
+              className="forecast-confidence-read"
+              aria-label={`${forecastAssessment.level} forecast confidence. ${confidenceDriverCopy ?? ''} ${ensembleAgreement ?? ''}`}
+            >
+              <div>
+                <strong>{forecastAssessment.level} confidence</strong>
+                <span>
+                  Centred on {formatSnowDepth(maxCm)} cm
+                  {latest.ensemble ? ` · ${latest.ensemble.memberCount} forecast runs` : ''}
+                </span>
+              </div>
+              {confidenceDriverCopy ? <p>{confidenceDriverCopy}</p> : null}
+              {ensembleAgreement ? <small>{ensembleAgreement}</small> : null}
+            </div>
+          ) : null}
         </section>
 
         {mode === 'forecast' && stormStart && stormEnd ? (
@@ -430,6 +536,9 @@ export function WeatherBrief({ latest, field, terrain, analysis, trails, weather
             {isStale ? <strong>Data may be stale</strong> : null}
           </p>
           <div>
+            <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">
+              Weather data by Open-Meteo <ExternalLink size={12} />
+            </a>
             <a href="https://www.mthutt.co.nz/weather-report/" target="_blank" rel="noreferrer">
               Official report <ExternalLink size={12} />
             </a>

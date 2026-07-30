@@ -1,5 +1,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { summariseGfsEnsemble } from './ensemble-summary'
+import type { EnsembleSnowfallSummary } from '../src/types'
 
 const dataDir = join(process.cwd(), 'public', 'data')
 mkdirSync(dataDir, { recursive: true })
@@ -35,6 +37,37 @@ url.searchParams.set('hourly', hourly)
 url.searchParams.set('past_days', '3')
 url.searchParams.set('forecast_days', '14')
 url.searchParams.set('timezone', 'Pacific/Auckland')
+
+const ensembleUrl = new URL('https://ensemble-api.open-meteo.com/v1/ensemble')
+ensembleUrl.searchParams.set('latitude', String(lat))
+ensembleUrl.searchParams.set('longitude', String(lon))
+ensembleUrl.searchParams.set('elevation', '1600')
+ensembleUrl.searchParams.set('hourly', 'snowfall')
+ensembleUrl.searchParams.set('models', 'gfs_seamless')
+ensembleUrl.searchParams.set('forecast_hours', '72')
+ensembleUrl.searchParams.set('timezone', 'Pacific/Auckland')
+
+async function fetchEnsembleSummary(): Promise<EnsembleSnowfallSummary | undefined> {
+  try {
+    const response = await fetch(ensembleUrl, { signal: AbortSignal.timeout(15_000) })
+    if (!response.ok) throw new Error(`Open-Meteo ensemble ${response.status}`)
+    const summary = summariseGfsEnsemble(await response.json())
+    if (!summary) throw new Error('Open-Meteo ensemble response had fewer than two valid members')
+    return summary
+  } catch (error) {
+    console.warn(
+      `Ensemble update unavailable; continuing with deterministic data: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+    )
+    return undefined
+  }
+}
+
+// Start this alongside the deterministic request. It is strictly optional,
+// handles its own failures, and has a timeout so it cannot prevent a normal
+// weather update from being published.
+const ensemblePromise = fetchEnsembleSummary()
 
 try {
   const response = await fetch(url)
@@ -253,9 +286,11 @@ try {
       weatherCode: codeMode(indexes),
     }))
 
+  const ensemble = await ensemblePromise
   const next = {
     ...fallback,
     generatedAt: new Date().toISOString(),
+    ensemble,
     summary: {
       ...fallback.summary,
       recentSnowCm: Number(recentSnowCm.toFixed(1)),

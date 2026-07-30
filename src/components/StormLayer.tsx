@@ -11,6 +11,8 @@ import type { TerrainData } from '../types'
 type Props = {
   terrain: TerrainData
   weather: PowderWeather
+  animate: boolean
+  lowPower: boolean
 }
 
 // Live 3D weather layers driven by the same Open-Meteo data as the powder
@@ -137,7 +139,7 @@ function cloudLevel(terrain: TerrainData, weather: PowderWeather) {
   return { baseM: terrain.maxElevation + 500, cover: 0.12, kind: 'clear' as const }
 }
 
-export function StormLayer({ terrain, weather }: Props) {
+export function StormLayer({ terrain, weather, animate, lowPower }: Props) {
   const showClouds = useViewStore((state) => state.showClouds)
   const showSnowfall = useViewStore((state) => state.showSnowfall)
   const showWind = useViewStore((state) => state.showWind)
@@ -175,8 +177,9 @@ export function StormLayer({ terrain, weather }: Props) {
   const wind = useMemo(() => windVector(windFromDeg, windKph), [windFromDeg, windKph])
 
   // --- Snowflakes ---
-  const flakeTexture = useMemo(() => createFlakeTexture(), [])
+  const flakeTexture = useMemo(() => (showSnowfall ? createFlakeTexture() : null), [showSnowfall])
   const flakePositions = useMemo(() => {
+    if (!showSnowfall) return new Float32Array(0)
     const positions = new Float32Array(MAX_SNOWFLAKES * 3)
     for (let i = 0; i < MAX_SNOWFLAKES; i += 1) {
       positions[i * 3] = (Math.random() - 0.5) * world.x
@@ -184,26 +187,34 @@ export function StormLayer({ terrain, weather }: Props) {
       positions[i * 3 + 2] = (Math.random() - 0.5) * world.z
     }
     return positions
-  }, [world, snowTopY])
+  }, [showSnowfall, world, snowTopY])
   const flakeGeometry = useRef<THREE.BufferGeometry | null>(null)
 
   // --- Wind streaks ---
-  const streakPositions = useMemo(() => new Float32Array(STREAK_COUNT * 2 * 3), [])
+  const streakPositions = useMemo(
+    () => new Float32Array(showWind ? STREAK_COUNT * 2 * 3 : 0),
+    [showWind],
+  )
   const streakState = useMemo(() => {
+    if (!showWind) return new Float32Array(0)
     const state = new Float32Array(STREAK_COUNT * 2) // x, z per streak
     for (let i = 0; i < STREAK_COUNT; i += 1) {
       state[i * 2] = (Math.random() - 0.5) * world.x
       state[i * 2 + 1] = (Math.random() - 0.5) * world.z
     }
     return state
-  }, [world])
+  }, [showWind, world])
   const streakGeometry = useRef<THREE.BufferGeometry | null>(null)
 
   // --- Clouds ---
-  const cloudTexture = useMemo(() => createCloudTexture(), [])
-  const cloudDeckTexture = useMemo(() => createCloudDeckTexture(), [])
+  const cloudTexture = useMemo(() => (showClouds ? createCloudTexture() : null), [showClouds])
+  const cloudDeckTexture = useMemo(
+    () => (showClouds ? createCloudDeckTexture() : null),
+    [showClouds],
+  )
   const cloudRefs = useRef<Array<THREE.Sprite | null>>([])
   const clouds = useMemo(() => {
+    if (!showClouds) return []
     const items: Array<{ x: number; z: number; scale: number; opacity: number }> = []
     const count = Math.round(4 + 10 * level.cover)
     for (let i = 0; i < count; i += 1) {
@@ -215,13 +226,15 @@ export function StormLayer({ terrain, weather }: Props) {
       })
     }
     return items
-  }, [world, level])
+  }, [showClouds, world, level])
 
-  useEffect(() => () => cloudTexture.dispose(), [cloudTexture])
-  useEffect(() => () => cloudDeckTexture.dispose(), [cloudDeckTexture])
-  useEffect(() => () => flakeTexture.dispose(), [flakeTexture])
+  useEffect(() => () => cloudTexture?.dispose(), [cloudTexture])
+  useEffect(() => () => cloudDeckTexture?.dispose(), [cloudDeckTexture])
+  useEffect(() => () => flakeTexture?.dispose(), [flakeTexture])
 
+  const windFrameTime = useRef(0)
   useFrame((_, delta) => {
+    if (!animate || (!showSnowfall && !showWind && !showClouds)) return
     const dt = Math.min(delta, 0.05)
 
     // Snow: fall + wind drift, wrapping within the volume below cloud base.
@@ -234,12 +247,13 @@ export function StormLayer({ terrain, weather }: Props) {
       const dz = wind.vz * dt
       const halfX = world.x / 2
       const halfZ = world.z / 2
+      const now = performance.now()
       for (let i = 0; i < flakeCount; i += 1) {
         // Per-flake sway so flakes flutter rather than fall in straight lines.
-        const sway = Math.sin(performance.now() * 0.0011 + i * 1.7) * fall * 0.35
+        const sway = Math.sin(now * 0.0011 + i * 1.7) * fall * 0.35
         let x = array[i * 3] + dx + sway
         let y = array[i * 3 + 1] - fall * (0.75 + ((i * 37) % 17) / 34)
-        let z = array[i * 3 + 2] + dz + Math.cos(performance.now() * 0.0009 + i * 2.3) * fall * 0.25
+        let z = array[i * 3 + 2] + dz + Math.cos(now * 0.0009 + i * 2.3) * fall * 0.25
         if (y < 0) y = Math.max(snowTopY, 1) * (0.9 + Math.random() * 0.1)
         if (x > halfX) x -= world.x
         if (x < -halfX) x += world.x
@@ -255,7 +269,12 @@ export function StormLayer({ terrain, weather }: Props) {
 
     // Wind streaks: advected just above the terrain surface, tail behind.
     const streaks = streakGeometry.current
-    if (showWind && streaks) {
+    if (showWind) windFrameTime.current += dt
+    else windFrameTime.current = 0
+    const windInterval = lowPower ? 1 / 24 : 1 / 45
+    if (showWind && streaks && windFrameTime.current >= windInterval) {
+      const windDt = windFrameTime.current
+      windFrameTime.current = 0
       const attribute = streaks.getAttribute('position') as THREE.BufferAttribute
       const array = attribute.array as Float32Array
       const gustScale = Math.max(1, gustKph / Math.max(windKph, 1)) * 0.5
@@ -266,8 +285,8 @@ export function StormLayer({ terrain, weather }: Props) {
       const halfX = world.x / 2
       const halfZ = world.z / 2
       for (let i = 0; i < STREAK_COUNT; i += 1) {
-        let x = streakState[i * 2] + wind.vx * dt * 1.6
-        let z = streakState[i * 2 + 1] + wind.vz * dt * 1.6
+        let x = streakState[i * 2] + wind.vx * windDt * 1.6
+        let z = streakState[i * 2 + 1] + wind.vz * windDt * 1.6
         if (x > halfX || x < -halfX || z > halfZ || z < -halfZ) {
           x = (Math.random() - 0.5) * world.x
           z = (Math.random() - 0.5) * world.z
@@ -286,7 +305,7 @@ export function StormLayer({ terrain, weather }: Props) {
       attribute.needsUpdate = true
     }
 
-    if (showClouds) {
+    if (showClouds && cloudDeckTexture) {
       // The cloud deck texture scrolls with the wind.
       const deckDrift = 0.02
       cloudDeckTexture.offset.x -= wind.vx * dt * deckDrift * 10
@@ -315,7 +334,7 @@ export function StormLayer({ terrain, weather }: Props) {
             <bufferAttribute attach="attributes-position" args={[flakePositions, 3]} />
           </bufferGeometry>
           <pointsMaterial
-            map={flakeTexture}
+            map={flakeTexture ?? undefined}
             color="#ffffff"
             size={0.038}
             sizeAttenuation
@@ -340,7 +359,7 @@ export function StormLayer({ terrain, weather }: Props) {
           <mesh position={[0, cloudBaseY, 0]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={10}>
             <planeGeometry args={[world.x * 1.3, world.z * 1.3]} />
             <meshBasicMaterial
-              map={cloudDeckTexture}
+              map={cloudDeckTexture ?? undefined}
               transparent
               opacity={0.3 + 0.6 * level.cover}
               depthWrite={false}
@@ -358,7 +377,7 @@ export function StormLayer({ terrain, weather }: Props) {
               renderOrder={10}
             >
               <spriteMaterial
-                map={cloudTexture}
+                map={cloudTexture ?? undefined}
                 transparent
                 opacity={cloud.opacity}
                 depthWrite={false}

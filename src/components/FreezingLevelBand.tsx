@@ -17,10 +17,20 @@ type Props = {
 
 export function FreezingLevelBand({ terrain, freezingLevelM }: Props) {
   const showFreezingLevel = useViewStore((state) => state.showFreezingLevel)
+  if (!showFreezingLevel || !freezingLevelM) return null
+  return <VisibleFreezingLevelBand terrain={terrain} freezingLevelM={freezingLevelM} />
+}
+
+function VisibleFreezingLevelBand({
+  terrain,
+  freezingLevelM,
+}: {
+  terrain: TerrainData
+  freezingLevelM: number
+}) {
   const exaggeration = useViewStore((state) => state.exaggeration)
 
   const rings = useMemo(() => {
-    if (!freezingLevelM) return []
     if (freezingLevelM <= terrain.minElevation + 20 || freezingLevelM >= terrain.maxElevation - 20) {
       return []
     }
@@ -42,8 +52,6 @@ export function FreezingLevelBand({ terrain, freezingLevelM }: Props) {
       })
       .filter((points) => points.length >= 3)
   }, [terrain, freezingLevelM, exaggeration])
-
-  if (!showFreezingLevel || !freezingLevelM) return null
 
   // Off-terrain cases still deserve a message pill so the toggle always
   // gives feedback.

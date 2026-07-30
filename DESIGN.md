@@ -52,6 +52,11 @@ rounding every row or metric into an independent card.
 - Zone rows move the camera to the actual terrain feature.
 - The map adapts its visual threshold to each event, while legend labels and zone values always
   remain absolute centimetres. A dusting may be faint, but it is never silently discarded.
+- Forecast ranges remain centred on the terrain model's displayed peak. Ensemble spread qualifies
+  that estimate and model agreement is named plainly; a mountain-wide ensemble median never
+  silently replaces the map's terrain-specific value.
+- Confidence is evidence, not decoration. Show at most two material limitations, the number of
+  forecast runs when known, and one actionable probability threshold.
 - Mobile follows the same hierarchy vertically: command bar, map, inspector navigation, content.
   It does not turn desktop panels into a stack of overlapping cards.
 
@@ -67,6 +72,8 @@ rounding every row or metric into an independent card.
   a divider.
 - Avoid detached rounded containers for major page regions. Radius belongs to controls and small
   stateful elements, not to every section of the application.
+- Never present a single model output as certainty. Preserve the distinction between recent terrain
+  signal, deterministic powder estimate, ensemble uncertainty, and official safety information.
 
 ## Accessibility and motion
 
