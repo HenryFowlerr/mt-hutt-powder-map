@@ -1,4 +1,8 @@
-import { METERS_PER_DEGREE_LAT, metersPerDegreeLon } from './geo'
+import {
+  METERS_PER_DEGREE_LAT,
+  metersPerDegreeLon,
+  polylineMidpoint,
+} from './geo'
 import { describeCell, type PowderField, type PowderMode, type PowderWeather } from './powderModel'
 import { lonLatToGrid, type TerrainAnalysis } from './terrainAnalysis'
 import type { TerrainData, TrailCollection } from '../types'
@@ -18,7 +22,7 @@ export type ZoneSummary = {
 }
 
 // [display name, anchor run (post-override names), radius in metres]
-const ZONES: Array<[string, string, number]> = [
+export const ZONE_CONFIG: ReadonlyArray<readonly [string, string, number]> = [
   ['South Face', 'Saddle Face', 600],
   ['Top Towers', "Jan's Face", 450],
   ['Mid Towers', 'Mid Towers 2', 450],
@@ -29,14 +33,17 @@ const ZONES: Array<[string, string, number]> = [
   ['Lower Triple', 'Log Chute', 500],
 ]
 
-function anchorFor(trails: TrailCollection, runName: string): [number, number] | null {
+function anchorFor(
+  trails: TrailCollection,
+  runName: string,
+  referenceLat: number,
+): [number, number] | null {
   const feature = trails.features.find(
     (candidate) => candidate.properties.name === runName && candidate.geometry.type === 'LineString',
   )
   if (!feature) return null
   const coords = feature.geometry.coordinates as number[][]
-  const [lon, lat] = coords[Math.floor(coords.length / 2)]
-  return [lon, lat]
+  return polylineMidpoint(coords, referenceLat)
 }
 
 function roundDepth(value: number) {
@@ -59,8 +66,8 @@ export function buildZoneSummaries(
 
   const summaries: ZoneSummary[] = []
 
-  for (const [name, runName, radiusM] of ZONES) {
-    const anchor = anchorFor(trails, runName)
+  for (const [name, runName, radiusM] of ZONE_CONFIG) {
+    const anchor = anchorFor(trails, runName, centerLat)
     if (!anchor) continue
     const grid = lonLatToGrid(anchor[0], anchor[1], terrain)
     const spanCols = Math.ceil(radiusM / cellX)

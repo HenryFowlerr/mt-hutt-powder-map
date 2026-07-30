@@ -13,7 +13,7 @@ import { FreezingLevelBand } from './FreezingLevelBand'
 import { IceOverlay } from './IceOverlay'
 import { FocusMarker } from './FocusMarker'
 import { ZoneMarkers } from './ZoneMarkers'
-import { createTerrainGeometry, terrainPoint } from '../lib/terrain'
+import { createTerrainGeometry, skiAreaCenter, terrainPoint } from '../lib/terrain'
 import type { PowderField, PowderWeather } from '../lib/powderModel'
 import type { IceField, IceWeather } from '../lib/iceModel'
 import type { TerrainAnalysis } from '../lib/terrainAnalysis'
@@ -32,25 +32,6 @@ type Props = {
   overrides?: TrailCollection | null
 }
 
-// Camera target sits on the main ski area (mean of lift midpoints) so the
-// default view opens on the mountain proper, like the official map, not on
-// empty valley terrain.
-function skiAreaTarget(terrain: TerrainData, trails: TrailCollection, exaggeration: number) {
-  const midpoints: Array<[number, number]> = []
-  for (const feature of trails.features) {
-    if (feature.properties.kind !== 'lift' || feature.geometry.type !== 'LineString') continue
-    const coords = feature.geometry.coordinates as number[][]
-    const [lon, lat] = coords[Math.floor(coords.length / 2)]
-    midpoints.push([lon, lat])
-  }
-  if (midpoints.length === 0) {
-    return new THREE.Vector3(0, 1.5, 0)
-  }
-  const lon = midpoints.reduce((total, point) => total + point[0], 0) / midpoints.length
-  const lat = midpoints.reduce((total, point) => total + point[1], 0) / midpoints.length
-  return terrainPoint(lon, lat, terrain, exaggeration)
-}
-
 function CameraRig({ terrain, trails }: { terrain: TerrainData; trails: TrailCollection }) {
   const controlsRef = useRef<OrbitControlsImpl | null>(null)
   const orientationResetCount = useViewStore((state) => state.orientationResetCount)
@@ -61,7 +42,7 @@ function CameraRig({ terrain, trails }: { terrain: TerrainData; trails: TrailCol
   const lastOrientationResetCount = useRef(orientationResetCount)
 
   const target = useMemo(
-    () => skiAreaTarget(terrain, trails, exaggeration),
+    () => skiAreaCenter(terrain, trails, exaggeration),
     [terrain, trails, exaggeration],
   )
 

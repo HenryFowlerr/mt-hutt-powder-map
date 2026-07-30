@@ -1,5 +1,10 @@
 import * as THREE from 'three'
-import { lonLatToXZ, WORLD_UNITS_PER_METER } from './geo'
+import {
+  lonLatToXZ,
+  polylineMidpoint,
+  terrainCenter,
+  WORLD_UNITS_PER_METER,
+} from './geo'
 import { clamp01, sampleGrid, smoothstep, type TerrainAnalysis } from './terrainAnalysis'
 import type { TerrainData } from '../types'
 
@@ -143,11 +148,12 @@ export function skiAreaCenter(
   exaggeration: number,
 ) {
   const midpoints: Array<[number, number]> = []
+  const referenceLat = terrainCenter(terrain).lat
   for (const feature of trails.features) {
     if (feature.properties.kind !== 'lift' || feature.geometry.type !== 'LineString') continue
     const coords = feature.geometry.coordinates as number[][]
-    const [lon, lat] = coords[Math.floor(coords.length / 2)]
-    midpoints.push([lon, lat])
+    const midpoint = polylineMidpoint(coords, referenceLat)
+    if (midpoint) midpoints.push(midpoint)
   }
   if (midpoints.length === 0) return new THREE.Vector3(0, 1.5, 0)
   const lon = midpoints.reduce((total, point) => total + point[0], 0) / midpoints.length

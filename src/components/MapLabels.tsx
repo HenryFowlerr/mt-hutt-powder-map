@@ -3,6 +3,7 @@ import { useFrame, useThree } from '@react-three/fiber'
 import type { CSSProperties } from 'react'
 import { useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
+import { polylineMidpoint, terrainCenter } from '../lib/geo'
 import { sampleElevation, skiAreaCenter, terrainPoint } from '../lib/terrain'
 import { useViewStore } from '../state/viewStore'
 import type { TerrainData, TrailCollection } from '../types'
@@ -62,10 +63,6 @@ const HALO_STYLE: CSSProperties = {
     '-1px -1px 0 rgba(250,253,254,.94), 1px -1px 0 rgba(250,253,254,.94), -1px 1px 0 rgba(250,253,254,.94), 1px 1px 0 rgba(250,253,254,.94), 0 1px 3px rgba(250,253,254,.9)',
 }
 
-function lineMidpoint(coords: number[][]) {
-  return coords[Math.floor(coords.length / 2)]
-}
-
 function runByName(trails: TrailCollection, name: string) {
   const feature = trails.features.find(
     (candidate) => candidate.properties.name === name && candidate.geometry.type === 'LineString',
@@ -76,6 +73,7 @@ function runByName(trails: TrailCollection, name: string) {
 function buildLabels(terrain: TerrainData, trails: TrailCollection, exaggeration: number): MapLabel[] {
   const labels: MapLabel[] = []
   const lift = (offset: number) => 0.06 + offset
+  const referenceLat = terrainCenter(terrain).lat
 
   const seenRuns = new Set<string>()
   let summitTop: number[] | null = null
@@ -99,7 +97,9 @@ function buildLabels(terrain: TerrainData, trails: TrailCollection, exaggeration
       if (name === 'Norwest Express') baseBottom = bottom
 
       if (MAJOR_LIFTS.has(name)) {
-        const [lon, lat] = lineMidpoint(coords)
+        const midpoint = polylineMidpoint(coords, referenceLat)
+        if (!midpoint) continue
+        const [lon, lat] = midpoint
         const position = terrainPoint(lon, lat, terrain, exaggeration)
         position.y += lift(0.05)
         labels.push({
@@ -120,7 +120,9 @@ function buildLabels(terrain: TerrainData, trails: TrailCollection, exaggeration
     if (!isNamed || seenRuns.has(name)) continue
     seenRuns.add(name)
 
-    const [lon, lat] = lineMidpoint(coords)
+    const midpoint = polylineMidpoint(coords, referenceLat)
+    if (!midpoint) continue
+    const [lon, lat] = midpoint
     const position = terrainPoint(lon, lat, terrain, exaggeration)
     position.y += lift(0)
     const difficulty = feature.properties.difficulty ?? 'unknown'
@@ -138,7 +140,9 @@ function buildLabels(terrain: TerrainData, trails: TrailCollection, exaggeration
   for (const [text, runName] of AREA_ANCHOR_RUNS) {
     const coords = runByName(trails, runName)
     if (!coords) continue
-    const [lon, lat] = lineMidpoint(coords)
+    const midpoint = polylineMidpoint(coords, referenceLat)
+    if (!midpoint) continue
+    const [lon, lat] = midpoint
     const position = terrainPoint(lon, lat, terrain, exaggeration)
     position.y += lift(0.08)
     labels.push({

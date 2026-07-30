@@ -122,6 +122,9 @@ test('desktop navigation has a logical focus order and operable state controls',
     inspector.getByRole('button', { name: 'Layers' }),
     page.getByRole('button', { name: 'Last 72 hours' }),
     page.getByRole('button', { name: 'Next 72 hours' }),
+    page.getByRole('link', {
+      name: 'Check official live mountain, road & lift status',
+    }),
   ]
 
   await expect(page.locator('button[aria-label^="Focus "]')).toHaveCount(0)
@@ -131,6 +134,7 @@ test('desktop navigation has a logical focus order and operable state controls',
     await expectVisibleFocus(control)
   }
 
+  await page.keyboard.press('Shift+Tab')
   await page.keyboard.press('Shift+Tab')
   const recent = page.getByRole('button', { name: 'Last 72 hours' })
   await expectVisibleFocus(recent)
@@ -177,7 +181,11 @@ test('brief disclosure and external source links remain keyboard accessible', as
   await page.keyboard.press('Enter')
   await expect(disclosure.locator('..')).toHaveAttribute('open', '')
 
-  for (const name of ['Weather data by Open-Meteo', 'Official report', 'Avalanche advisory']) {
+  for (const name of [
+    'Weather data by Open-Meteo',
+    'Check official live mountain, road & lift status',
+    'Avalanche advisory',
+  ]) {
     const link = brief.getByRole('link', { name })
     await link.focus()
     await expectVisibleFocus(link)

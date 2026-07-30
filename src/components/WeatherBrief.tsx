@@ -305,6 +305,16 @@ export function WeatherBrief({ latest, field, terrain, analysis, trails, weather
           </button>
         </div>
 
+        <a
+          className="official-status-link"
+          href="https://www.mthutt.co.nz/weather-report/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <ExternalLink size={14} />
+          <span>Check official live mountain, road &amp; lift status</span>
+        </a>
+
         <section className="depth-hero" aria-live="polite">
           <p>{mode === 'forecast' ? 'Likely deepest modelled pocket' : 'Deepest modelled pocket'}</p>
           <div
@@ -553,9 +563,6 @@ export function WeatherBrief({ latest, field, terrain, analysis, trails, weather
           <div>
             <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">
               Weather data by Open-Meteo <ExternalLink size={12} />
-            </a>
-            <a href="https://www.mthutt.co.nz/weather-report/" target="_blank" rel="noreferrer">
-              Official report <ExternalLink size={12} />
             </a>
             <a href="https://www.avalanche.net.nz/" target="_blank" rel="noreferrer">
               Avalanche advisory <ExternalLink size={12} />

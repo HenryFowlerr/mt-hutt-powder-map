@@ -61,6 +61,7 @@ export type PowderPhaseHour = {
   snowfallCm: number
   precipitationMm?: number
   freezingLevelM?: number
+  windDirectionDeg?: number
 }
 
 type PhaseReadyHour = PowderPhaseHour & {
@@ -144,6 +145,87 @@ function lookupSnow(
   return lookup.values[index]
 }
 
+export type PowderWindSector = {
+  directionDeg: number
+  weight: number
+}
+
+type WindSectorAccumulator = {
+  weight: number
+  vectorX: number
+  vectorY: number
+}
+
+/**
+ * Reduces up to 72 hourly wind directions to eight precipitation-weighted
+ * sectors. Precipitation only counts where it can fall as snow somewhere on
+ * the supplied terrain; official reference snowfall remains a fallback.
+ */
+export function buildForecastWindSectors(
+  hours: readonly PowderPhaseHour[] | undefined,
+  maximumElevationM: number,
+): PowderWindSector[] | null {
+  if (!hours?.length) return null
+
+  const accumulators: WindSectorAccumulator[] = Array.from(
+    { length: 8 },
+    () => ({ weight: 0, vectorX: 0, vectorY: 0 }),
+  )
+  let totalWeight = 0
+
+  for (const hour of hours.slice(0, 72)) {
+    if (
+      hour.windDirectionDeg === undefined ||
+      !Number.isFinite(hour.windDirectionDeg)
+    ) {
+      continue
+    }
+
+    const officialSnowWaterMm =
+      Number.isFinite(hour.snowfallCm) && hour.snowfallCm > 0
+        ? hour.snowfallCm / 0.7
+        : 0
+    const precipitationSnowWaterMm =
+      hour.precipitationMm !== undefined &&
+      Number.isFinite(hour.precipitationMm) &&
+      hour.precipitationMm > 0 &&
+      hour.freezingLevelM !== undefined &&
+      Number.isFinite(hour.freezingLevelM)
+        ? hour.precipitationMm *
+          aggregateSnowPhase(maximumElevationM, hour.freezingLevelM)
+        : 0
+    const weight = Math.max(
+      officialSnowWaterMm,
+      precipitationSnowWaterMm,
+    )
+    if (weight <= 0) continue
+
+    const directionDeg = ((hour.windDirectionDeg % 360) + 360) % 360
+    const sectorIndex = Math.floor(((directionDeg + 22.5) % 360) / 45)
+    const directionRad = (directionDeg * Math.PI) / 180
+    const accumulator = accumulators[sectorIndex]
+    accumulator.weight += weight
+    accumulator.vectorX += Math.sin(directionRad) * weight
+    accumulator.vectorY += Math.cos(directionRad) * weight
+    totalWeight += weight
+  }
+
+  if (totalWeight <= 0) return null
+
+  return accumulators.flatMap((accumulator) => {
+    if (accumulator.weight <= 0) return []
+    const directionDeg =
+      ((Math.atan2(accumulator.vectorX, accumulator.vectorY) * 180) /
+        Math.PI +
+        360) %
+      360
+    return [{
+      directionDeg,
+      weight: accumulator.weight / totalWeight,
+    }]
+  })
+}
+
 // Terrain-aware powder deposition model shared by the browser overlay and
 // the data pipeline. Produces dense per-cell fields (same grid as the DEM)
 // of expected skiable powder in cm for the recent storm and the forecast
@@ -202,53 +284,90 @@ type CellFactors = {
   skiable: number
 }
 
+type PreparedWindSector = PowderWindSector & {
+  shelter: Float32Array
+}
+
+function fallbackWindSector(weather: PowderWeather): PowderWindSector[] {
+  return [{
+    directionDeg: weather.mainWindDirectionDeg,
+    weight: windDirectionalCoherence(weather.windDirectionSpreadDeg),
+  }]
+}
+
+function prepareWindSectors(
+  terrain: TerrainData,
+  sectors: readonly PowderWindSector[],
+): PreparedWindSector[] {
+  return sectors.map((sector) => ({
+    ...sector,
+    shelter: getWindShelter(terrain, sector.directionDeg),
+  }))
+}
+
 function cellFactors(
   index: number,
   terrain: TerrainData,
   analysis: TerrainAnalysis,
   weather: PowderWeather,
+  windSectors?: readonly PreparedWindSector[],
   hourlyPhaseApplied = false,
 ): CellFactors {
   const elevation = terrain.heights[index]
   const slope = analysis.slopeDeg[index]
   const aspect = analysis.aspectDeg[index]
-  const shelterDeg = getWindShelter(terrain, weather.mainWindDirectionDeg)[index]
-
-  // Wind direction is where wind comes FROM; lee slopes face away from it.
-  const leeAspectDeg = (weather.mainWindDirectionDeg + 180) % 360
-  const aspectDifference = angularDifference(aspect, leeAspectDeg)
   // Flat terrain has no meaningful aspect: fade lee effect below ~8 deg slope.
   const aspectRelevance = smoothstep(4, 12, slope)
-  const leeAlignment = smoothstep(110, 20, aspectDifference)
 
   const gustKph = weather.maxGustKph ?? weather.avgWindKph * 1.6
   const transportFactor = smoothstep(15, 45, weather.avgWindKph)
   const overScourFactor = smoothstep(55, 85, gustKph)
-  const directionalCoherence = windDirectionalCoherence(
-    weather.windDirectionSpreadDeg,
-  )
 
   const concavityFactor = analysis.gullyFactor[index]
 
-  // Upwind horizon (Winstral Sx): deposition behind ridge crests, stripping
-  // on open windward ground. This carries more weight than aspect alone —
-  // a NE face right behind a crest loads far more than an open NE face.
-  const rawShelterFactor = smoothstep(2, 13, shelterDeg)
-  const shelterFactor = rawShelterFactor * directionalCoherence
-  const exposureFactor = smoothstep(1, 10, -shelterDeg)
+  let leeFactor = 0
+  let shelterFactor = 0
+  let directionalScour = 0
+  const effectiveWindSectors =
+    windSectors ??
+    prepareWindSectors(terrain, fallbackWindSector(weather))
+  for (const sector of effectiveWindSectors) {
+    const shelterDeg = sector.shelter[index]
+    // Wind direction is where wind comes FROM; lee slopes face away from it.
+    const leeAspectDeg = (sector.directionDeg + 180) % 360
+    const leeAlignment = smoothstep(
+      110,
+      20,
+      angularDifference(aspect, leeAspectDeg),
+    )
+    // Winstral-style upwind shelter handles deposition behind ridge crests.
+    const rawShelterFactor = smoothstep(2, 13, shelterDeg)
+    const exposureFactor = smoothstep(1, 10, -shelterDeg)
+    const windward =
+      smoothstep(
+        110,
+        20,
+        angularDifference(aspect, sector.directionDeg),
+      ) * aspectRelevance
 
-  const leeFactor =
-    (0.45 * leeAlignment * aspectRelevance + 0.55 * rawShelterFactor) *
-    transportFactor *
-    (0.55 + 0.45 * concavityFactor) *
-    directionalCoherence
+    shelterFactor += rawShelterFactor * sector.weight
+    leeFactor +=
+      (0.45 * leeAlignment * aspectRelevance +
+        0.55 * rawShelterFactor) *
+      transportFactor *
+      (0.55 + 0.45 * concavityFactor) *
+      sector.weight
+    directionalScour +=
+      (exposureFactor * (0.3 + 0.5 * transportFactor) +
+        windward * transportFactor * 0.3) *
+      sector.weight
+  }
 
-  // Exposed convex/windward terrain loses snow to wind; worse in gusts.
-  const windward = smoothstep(110, 20, angularDifference(aspect, weather.mainWindDirectionDeg)) * aspectRelevance
+  // Exposed convex ridges scour in strong wind regardless of mean direction;
+  // only the direction-specific exposure and windward terms are blended.
   const scourPenalty = clamp01(
     analysis.ridgeExposure[index] * (0.3 + 0.5 * transportFactor) +
-      exposureFactor * (0.3 + 0.5 * transportFactor) * directionalCoherence +
-      windward * transportFactor * 0.3 * directionalCoherence +
+      directionalScour +
       analysis.ridgeExposure[index] * overScourFactor * 0.4,
   )
 
@@ -342,6 +461,17 @@ export function buildPowderField(
   const recentSignal = clamp01(weather.recentSnowCm / 35)
   const forecastSignal = clamp01(weather.forecastSnowCm / 35)
   const forecastModeWeather = forecastWeather(weather)
+  const recentWindSectors = prepareWindSectors(
+    terrain,
+    fallbackWindSector(weather),
+  )
+  const forecastWindSectors = prepareWindSectors(
+    terrain,
+    buildForecastWindSectors(
+      weather.forecastPhaseHours,
+      terrain.maxElevation,
+    ) ?? fallbackWindSector(forecastModeWeather),
+  )
   const recentPhaseLookup = phaseSnowLookup(
     terrain,
     weather.recentPhaseHours,
@@ -370,6 +500,7 @@ export function buildPowderField(
       terrain,
       analysis,
       weather,
+      recentWindSectors,
       recentPhaseLookup !== null,
     )
     const forecastFactors = cellFactors(
@@ -377,6 +508,7 @@ export function buildPowderField(
       terrain,
       analysis,
       forecastModeWeather,
+      forecastWindSectors,
       forecastPhaseLookup !== null,
     )
     recentScore[index] = scoreCell(
@@ -521,8 +653,32 @@ export function describeCell(
   mode: PowderMode = 'recent',
 ): { reason: string; dominantFactor: string } {
   const effectiveWeather = mode === 'forecast' ? forecastWeather(weather) : weather
-  const factors = cellFactors(index, terrain, analysis, effectiveWeather)
-  const windFrom = compassLabel(effectiveWeather.mainWindDirectionDeg)
+  const distributedSectors =
+    mode === 'forecast'
+      ? buildForecastWindSectors(
+          weather.forecastPhaseHours,
+          terrain.maxElevation,
+        )
+      : null
+  const preparedSectors = prepareWindSectors(
+    terrain,
+    distributedSectors ?? fallbackWindSector(effectiveWeather),
+  )
+  const factors = cellFactors(
+    index,
+    terrain,
+    analysis,
+    effectiveWeather,
+    preparedSectors,
+    mode === 'forecast' &&
+      (weather.forecastPhaseHours?.some(hasPhaseInputs) ?? false),
+  )
+  const multiSectorWind = (distributedSectors?.length ?? 0) > 1
+  const windFrom = compassLabel(
+    distributedSectors?.length === 1
+      ? distributedSectors[0].directionDeg
+      : effectiveWeather.mainWindDirectionDeg,
+  )
   const facing = compassLabel(analysis.aspectDeg[index])
 
   const rainAffected =
@@ -533,12 +689,16 @@ export function describeCell(
     [
       factors.shelterFactor * 1.05,
       'ridge shelter',
-      `Deposits in the wind shadow just behind the crest upwind (${windFrom} wind).`,
+      multiSectorWind
+        ? `Deposits behind terrain features across ${distributedSectors?.length ?? 0} active wind sectors.`
+        : `Deposits in the wind shadow just behind the crest upwind (${windFrom} wind).`,
     ],
     [
       factors.leeFactor,
       'wind loading',
-      `Likely lee-loaded from ${windFrom} wind onto sheltered ${facing}-facing terrain.`,
+      multiSectorWind
+        ? `Likely loaded onto sheltered ${facing}-facing terrain as storm winds shift.`
+        : `Likely lee-loaded from ${windFrom} wind onto sheltered ${facing}-facing terrain.`,
     ],
     [
       factors.concavityFactor * 0.9,
@@ -553,7 +713,9 @@ export function describeCell(
     [
       factors.scourPenalty,
       'wind scour',
-      `Exposed ${facing}-facing terrain likely scoured by ${windFrom} wind.`,
+      multiSectorWind
+        ? `Exposed ${facing}-facing terrain likely scoured as storm winds shift.`
+        : `Exposed ${facing}-facing terrain likely scoured by ${windFrom} wind.`,
     ],
     [
       rainAffected ? 0.6 : 0,

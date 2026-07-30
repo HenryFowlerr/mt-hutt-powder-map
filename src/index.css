@@ -269,6 +269,31 @@ summary:focus-visible {
   box-shadow: 0 1px 5px rgba(17, 42, 54, 0.12);
 }
 
+.official-status-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 44px;
+  min-height: 44px;
+  margin-top: 5px;
+  color: var(--accent-deep);
+  font-size: var(--text-secondary);
+  font-weight: 640;
+  line-height: 1.35;
+  text-decoration: underline;
+  text-decoration-color: rgba(8, 127, 209, 0.36);
+  text-underline-offset: 3px;
+}
+
+.official-status-link svg {
+  flex: none;
+}
+
+.official-status-link:hover {
+  color: var(--accent);
+  text-decoration-color: currentColor;
+}
+
 .depth-hero {
   padding: 23px 2px 20px;
   border-bottom: 1px solid var(--hairline);

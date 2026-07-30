@@ -2,12 +2,14 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import {
+  buildForecastWindSectors,
   buildPowderDisplayField,
   buildPowderField,
   fieldMaxCm,
   hourlyPhaseSnowCm,
   windDirectionalCoherence,
   type PowderField,
+  type PowderPhaseHour,
   type PowderWeather,
 } from '../src/lib/powderModel'
 import { analyzeTerrain } from '../src/lib/terrainAnalysis'
@@ -53,6 +55,18 @@ function meanAbsoluteDifference(a: Float32Array, b: Float32Array) {
   let total = 0
   for (let index = 0; index < a.length; index += 1) total += Math.abs(a[index] - b[index])
   return total / a.length
+}
+
+function meanDifferenceFromAverage(
+  candidate: Float32Array,
+  a: Float32Array,
+  b: Float32Array,
+) {
+  let total = 0
+  for (let index = 0; index < candidate.length; index += 1) {
+    total += Math.abs(candidate[index] - (a[index] + b[index]) / 2)
+  }
+  return total / candidate.length
 }
 
 function assertFiniteNonNegative(grid: Float32Array, message: string) {
@@ -254,6 +268,153 @@ assert(
   'a light event must remain visible even when wind direction shifts widely',
 )
 
+function windHours(directions: readonly number[]): PowderPhaseHour[] {
+  return directions.map((windDirectionDeg) => ({
+    snowfallCm: 0.7,
+    precipitationMm: 1,
+    freezingLevelM: 1250,
+    windDirectionDeg,
+  }))
+}
+
+const stableWindHours = windHours(Array.from({ length: 12 }, () => 315))
+const stableSectors = buildForecastWindSectors(
+  stableWindHours,
+  terrain.maxElevation,
+)
+assert.equal(
+  stableSectors?.length,
+  1,
+  'a stable hourly wind series must reduce to one active sector',
+)
+assert(
+  Math.abs((stableSectors?.[0].directionDeg ?? 0) - 315) < 1e-9,
+  'a sector must retain its precipitation-weighted mean direction',
+)
+const stableSectorField = forecastField({
+  forecastSnowCm: 8.4,
+  forecastWindDirectionDeg: 315,
+  forecastWindDirectionSpreadDeg: 112,
+  forecastPhaseHours: stableWindHours,
+})
+const stableFallbackField = forecastField({
+  forecastSnowCm: 8.4,
+  forecastWindDirectionDeg: 315,
+  forecastWindDirectionSpreadDeg: 0,
+})
+const stableSectorDifference = meanAbsoluteDifference(
+  stableSectorField.forecastCm,
+  stableFallbackField.forecastCm,
+)
+assert(
+  stableSectorDifference < 0.001,
+  `one active sector must preserve the stable single-direction field (${stableSectorDifference.toFixed(6)} cm difference)`,
+)
+
+const opposingWindHours = windHours([
+  315, 135, 315, 135, 315, 135, 315, 135, 315, 135, 315, 135,
+])
+const opposingSectors = buildForecastWindSectors(
+  opposingWindHours,
+  terrain.maxElevation,
+)
+assert.equal(
+  opposingSectors?.length,
+  2,
+  'opposing precipitation-bearing winds must retain two active sectors',
+)
+const opposingField = forecastField({
+  forecastSnowCm: 8.4,
+  forecastWindDirectionDeg: 315,
+  forecastWindDirectionSpreadDeg: 112,
+  forecastPhaseHours: opposingWindHours,
+})
+const southeastStableField = forecastField({
+  forecastSnowCm: 8.4,
+  forecastWindDirectionDeg: 135,
+  forecastWindDirectionSpreadDeg: 0,
+})
+const opposingFallbackField = forecastField({
+  forecastSnowCm: 8.4,
+  forecastWindDirectionDeg: 315,
+  forecastWindDirectionSpreadDeg: 112,
+})
+const sectorDistanceFromExpectedBlend = meanDifferenceFromAverage(
+  opposingField.forecastCm,
+  stableFallbackField.forecastCm,
+  southeastStableField.forecastCm,
+)
+const fallbackDistanceFromExpectedBlend = meanDifferenceFromAverage(
+  opposingFallbackField.forecastCm,
+  stableFallbackField.forecastCm,
+  southeastStableField.forecastCm,
+)
+assert(
+  sectorDistanceFromExpectedBlend < fallbackDistanceFromExpectedBlend,
+  'opposing sectors must represent the two directional fields better than a damped mean direction',
+)
+assertFiniteNonNegative(
+  opposingField.forecastCm,
+  'multi-sector forecast centimetres must remain finite and non-negative',
+)
+assertFiniteNonNegative(
+  opposingField.forecastScore,
+  'multi-sector forecast scores must remain finite and non-negative',
+)
+
+const opposingTraceHours: PowderPhaseHour[] = [
+  {
+    snowfallCm: 0.1,
+    precipitationMm: 0.1 / 0.7,
+    freezingLevelM: 1250,
+    windDirectionDeg: 315,
+  },
+  {
+    snowfallCm: 0.1,
+    precipitationMm: 0.1 / 0.7,
+    freezingLevelM: 1250,
+    windDirectionDeg: 135,
+  },
+]
+const opposingTraceField = forecastField({
+  forecastSnowCm: 0.2,
+  forecastPhaseHours: opposingTraceHours,
+})
+const opposingTraceDisplay = buildPowderDisplayField(
+  opposingTraceField,
+  analysis,
+  'forecast',
+)
+assert(
+  nonZeroCount(opposingTraceDisplay) > 0,
+  'a light bimodal-wind event must remain visible',
+)
+
+const eightSectorHours = windHours(
+  Array.from({ length: 8 }, (_, index) => index * 45),
+)
+assert.equal(
+  buildForecastWindSectors(eightSectorHours, terrain.maxElevation)?.length,
+  8,
+  'hourly winds must be capped at eight active sectors',
+)
+const coldTerrain = { ...terrain }
+const coldBuildStartedAt = performance.now()
+const coldEightSectorField = buildPowderField(coldTerrain, analysis, {
+  ...baseWeather,
+  forecastSnowCm: 5.6,
+  forecastPhaseHours: eightSectorHours,
+})
+const coldEightSectorBuildMs = performance.now() - coldBuildStartedAt
+assert(
+  coldEightSectorBuildMs < 2500,
+  `cold-cache eight-sector field must build within 2500 ms (received ${coldEightSectorBuildMs.toFixed(0)} ms)`,
+)
+assertFiniteNonNegative(
+  coldEightSectorField.forecastCm,
+  'cold-cache eight-sector output must remain finite and non-negative',
+)
+
 console.log(
   [
     `Powder model checks passed`,
@@ -266,5 +427,7 @@ console.log(
     `cold/dry max: ${coldDryMax.toFixed(1)} cm`,
     `warm/wet max: ${warmWetMax.toFixed(1)} cm`,
     `direction contrast stable/moderate/wide: ${stableDirectionDifference.toFixed(2)} / ${moderateDirectionDifference.toFixed(2)} / ${wideDirectionDifference.toFixed(2)} cm`,
+    `opposing-sector blend error vs fallback: ${sectorDistanceFromExpectedBlend.toFixed(2)} / ${fallbackDistanceFromExpectedBlend.toFixed(2)} cm`,
+    `cold-cache eight-sector build: ${coldEightSectorBuildMs.toFixed(0)} ms`,
   ].join('\n'),
 )

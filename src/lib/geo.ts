@@ -13,6 +13,59 @@ export function metersPerDegreeLon(lat: number) {
   return METERS_PER_DEGREE_LAT * Math.cos((lat * Math.PI) / 180)
 }
 
+/**
+ * Return the point halfway along a polyline by cumulative ground distance.
+ *
+ * Segment lengths use the same local equirectangular metre approximation as
+ * the terrain projection. Passing the terrain-centre latitude keeps map
+ * anchors consistent across this small ski-area extent. Empty lines have no
+ * midpoint; single-point and zero-length lines return a copied coordinate.
+ */
+export function polylineMidpoint(
+  coordinates: readonly (readonly number[])[],
+  referenceLat: number,
+): [number, number] | null {
+  if (coordinates.length === 0) return null
+  const first: [number, number] = [coordinates[0][0], coordinates[0][1]]
+  if (coordinates.length === 1) return first
+
+  const lonScale = metersPerDegreeLon(referenceLat)
+  const segmentLengths: number[] = []
+  let totalLength = 0
+
+  for (let index = 1; index < coordinates.length; index += 1) {
+    const previous = coordinates[index - 1]
+    const current = coordinates[index]
+    const length = Math.hypot(
+      (current[0] - previous[0]) * lonScale,
+      (current[1] - previous[1]) * METERS_PER_DEGREE_LAT,
+    )
+    segmentLengths.push(length)
+    totalLength += length
+  }
+
+  if (totalLength === 0) return first
+
+  const halfway = totalLength / 2
+  let travelled = 0
+  for (let index = 0; index < segmentLengths.length; index += 1) {
+    const segmentLength = segmentLengths[index]
+    if (travelled + segmentLength >= halfway) {
+      const start = coordinates[index]
+      const end = coordinates[index + 1]
+      const fraction = segmentLength === 0 ? 0 : (halfway - travelled) / segmentLength
+      return [
+        start[0] + (end[0] - start[0]) * fraction,
+        start[1] + (end[1] - start[1]) * fraction,
+      ]
+    }
+    travelled += segmentLength
+  }
+
+  const last = coordinates[coordinates.length - 1]
+  return [last[0], last[1]]
+}
+
 export function terrainCenter(terrain: TerrainData) {
   return {
     lon: (terrain.bounds.west + terrain.bounds.east) / 2,

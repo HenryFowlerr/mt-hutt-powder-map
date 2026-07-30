@@ -52,7 +52,10 @@ test('keeps weather and safety sources as accessible external links', async ({ p
 
   const sources = [
     { name: 'Weather data by Open-Meteo', href: 'https://open-meteo.com/' },
-    { name: 'Official report', href: 'https://www.mthutt.co.nz/weather-report/' },
+    {
+      name: 'Check official live mountain, road & lift status',
+      href: 'https://www.mthutt.co.nz/weather-report/',
+    },
     { name: 'Avalanche advisory', href: 'https://www.avalanche.net.nz/' },
   ]
 
