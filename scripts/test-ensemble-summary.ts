@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { summariseGfsEnsemble } from './ensemble-summary'
 
-const time = ['2026-07-31T00:00', '2026-07-31T01:00']
+const time = [1785412800, 1785416400]
 const generatedAt = '2026-07-30T12:00:00.000Z'
 
 const summary = summariseGfsEnsemble(
@@ -26,6 +26,8 @@ assert.deepEqual(summary.probabilityPct, {
   atLeast10Cm: 25,
 })
 assert.equal(summary.windowHours, 2)
+assert.equal(summary.windowStartAt, '2026-07-30T12:00:00.000Z')
+assert.equal(summary.windowEndAt, '2026-07-30T13:00:00.000Z')
 assert.equal(summary.generatedAt, generatedAt)
 
 const withMalformedMembers = summariseGfsEnsemble({
@@ -52,6 +54,6 @@ assert.equal(
   }),
   undefined,
 )
-assert.equal(summariseGfsEnsemble({ hourly: { time: ['invalid'], snowfall: [1] } }), undefined)
+assert.equal(summariseGfsEnsemble({ hourly: { time: ['2026-07-31T00:00'], snowfall: [1] } }), undefined)
 
 console.log('Ensemble summary regression checks passed.')

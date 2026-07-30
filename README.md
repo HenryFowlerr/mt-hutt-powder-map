@@ -44,7 +44,9 @@ The updater calls Open-Meteo's deterministic and GFS ensemble APIs, writes
 `public/data/latest.json` (summary, 14-day daily forecast, hourly series, powder polygons, and an
 optional 31-run snowfall distribution), and never overwrites good data with a failed fetch. If the
 ensemble request fails, the deterministic update still succeeds. GitHub Actions validates and
-refreshes the public data hourly.
+refreshes the public data hourly. API timestamps are requested as UNIX time, published as explicit
+UTC ISO values, and grouped into calendar days in `Pacific/Auckland` so the 72-hour windows do not
+depend on the updater machine's timezone.
 
 ## Deploy
 

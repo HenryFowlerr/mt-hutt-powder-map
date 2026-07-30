@@ -1,4 +1,5 @@
 import type { EnsembleSnowfallSummary } from '../src/types'
+import { openMeteoUnixIso, openMeteoUnixMs } from './weather-time'
 
 type UnknownRecord = Record<string, unknown>
 
@@ -43,7 +44,14 @@ export function summariseGfsEnsemble(
   if (
     !Array.isArray(times) ||
     times.length === 0 ||
-    times.some((time) => typeof time !== 'string' || !Number.isFinite(Date.parse(time)))
+    times.some((time) => {
+      try {
+        openMeteoUnixMs(time)
+        return false
+      } catch {
+        return true
+      }
+    })
   ) {
     return undefined
   }
@@ -70,8 +78,8 @@ export function summariseGfsEnsemble(
     source: 'Open-Meteo Ensemble API',
     model: 'gfs_seamless',
     generatedAt,
-    windowStartAt: times[0] as string,
-    windowEndAt: times[times.length - 1] as string,
+    windowStartAt: openMeteoUnixIso(times[0]),
+    windowEndAt: openMeteoUnixIso(times[times.length - 1]),
     windowHours: times.length,
     memberCount: totals.length,
     snowfallCm: {

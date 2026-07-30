@@ -10,7 +10,7 @@
     "fetch:trails": "tsx scripts/fetch-osm-trails.ts",
     "update:data": "tsx scripts/fetch-weather.ts && tsx scripts/build-powder-grid.ts",
     "test:data": "tsx scripts/check-data-integrity.ts",
-    "test:model": "tsx scripts/check-powder-model.ts",
+    "test:model": "tsx scripts/check-powder-model.ts && tsx scripts/test-weather-time.ts",
     "test:confidence": "tsx scripts/check-forecast-confidence.ts && tsx scripts/test-ensemble-summary.ts",
     "test:bundle": "tsx scripts/check-bundle-budget.ts",
     "test:e2e": "npm run build && playwright test",
@@ -31,6 +31,7 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
     "@playwright/test": "^1.62.0",
     "@types/node": "^24.13.2",
     "@types/react": "^19.2.17",

@@ -4,6 +4,7 @@ import { WeatherBrief } from './components/WeatherBrief'
 import { ForecastPanel } from './components/ForecastPanel'
 import { BrandHeader } from './components/BrandHeader'
 import { MapLegend } from './components/MapLegend'
+import { MapErrorBoundary } from './components/MapErrorBoundary'
 import { InspectorNav } from './components/InspectorNav'
 import { LayersPanel } from './components/LayersPanel'
 import { buildPowderField, type PowderWeather } from './lib/powderModel'
@@ -128,25 +129,27 @@ function App() {
       <div className="workspace-body">
         <section className="map-stage" aria-label="Interactive Mt Hutt terrain map">
           {data && derived ? (
-            <Suspense
-              fallback={
-                <div className="loading-state" role="status">
-                  <h1>Preparing terrain</h1>
-                  <p>Loading the interactive mountain map…</p>
-                </div>
-              }
-            >
-              <MountainScene
-                terrain={data.terrain}
-                trails={data.trails}
-                analysis={derived.analysis}
-                field={derived.field}
-                weather={derived.weather}
-                iceField={derived.iceField}
-                iceWeather={derived.iceWeather}
-                overrides={overrides}
-              />
-            </Suspense>
+            <MapErrorBoundary>
+              <Suspense
+                fallback={
+                  <div className="loading-state" role="status">
+                    <h1>Preparing terrain</h1>
+                    <p>Loading the interactive mountain map…</p>
+                  </div>
+                }
+              >
+                <MountainScene
+                  terrain={data.terrain}
+                  trails={data.trails}
+                  analysis={derived.analysis}
+                  field={derived.field}
+                  weather={derived.weather}
+                  iceField={derived.iceField}
+                  iceWeather={derived.iceWeather}
+                  overrides={overrides}
+                />
+              </Suspense>
+            </MapErrorBoundary>
           ) : (
             <div className="loading-state" role="status">
               <h1>Mt Hutt Powder Map</h1>

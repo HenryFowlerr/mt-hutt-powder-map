@@ -12,6 +12,7 @@ import { StormLayer } from './StormLayer'
 import { FreezingLevelBand } from './FreezingLevelBand'
 import { IceOverlay } from './IceOverlay'
 import { FocusMarker } from './FocusMarker'
+import { ZoneMarkers } from './ZoneMarkers'
 import { createTerrainGeometry, terrainPoint } from '../lib/terrain'
 import type { PowderField, PowderWeather } from '../lib/powderModel'
 import type { IceField, IceWeather } from '../lib/iceModel'
@@ -176,6 +177,13 @@ export function MountainScene({
       <TrailOverlay terrain={terrain} trails={trails} />
       <MapDetails terrain={terrain} trails={trails} overrides={overrides} />
       <MapLabels terrain={terrain} trails={trails} />
+      <ZoneMarkers
+        terrain={terrain}
+        trails={trails}
+        analysis={analysis}
+        field={field}
+        weather={weather}
+      />
       <FocusMarker terrain={terrain} />
       <StormLayer terrain={terrain} weather={weather} animate={animate} lowPower={lowPower} />
       <FreezingLevelBand terrain={terrain} freezingLevelM={weather.freezingLevelM} />

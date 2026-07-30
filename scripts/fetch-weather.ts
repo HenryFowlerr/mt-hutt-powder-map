@@ -1,6 +1,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { summariseGfsEnsemble } from './ensemble-summary'
+import { dateKeyAtZone, openMeteoUnixIso, openMeteoUnixMs } from './weather-time'
 import type { EnsembleSnowfallSummary } from '../src/types'
 
 const dataDir = join(process.cwd(), 'public', 'data')
@@ -37,6 +38,7 @@ url.searchParams.set('hourly', hourly)
 url.searchParams.set('past_days', '3')
 url.searchParams.set('forecast_days', '14')
 url.searchParams.set('timezone', 'Pacific/Auckland')
+url.searchParams.set('timeformat', 'unixtime')
 
 const ensembleUrl = new URL('https://ensemble-api.open-meteo.com/v1/ensemble')
 ensembleUrl.searchParams.set('latitude', String(lat))
@@ -46,6 +48,7 @@ ensembleUrl.searchParams.set('hourly', 'snowfall')
 ensembleUrl.searchParams.set('models', 'gfs_seamless')
 ensembleUrl.searchParams.set('forecast_hours', '72')
 ensembleUrl.searchParams.set('timezone', 'Pacific/Auckland')
+ensembleUrl.searchParams.set('timeformat', 'unixtime')
 
 async function fetchEnsembleSummary(): Promise<EnsembleSnowfallSummary | undefined> {
   try {
@@ -73,15 +76,16 @@ try {
   const response = await fetch(url)
   if (!response.ok) throw new Error(`Open-Meteo ${response.status}`)
   const weather = await response.json()
-  const hours: string[] = weather.hourly?.time ?? []
+  const hours: unknown[] = weather.hourly?.time ?? []
+  const hourTimes = hours.map(openMeteoUnixMs)
   const now = Date.now()
 
-  const recentIndexes = hours
-    .map((time, index) => ({ time: new Date(time).getTime(), index }))
+  const recentIndexes = hourTimes
+    .map((time, index) => ({ time, index }))
     .filter(({ time }) => time <= now && time >= now - 72 * 60 * 60 * 1000)
     .map(({ index }) => index)
-  const forecastIndexes = hours
-    .map((time, index) => ({ time: new Date(time).getTime(), index }))
+  const forecastIndexes = hourTimes
+    .map((time, index) => ({ time, index }))
     .filter(({ time }) => time > now && time <= now + 72 * 60 * 60 * 1000)
     .map(({ index }) => index)
 
@@ -234,9 +238,11 @@ try {
   const snowfallForecastIndexes = forecastIndexes.filter(
     (index) => Number(weather.hourly?.snowfall?.[index] ?? 0) >= 0.05,
   )
-  const stormStartAt = snowfallForecastIndexes.length ? hours[snowfallForecastIndexes[0]] : undefined
+  const stormStartAt = snowfallForecastIndexes.length
+    ? openMeteoUnixIso(hours[snowfallForecastIndexes[0]])
+    : undefined
   const stormEndAt = snowfallForecastIndexes.length
-    ? hours[snowfallForecastIndexes[snowfallForecastIndexes.length - 1]]
+    ? openMeteoUnixIso(hours[snowfallForecastIndexes[snowfallForecastIndexes.length - 1]])
     : undefined
   const stormPeakSnowCm = maxValue('snowfall', forecastIndexes, 0)
   const directionSpread = windDirectionSpread(forecastStormIndexes)
@@ -246,8 +252,8 @@ try {
   // get freezing level and cloud per day (Open-Meteo's daily API omits them).
   const dailyMap = new Map<string, number[]>()
   for (let index = 0; index < hours.length; index += 1) {
-    if (new Date(hours[index]).getTime() < now - 60 * 60 * 1000) continue // today onward
-    const day = hours[index].slice(0, 10)
+    if (hourTimes[index] < now - 60 * 60 * 1000) continue // today onward
+    const day = dateKeyAtZone(hours[index])
     const list = dailyMap.get(day)
     if (list) list.push(index)
     else dailyMap.set(day, [index])
@@ -344,7 +350,7 @@ try {
       ],
     },
     observations: recentIndexes.map((index) => ({
-      time: hours[index],
+      time: openMeteoUnixIso(hours[index]),
       temperatureC: weather.hourly.temperature_2m[index],
       snowfallCm: weather.hourly.snowfall[index],
       windKph: weather.hourly.wind_speed_10m[index],
@@ -358,10 +364,10 @@ try {
     // The powder model uses the next 72 h; the outlook strip and timeline use
     // the next 7 days of hourly data (14-day view uses the daily array below).
     forecast: hours
-      .map((time, index) => ({ time: new Date(time).getTime(), index }))
+      .map((time, index) => ({ time: openMeteoUnixMs(time), index }))
       .filter(({ time }) => time > now && time <= now + 7 * 24 * 60 * 60 * 1000)
       .map(({ index }) => ({
-        time: hours[index],
+        time: openMeteoUnixIso(hours[index]),
         temperatureC: weather.hourly.temperature_2m[index],
         snowfallCm: weather.hourly.snowfall[index],
         windKph: weather.hourly.wind_speed_10m[index],
