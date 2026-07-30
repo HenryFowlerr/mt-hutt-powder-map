@@ -2,6 +2,10 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { summariseGfsEnsemble } from './ensemble-summary'
 import { dateKeyAtZone, openMeteoUnixIso, openMeteoUnixMs } from './weather-time'
+import {
+  assessRecentTerrainSignal,
+  legacyConfidenceForRecentSignal,
+} from '../src/lib/recentTerrainSignal'
 import type { EnsembleSnowfallSummary } from '../src/types'
 
 const dataDir = join(process.cwd(), 'public', 'data')
@@ -293,9 +297,16 @@ try {
     }))
 
   const ensemble = await ensemblePromise
+  const generatedAt = new Date().toISOString()
+  const recentTerrainSignal = assessRecentTerrainSignal({
+    recentSnowCm,
+    generatedAt,
+    now: generatedAt,
+    coverageHours: recentIndexes.length,
+  })
   const next = {
     ...fallback,
-    generatedAt: new Date().toISOString(),
+    generatedAt,
     ensemble,
     summary: {
       ...fallback.summary,
@@ -332,12 +343,8 @@ try {
       recentRainMm: Number(recentRainMm.toFixed(1)),
       hoursAboveZero,
       hoursSinceSnow,
-      confidence:
-        (recentSnowCm > 4 || forecastSnowCm > 4) && directionSpread < 45
-          ? 'high'
-          : recentSnowCm > 1 || forecastSnowCm > 1
-            ? 'medium'
-            : 'low',
+      recentTerrainSignal,
+      confidence: legacyConfidenceForRecentSignal(recentTerrainSignal),
       headline:
         recentSnowCm > 4
           ? 'Recent snow and wind are producing a stronger powder signal on sheltered lee terrain.'

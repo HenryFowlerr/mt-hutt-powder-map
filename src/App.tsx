@@ -11,6 +11,11 @@ import { buildPowderField, type PowderWeather } from './lib/powderModel'
 import { buildIceField, type IceWeather } from './lib/iceModel'
 import { analyzeTerrain } from './lib/terrainAnalysis'
 import { applyTrailOverrides } from './lib/trailOverrides'
+import {
+  validateLatestPayload,
+  validateTerrainPayload,
+  validateTrailPayload,
+} from './lib/dataSchema'
 import type { LatestData, TerrainData, TrailCollection } from './types'
 import { useViewStore } from './state/viewStore'
 import './index.css'
@@ -25,12 +30,28 @@ type AppData = {
   latest: LatestData
 }
 
-async function loadJson<T>(path: string): Promise<T> {
+async function loadJson<T>(
+  path: string,
+  validate: (value: unknown, path: string) => T,
+): Promise<T> {
   const response = await fetch(`${import.meta.env.BASE_URL}${path}`)
   if (!response.ok) {
     throw new Error(`Could not load ${path}: ${response.status}`)
   }
-  return response.json() as Promise<T>
+  let value: unknown
+  try {
+    value = await response.json()
+  } catch {
+    throw new Error(`Data from ${path} is not valid JSON`)
+  }
+  return validate(value, path)
+}
+
+function friendlyLoadError(error: string) {
+  if (error.includes('terrain.json')) return 'The terrain data could not be verified.'
+  if (error.includes('trails.geojson')) return 'The trail data could not be verified.'
+  if (error.includes('latest.json')) return 'The latest weather data could not be verified.'
+  return 'Mountain data is temporarily unavailable.'
 }
 
 function App() {
@@ -49,9 +70,9 @@ function App() {
     let cancelled = false
     setError(null)
     Promise.all([
-      loadJson<TerrainData>('data/terrain.json'),
-      loadJson<TrailCollection>('data/trails.geojson'),
-      loadJson<LatestData>('data/latest.json'),
+      loadJson('data/terrain.json', validateTerrainPayload),
+      loadJson('data/trails.geojson', validateTrailPayload),
+      loadJson('data/latest.json', validateLatestPayload),
     ])
       .then(([terrain, trails, latest]) => {
         if (!cancelled) {
@@ -64,7 +85,9 @@ function App() {
         }
       })
     // Optional base-area detail layer (real carparks/road/buildings from OSM).
-    loadJson<TrailCollection>('data/map-overrides.geojson')
+    loadJson('data/map-overrides.geojson', (value, path) =>
+      validateTrailPayload(value, path, { allowEmptyNames: true }),
+    )
       .then((nextOverrides) => {
         if (!cancelled) setOverrides(nextOverrides)
       })
@@ -152,8 +175,9 @@ function App() {
             </MapErrorBoundary>
           ) : (
             <div className="loading-state" role="status">
-              <h1>Mt Hutt Powder Map</h1>
-              <p>{error ?? 'Loading mountain data...'}</p>
+              <h1>{error ? 'Map data unavailable' : 'Mt Hutt Powder Map'}</h1>
+              <p>{error ? friendlyLoadError(error) : 'Loading mountain data...'}</p>
+              {error ? <small className="loading-detail">{error}</small> : null}
               {error ? (
                 <button type="button" onClick={() => setLoadAttempt((attempt) => attempt + 1)}>
                   Try again

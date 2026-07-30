@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { ChevronRight, ExternalLink, Info, ShieldAlert } from 'lucide-react'
 import { conditionsAdvice } from '../lib/advice'
 import { assessForecastConfidence } from '../lib/forecastConfidence'
+import { assessRecentTerrainSignal } from '../lib/recentTerrainSignal'
 import { fieldMaxRisk, iceRiskLabel, type IceField } from '../lib/iceModel'
 import { buildAspectRose, buildElevationBands, buildSnowTimeline, pickBestDay } from '../lib/insights'
 import { fieldMaxCm, powderColorForCm, type PowderField, type PowderWeather } from '../lib/powderModel'
@@ -244,8 +245,19 @@ export function WeatherBrief({ latest, field, terrain, analysis, trails, weather
     latest.ensemble,
     latest.summary.forecastSnowCm,
   )
-  const displayConfidence =
-    mode === 'forecast' ? (forecastAssessment?.level ?? 'low') : latest.summary.confidence
+  const recentTerrainSignal = assessRecentTerrainSignal({
+    recentSnowCm: latest.summary.recentSnowCm,
+    generatedAt: latest.generatedAt,
+    recentHours: latest.observations,
+  })
+  const forecastConfidence = forecastAssessment?.level ?? 'low'
+  const recentSignalTone =
+    recentTerrainSignal.strength === 'strong'
+      ? 'high'
+      : recentTerrainSignal.strength === 'moderate' || recentTerrainSignal.strength === 'trace'
+        ? 'medium'
+        : 'low'
+  const statusTone = mode === 'forecast' ? forecastConfidence : recentSignalTone
 
   return (
     <section className="brief-view" aria-label="Mt Hutt snow brief">
@@ -253,17 +265,20 @@ export function WeatherBrief({ latest, field, terrain, analysis, trails, weather
         <div className="brief-topline">
           <span>Snow brief</span>
           <span
-            className={`model-status ${displayConfidence}`}
+            className={`model-status ${statusTone}`}
             aria-label={
               mode === 'forecast'
-                ? `Forecast confidence ${displayConfidence}`
-                : `Terrain signal ${displayConfidence}`
+                ? `Forecast confidence ${forecastConfidence}`
+                : `Recent terrain signal ${recentTerrainSignal.strength}. Data quality ${recentTerrainSignal.dataQuality}; ${recentTerrainSignal.coverageHours} of ${recentTerrainSignal.expectedHours} recent model hours.`
             }
+            title={mode === 'recent' ? recentTerrainSignal.reason : undefined}
           >
             <i />
             {mode === 'forecast'
-              ? `Forecast · ${displayConfidence} confidence`
-              : `Terrain signal · ${displayConfidence}`}
+              ? `Forecast · ${forecastConfidence} confidence`
+              : `Terrain signal · ${recentTerrainSignal.strength}${
+                  recentTerrainSignal.dataQuality === 'low' ? ' · stale or incomplete' : ''
+                }`}
           </span>
         </div>
 

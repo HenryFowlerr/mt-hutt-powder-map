@@ -1,6 +1,6 @@
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, OrthographicCamera, PerspectiveCamera } from '@react-three/drei'
-import { useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import { TerrainMesh } from './TerrainMesh'
@@ -139,6 +139,9 @@ export function MountainScene({
   const clearFocus = useViewStore((state) => state.clearFocus)
   const focusPoint = useViewStore((state) => state.focusPoint)
   const exaggeration = useViewStore((state) => state.exaggeration)
+  const [webglContextLost, setWebglContextLost] = useState(false)
+  const [canvasElement, setCanvasElement] = useState<HTMLCanvasElement | null>(null)
+  const handleWebglContextLost = useCallback(() => setWebglContextLost(true), [])
   const { animate, dpr, lowPower } = useWebglRuntimeBudget()
   const terrainGeometry = useMemo(
     () => createTerrainGeometry(terrain, exaggeration),
@@ -146,11 +149,29 @@ export function MountainScene({
   )
 
   useEffect(() => () => terrainGeometry.dispose(), [terrainGeometry])
+  useEffect(() => {
+    if (!canvasElement) return
+    const handleContextLost = (event: Event) => {
+      event.preventDefault()
+      handleWebglContextLost()
+    }
+    canvasElement.addEventListener('webglcontextlost', handleContextLost)
+    canvasElement.dataset.contextGuard = 'ready'
+    return () => {
+      canvasElement.removeEventListener('webglcontextlost', handleContextLost)
+      delete canvasElement.dataset.contextGuard
+    }
+  }, [canvasElement, handleWebglContextLost])
+
+  if (webglContextLost) {
+    throw new Error('WebGL context lost')
+  }
 
   return (
     <Canvas
       dpr={dpr}
       gl={{ antialias: true }}
+      onCreated={({ gl }) => setCanvasElement(gl.domElement)}
       onPointerMissed={() => {
         // Clicking empty space (not the panel, not a zone) deselects a focus.
         if (focusPoint) clearFocus()

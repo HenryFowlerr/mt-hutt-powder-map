@@ -34,6 +34,10 @@ layer toggles, mobile hierarchy, data failures, retries, optional-source fallbac
 Install Chromium once with
 `npx playwright install chromium` before running it locally.
 
+Runtime payload validation prevents malformed terrain, trail, weather, daily, or ensemble JSON from
+reaching the model. Recent terrain signal strength is calculated only from the last 72 hours and is
+kept separate from future forecast confidence.
+
 ## Update Weather
 
 ```bash

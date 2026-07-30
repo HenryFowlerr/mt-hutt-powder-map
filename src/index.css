@@ -14,6 +14,8 @@
   --good: #159267;
   --warning: #d47d2f;
   --danger: #c64b46;
+  --text-caption: 11px;
+  --text-secondary: 12px;
   --shadow-panel: 0 24px 60px rgba(11, 34, 46, 0.18), 0 2px 8px rgba(11, 34, 46, 0.08);
   color: var(--ink);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
@@ -104,9 +106,18 @@ summary:focus-visible {
   font-size: 14px;
 }
 
+.loading-state .loading-detail {
+  max-width: 34rem;
+  color: var(--muted);
+  font-size: var(--text-caption);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
 .loading-state button {
   justify-self: center;
-  min-height: 34px;
+  min-width: 44px;
+  min-height: 44px;
   padding: 0 16px;
   border: 1px solid var(--hairline-strong);
   border-radius: 8px;
@@ -156,7 +167,7 @@ summary:focus-visible {
   padding-left: 16px;
   border-left: 1px solid rgba(9, 21, 28, 0.18);
   color: var(--ink-soft);
-  font-size: 10.5px;
+  font-size: var(--text-caption);
   font-weight: 560;
 }
 
@@ -179,7 +190,7 @@ summary:focus-visible {
 .brief-topline > span:first-child,
 .section-heading > div > span {
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--text-caption);
   font-weight: 690;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -190,7 +201,7 @@ summary:focus-visible {
   align-items: center;
   gap: 6px;
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: var(--text-caption);
   font-weight: 590;
   text-transform: capitalize;
 }
@@ -216,7 +227,7 @@ summary:focus-visible {
 }
 
 .mode-switch button {
-  min-height: 33px;
+  min-height: 44px;
   padding: 0 12px;
   border: 0;
   border-radius: 8px;
@@ -297,6 +308,10 @@ summary:focus-visible {
   gap: 12px;
 }
 
+.forecast-confidence-read > div > * {
+  min-width: 0;
+}
+
 .forecast-confidence-read strong {
   color: var(--ink);
   font-size: 11px;
@@ -307,8 +322,10 @@ summary:focus-visible {
 .forecast-confidence-read span,
 .forecast-confidence-read small {
   color: var(--muted);
-  font-size: 10px;
-  line-height: 1.35;
+  font-size: var(--text-secondary);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  text-align: right;
 }
 
 .forecast-confidence-read p {
@@ -347,7 +364,7 @@ summary:focus-visible {
 
 .ski-window small {
   color: rgba(234, 249, 255, 0.63);
-  font-size: 9px;
+  font-size: var(--text-caption);
   font-weight: 650;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -360,8 +377,9 @@ summary:focus-visible {
 
 .ski-window > span:nth-child(2) {
   color: rgba(238, 250, 255, 0.78);
-  font-size: 10.5px;
-  line-height: 1.35;
+  font-size: var(--text-secondary);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
 .brief-metrics {
@@ -396,20 +414,18 @@ summary:focus-visible {
 .brief-metrics span {
   margin-bottom: 5px;
   color: var(--muted);
-  font-size: 9px;
+  font-size: var(--text-caption);
   font-weight: 680;
   letter-spacing: 0.07em;
   text-transform: uppercase;
 }
 
 .brief-metrics strong {
-  overflow: hidden;
   color: var(--ink);
   font-size: 13px;
   font-weight: 650;
-  line-height: 1.15;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
 }
 
 .brief-metrics strong i {
@@ -424,7 +440,7 @@ summary:focus-visible {
   display: block;
   margin-top: 2px;
   color: var(--muted);
-  font-size: 8px;
+  font-size: var(--text-caption);
   font-weight: 550;
 }
 
@@ -471,8 +487,8 @@ summary:focus-visible {
 
 .condition-line small {
   color: var(--muted);
-  font-size: 10.5px;
-  line-height: 1.35;
+  font-size: var(--text-secondary);
+  line-height: 1.45;
 }
 
 .storm-window-read {
@@ -496,7 +512,7 @@ summary:focus-visible {
 
 .storm-window-read small {
   color: var(--muted);
-  font-size: 7.5px;
+  font-size: var(--text-caption);
   font-weight: 680;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -504,7 +520,7 @@ summary:focus-visible {
 
 .storm-window-read strong {
   color: var(--ink);
-  font-size: 10px;
+  font-size: var(--text-caption);
   font-weight: 650;
   font-variant-numeric: tabular-nums;
 }
@@ -522,7 +538,7 @@ summary:focus-visible {
 
 .profile-heading span {
   color: var(--muted);
-  font-size: 9px;
+  font-size: var(--text-caption);
   font-weight: 690;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -530,7 +546,7 @@ summary:focus-visible {
 
 .profile-heading strong {
   color: var(--ink-soft);
-  font-size: 9.5px;
+  font-size: var(--text-caption);
   font-weight: 620;
 }
 
@@ -555,12 +571,10 @@ summary:focus-visible {
 }
 
 .profile-grid span {
-  overflow: hidden;
   color: var(--muted);
-  font-size: 8px;
+  font-size: var(--text-caption);
   font-weight: 640;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
 }
 
 .profile-grid strong {
@@ -570,7 +584,7 @@ summary:focus-visible {
 
 .profile-grid small {
   color: var(--accent-deep);
-  font-size: 8.5px;
+  font-size: var(--text-caption);
   font-weight: 590;
 }
 
@@ -590,13 +604,13 @@ summary:focus-visible {
 .ice-callout span {
   display: grid;
   gap: 2px;
-  font-size: 10.5px;
-  line-height: 1.35;
+  font-size: var(--text-secondary);
+  line-height: 1.45;
 }
 
 .ice-callout strong {
   color: var(--ink);
-  font-size: 10px;
+  font-size: var(--text-caption);
 }
 
 .zone-section,
@@ -619,12 +633,17 @@ summary:focus-visible {
 .section-heading > span,
 .section-heading > button {
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--text-caption);
   font-weight: 580;
 }
 
 .section-heading > button {
-  padding: 5px 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 11px;
   border: 0;
   border-radius: 999px;
   color: var(--accent-deep);
@@ -665,7 +684,7 @@ summary:focus-visible {
 
 .zone-index {
   color: var(--muted);
-  font-size: 9px;
+  font-size: var(--text-caption);
   font-variant-numeric: tabular-nums;
 }
 
@@ -681,11 +700,10 @@ summary:focus-visible {
 }
 
 .zone-title small {
-  overflow: hidden;
   color: var(--muted);
-  font-size: 9.5px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  font-size: var(--text-caption);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
 .zone-depth {
@@ -732,7 +750,7 @@ summary:focus-visible {
 
 .week-strip span {
   color: var(--muted);
-  font-size: 9px;
+  font-size: var(--text-caption);
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -745,16 +763,15 @@ summary:focus-visible {
 .week-strip strong small {
   margin-left: 1px;
   color: var(--muted);
-  font-size: 8px;
+  font-size: var(--text-caption);
   font-weight: 570;
 }
 
 .week-strip em {
-  overflow: hidden;
   color: var(--muted);
-  font-size: 8px;
+  font-size: var(--text-caption);
   font-style: normal;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 .model-detail {
@@ -766,6 +783,7 @@ summary:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  min-height: 44px;
   padding: 16px 0;
   color: var(--ink-soft);
   font-size: 11px;
@@ -801,7 +819,7 @@ summary:focus-visible {
 .model-detail-body section h3 {
   margin: 0 0 10px;
   color: var(--muted);
-  font-size: 9px;
+  font-size: var(--text-caption);
   font-weight: 700;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -810,7 +828,7 @@ summary:focus-visible {
 .model-detail-body section > p {
   margin: 0;
   color: var(--muted);
-  font-size: 10.5px;
+  font-size: var(--text-secondary);
   line-height: 1.5;
 }
 
@@ -838,7 +856,7 @@ summary:focus-visible {
   justify-content: space-between;
   margin-top: 4px;
   color: var(--muted);
-  font-size: 8px;
+  font-size: var(--text-caption);
 }
 
 .loading-read {
@@ -857,7 +875,7 @@ summary:focus-visible {
 
 .loading-read small {
   color: var(--muted);
-  font-size: 9.5px;
+  font-size: var(--text-caption);
 }
 
 .aspect-bars {
@@ -885,7 +903,7 @@ summary:focus-visible {
 
 .aspect-bars small {
   color: var(--muted);
-  font-size: 7.5px;
+  font-size: var(--text-caption);
 }
 
 .elevation-list {
@@ -897,7 +915,7 @@ summary:focus-visible {
   justify-content: space-between;
   padding: 8px 0;
   border-bottom: 1px solid var(--hairline);
-  font-size: 10px;
+  font-size: var(--text-caption);
 }
 
 .elevation-list span {
@@ -918,7 +936,7 @@ summary:focus-visible {
   justify-content: space-between;
   margin: 0 0 9px;
   color: var(--muted);
-  font-size: 9px;
+  font-size: var(--text-caption);
 }
 
 .brief-footer p strong {
@@ -935,8 +953,10 @@ summary:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  min-width: 44px;
+  min-height: 44px;
   color: var(--ink);
-  font-size: 9.5px;
+  font-size: var(--text-caption);
   font-weight: 620;
   text-decoration: none;
 }
@@ -949,7 +969,7 @@ summary:focus-visible {
   display: block;
   margin-top: 10px;
   color: var(--muted);
-  font-size: 8.5px;
+  font-size: var(--text-caption);
   line-height: 1.4;
 }
 
@@ -965,7 +985,7 @@ summary:focus-visible {
   align-items: center;
   gap: 6px;
   color: var(--ink);
-  font-size: 10px;
+  font-size: var(--text-caption);
   font-weight: 670;
 }
 
@@ -979,7 +999,7 @@ summary:focus-visible {
 
 .legend-title strong {
   color: var(--muted);
-  font-size: 8.5px;
+  font-size: var(--text-caption);
   font-weight: 630;
 }
 
@@ -995,7 +1015,7 @@ summary:focus-visible {
   justify-content: space-between;
   margin-top: 4px;
   color: var(--ink-soft);
-  font-size: 8px;
+  font-size: var(--text-caption);
   font-variant-numeric: tabular-nums;
 }
 
@@ -1050,7 +1070,7 @@ summary:focus-visible {
 .layer-list button small,
 .terrain-toggle small {
   color: var(--muted);
-  font-size: 9px;
+  font-size: var(--text-caption);
 }
 
 .layer-list button > i {
@@ -1106,7 +1126,7 @@ summary:focus-visible {
 .forecast-sub {
   margin: 10px 0 16px;
   color: var(--muted);
-  font-size: 10.5px;
+  font-size: var(--text-secondary);
 }
 
 .forecast-days {
@@ -1147,11 +1167,9 @@ summary:focus-visible {
 }
 
 .fd-label {
-  overflow: hidden;
   font-size: 11px;
   font-weight: 630;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
 }
 
 .fd-label small {
@@ -1160,7 +1178,7 @@ summary:focus-visible {
   border-radius: 999px;
   color: var(--muted);
   background: rgba(82, 108, 121, 0.09);
-  font-size: 7px;
+  font-size: var(--text-caption);
   font-weight: 690;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -1176,7 +1194,7 @@ summary:focus-visible {
 
 .fd-snow {
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--text-caption);
   font-weight: 660;
   text-align: right;
 }
@@ -1187,7 +1205,7 @@ summary:focus-visible {
 
 .fd-temp {
   color: var(--muted);
-  font-size: 9.5px;
+  font-size: var(--text-caption);
   text-align: right;
 }
 
@@ -1201,8 +1219,8 @@ summary:focus-visible {
   gap: 6px;
   margin: 0 0 10px;
   color: var(--ink-soft);
-  font-size: 10px;
-  line-height: 1.4;
+  font-size: var(--text-secondary);
+  line-height: 1.45;
 }
 
 .fd-note > img {
@@ -1229,7 +1247,7 @@ summary:focus-visible {
 .model-calibration {
   margin-top: 7px !important;
   color: var(--muted) !important;
-  font-size: 9px !important;
+  font-size: var(--text-caption) !important;
 }
 
 .fd-grid {
@@ -1251,27 +1269,27 @@ summary:focus-visible {
   display: block;
   margin-bottom: 3px;
   color: var(--muted);
-  font-size: 7.5px;
+  font-size: var(--text-caption);
   font-weight: 680;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
 .fd-grid strong {
-  font-size: 10px;
+  font-size: var(--text-caption);
   font-weight: 650;
 }
 
 .fd-grid strong em {
   color: var(--muted);
-  font-size: 8px;
+  font-size: var(--text-caption);
   font-style: normal;
 }
 
 .fd-layers {
   margin: 9px 0 0;
   color: var(--muted);
-  font-size: 9.5px;
+  font-size: var(--text-caption);
   line-height: 1.45;
 }
 
@@ -1295,13 +1313,13 @@ summary:focus-visible {
 
 .fd-mountain-profile small {
   color: var(--muted);
-  font-size: 7.5px;
+  font-size: var(--text-caption);
   font-weight: 670;
   text-transform: uppercase;
 }
 
 .fd-mountain-profile strong {
-  font-size: 9px;
+  font-size: var(--text-caption);
   font-weight: 650;
 }
 
@@ -1318,7 +1336,7 @@ summary:focus-visible {
   color: #20323c;
   background: rgba(248, 252, 253, 0.82);
   box-shadow: 0 2px 8px rgba(13, 37, 49, 0.11);
-  font-size: 9px;
+  font-size: var(--text-caption);
   font-weight: 650;
   letter-spacing: -0.01em;
   white-space: nowrap;
@@ -1332,7 +1350,7 @@ summary:focus-visible {
   border-radius: 999px;
   color: #25353d;
   background: rgba(251, 253, 254, 0.92);
-  font-size: 8.5px;
+  font-size: var(--text-caption);
   letter-spacing: 0.035em;
   text-transform: uppercase;
 }
@@ -1343,7 +1361,7 @@ summary:focus-visible {
   color: #152934;
   background: transparent;
   box-shadow: none;
-  font-size: 10px;
+  font-size: var(--text-caption);
   font-weight: 720;
   letter-spacing: 0.11em;
   text-shadow: 0 1px 7px rgba(248, 253, 255, 1), 0 0 3px #fff;
@@ -1357,11 +1375,11 @@ summary:focus-visible {
   border-radius: 999px;
   color: white;
   background: rgba(9, 26, 35, 0.82);
-  font-size: 8px;
+  font-size: var(--text-caption);
 }
 
 .map-label.run {
-  font-size: 8px;
+  font-size: var(--text-caption);
   font-weight: 620;
 }
 
@@ -1378,7 +1396,7 @@ summary:focus-visible {
   width: 15px;
   height: 15px;
   border-radius: 4px;
-  font-size: 9px;
+  font-size: var(--text-caption);
   font-weight: 760;
   pointer-events: none;
   box-shadow: 0 2px 8px rgba(10, 30, 40, 0.25);
@@ -1408,7 +1426,7 @@ summary:focus-visible {
   color: #edf8fc;
   background: rgba(7, 24, 33, 0.94);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
-  font-size: 10.5px;
+  font-size: var(--text-secondary);
   line-height: 1.4;
   pointer-events: none;
   transform: translateY(-16px);
@@ -1424,7 +1442,7 @@ summary:focus-visible {
 .powder-tooltip em,
 .map-tooltip em {
   color: rgba(237, 248, 252, 0.68);
-  font-size: 9px;
+  font-size: var(--text-caption);
   font-style: normal;
 }
 
@@ -1438,7 +1456,7 @@ summary:focus-visible {
   color: #fff;
   background: rgba(196, 73, 67, 0.91);
   box-shadow: 0 3px 10px rgba(93, 31, 27, 0.18);
-  font-size: 9px;
+  font-size: var(--text-caption);
   font-weight: 670;
   white-space: nowrap;
   pointer-events: none;
@@ -1450,7 +1468,7 @@ summary:focus-visible {
   margin: 0;
   padding: 0;
   color: var(--ink);
-  font-size: 10px;
+  font-size: var(--text-caption);
   list-style: none;
 }
 
@@ -1469,7 +1487,7 @@ summary:focus-visible {
 .legend-hint {
   margin-top: 7px;
   color: var(--muted);
-  font-size: 9.5px;
+  font-size: var(--text-caption);
 }
 
 @media (max-width: 860px) {
@@ -1499,7 +1517,7 @@ summary:focus-visible {
   }
 
   .brand-copy span {
-    font-size: 9.5px;
+    font-size: var(--text-caption);
   }
 
   .brief-metrics {
@@ -1593,11 +1611,11 @@ summary:focus-visible {
 }
 
 .product-identity .brand-copy span {
-  font-size: 10px;
+  font-size: var(--text-caption);
 }
 
 .product-identity .brand-freshness {
-  font-size: 9.5px;
+  font-size: var(--text-caption);
 }
 
 .map-actions {
@@ -1618,7 +1636,7 @@ summary:focus-visible {
   border-right: 1px solid var(--hairline);
   color: var(--ink-soft);
   background: transparent;
-  font-size: 10px;
+  font-size: var(--text-caption);
   font-weight: 620;
   cursor: pointer;
   transition: color 150ms ease, background 150ms ease;
@@ -1675,7 +1693,7 @@ summary:focus-visible {
   border-right: 1px solid var(--hairline);
   color: var(--muted);
   background: transparent;
-  font-size: 10px;
+  font-size: var(--text-caption);
   font-weight: 630;
   cursor: pointer;
   transition: color 150ms ease, background 150ms ease;
@@ -1740,7 +1758,7 @@ summary:focus-visible {
 .inspector-view-header p {
   margin: 0;
   color: var(--muted);
-  font-size: 8.5px;
+  font-size: var(--text-caption);
   font-weight: 700;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -1757,8 +1775,8 @@ summary:focus-visible {
   display: block;
   margin-top: 7px;
   color: var(--muted);
-  font-size: 10px;
-  line-height: 1.45;
+  font-size: var(--text-secondary);
+  line-height: 1.5;
 }
 
 .outlook-view .forecast-days {
@@ -1817,13 +1835,13 @@ summary:focus-visible {
 .map-key p {
   margin: 6px 0 0;
   color: var(--muted);
-  font-size: 8px;
-  line-height: 1.35;
+  font-size: var(--text-caption);
+  line-height: 1.45;
 }
 
 .map-key .empty-signal {
   margin-top: 0;
-  font-size: 9px;
+  font-size: var(--text-caption);
 }
 
 @keyframes inspector-view-in {
@@ -1864,7 +1882,7 @@ summary:focus-visible {
   }
 
   .map-actions button {
-    min-width: 42px;
+    min-width: 44px;
     padding: 0 11px;
   }
 
@@ -1883,7 +1901,7 @@ summary:focus-visible {
   }
 
   .inspector-nav button {
-    font-size: 9.5px;
+    font-size: var(--text-caption);
   }
 
   .inspector-nav button.active::after {
@@ -1921,5 +1939,207 @@ summary:focus-visible {
 
   .map-key {
     width: 188px;
+  }
+}
+
+/* At 200% browser zoom, a 390px phone has an effective layout width near 195px. */
+@media (max-width: 300px) {
+  .app-shell {
+    grid-template-rows: 54px minmax(0, 1fr);
+  }
+
+  .workspace-header {
+    padding: 0 6px;
+  }
+
+  .product-identity .brand-copy,
+  .product-identity .brand-freshness {
+    display: none;
+  }
+
+  .map-actions button {
+    padding: 0 8px;
+  }
+
+  .workspace-body {
+    grid-template-rows: minmax(210px, 42svh) minmax(0, 1fr);
+  }
+
+  .brief-content,
+  .outlook-view,
+  .layers-view {
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  .ski-window {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .ski-window > span:nth-child(2) {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .brief-metrics > div {
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+
+  .forecast-day {
+    grid-template-columns: 22px minmax(0, 1fr) auto;
+    min-height: 58px;
+  }
+
+  .fd-temp {
+    grid-column: 2;
+    grid-row: 2;
+    text-align: left;
+  }
+
+  .fd-snow {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .forecast-detail {
+    padding-left: 0;
+  }
+
+  .map-key {
+    width: min(188px, calc(100% - 7px));
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .workspace-header,
+  .inspector-nav,
+  .map-key,
+  .map-label,
+  .powder-tooltip,
+  .map-tooltip {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .workspace-header,
+  .inspector-nav,
+  .map-key {
+    background: var(--surface-solid);
+  }
+
+  .map-label {
+    background: #f8fcfd;
+  }
+
+  .powder-tooltip,
+  .map-tooltip {
+    background: #071821;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --ink: #02090d;
+    --ink-soft: #162a34;
+    --muted: #314955;
+    --hairline: rgba(5, 24, 34, 0.28);
+    --hairline-strong: rgba(5, 24, 34, 0.52);
+    --accent: #0069b4;
+    --accent-deep: #004f94;
+  }
+
+  button:focus-visible,
+  a:focus-visible,
+  summary:focus-visible {
+    outline-width: 3px;
+  }
+
+  .workspace-header,
+  .inspector-nav,
+  .map-key {
+    border-color: var(--hairline-strong);
+    background: var(--surface-solid);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .map-label,
+  .powder-tooltip,
+  .map-tooltip {
+    border-color: currentColor;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .mode-switch button.active,
+  .map-actions button.active,
+  .inspector-nav button.active,
+  .layer-list button.active,
+  .terrain-toggle.active {
+    box-shadow: inset 0 0 0 2px currentColor;
+  }
+}
+
+@media (forced-colors: active) {
+  :root {
+    --ink: CanvasText;
+    --ink-soft: CanvasText;
+    --muted: CanvasText;
+    --hairline: ButtonBorder;
+    --hairline-strong: ButtonBorder;
+    --surface: Canvas;
+    --surface-solid: Canvas;
+    --frost: Canvas;
+    --accent: Highlight;
+    --accent-deep: LinkText;
+    --accent-pale: Canvas;
+    --good: CanvasText;
+    --warning: CanvasText;
+    --danger: CanvasText;
+  }
+
+  body,
+  .app-shell,
+  .workspace-header,
+  .inspector-shell,
+  .inspector-nav,
+  .map-key,
+  .map-label,
+  .powder-tooltip,
+  .map-tooltip {
+    color: CanvasText;
+    background: Canvas;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .workspace-header,
+  .workspace-body > .map-stage,
+  .inspector-nav,
+  .map-key,
+  .map-label,
+  .powder-tooltip,
+  .map-tooltip {
+    border-color: ButtonBorder;
+  }
+
+  .mode-switch button.active,
+  .map-actions button.active,
+  .inspector-nav button.active,
+  .layer-list button.active,
+  .terrain-toggle.active {
+    color: HighlightText;
+    background: Highlight;
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+
+  .depth-scale,
+  .legend-swatch,
+  .brand-freshness i,
+  .model-status i {
+    border: 1px solid CanvasText;
+    forced-color-adjust: none;
   }
 }

@@ -78,7 +78,10 @@ rounding every row or metric into an independent card.
 ## Accessibility and motion
 
 - All icon-only controls require explicit accessible names.
+- Interactive targets are at least 44 CSS pixels even when their visible mark is smaller.
 - Active map layers and timeframes expose pressed state.
 - Text remains legible without relying on translucent background colour alone.
+- Translucent materials become opaque and boundaries strengthen for reduced-transparency,
+  increased-contrast, and forced-colour preferences.
 - Motion is brief and spatial; reduced-motion preferences disable it.
 - Mobile preserves a clear map viewport and gives the snow brief its own scroll area.

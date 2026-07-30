@@ -18,6 +18,44 @@ async function expectVisibleFocus(locator: Locator) {
   expect(focusStyle.outlineWidth).toBeGreaterThanOrEqual(2)
 }
 
+async function expectMinimumInteractiveTargets(scope: Locator, minimum = 44) {
+  const tooSmall = await scope.locator('button, a[href], summary').evaluateAll(
+    (elements, min) =>
+      elements.flatMap((element) => {
+        const rect = element.getBoundingClientRect()
+        const style = getComputedStyle(element)
+        if (
+          style.display === 'none' ||
+          style.visibility === 'hidden' ||
+          rect.width === 0 ||
+          rect.height === 0
+        ) {
+          return []
+        }
+        if (rect.width >= min && rect.height >= min) return []
+        return [{
+          control:
+            element.getAttribute('aria-label') ??
+            element.textContent?.trim().replace(/\s+/g, ' ').slice(0, 80) ??
+            element.tagName,
+          width: Math.round(rect.width * 10) / 10,
+          height: Math.round(rect.height * 10) / 10,
+        }]
+      }),
+    minimum,
+  )
+
+  expect(tooSmall).toEqual([])
+}
+
+async function expectNoHorizontalInspectorOverflow(page: Page) {
+  const dimensions = await page.locator('.inspector-scroll').evaluate((element) => ({
+    clientWidth: element.clientWidth,
+    scrollWidth: element.scrollWidth,
+  }))
+  expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth + 1)
+}
+
 async function expectNoHighImpactViolations(page: Page) {
   const results = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
@@ -146,5 +184,71 @@ test.describe('390px mobile accessibility', () => {
     }
 
     await expectNoHighImpactViolations(page)
+  })
+
+  test('keeps structural controls at least 44px across every inspector view', async ({
+    page,
+  }) => {
+    await page.goto('/')
+    const workspace = page.locator('.workspace-header, .inspector-shell')
+    const inspector = page.getByRole('navigation', { name: 'Mountain information' })
+
+    await expect(page.getByRole('region', { name: 'Mt Hutt snow brief' })).toBeVisible()
+    await expectMinimumInteractiveTargets(workspace)
+
+    await inspector.getByRole('button', { name: 'Outlook' }).click()
+    await expect(page.getByRole('region', { name: '14 day forecast' })).toBeVisible()
+    await expectMinimumInteractiveTargets(workspace)
+
+    await inspector.getByRole('button', { name: 'Layers' }).click()
+    await expect(page.getByRole('region', { name: 'Map layers' })).toBeVisible()
+    await expectMinimumInteractiveTargets(workspace)
+  })
+
+  test('keeps recovery controls at least 44px', async ({ page }) => {
+    await page.route('**/data/terrain.json', async (route) => {
+      await route.fulfill({
+        status: 503,
+        contentType: 'application/json',
+        body: JSON.stringify({ error: 'Temporary test failure' }),
+      })
+    })
+    await page.goto('/')
+
+    const loading = page.locator('.loading-state')
+    await expect(loading.getByRole('button', { name: 'Try again' })).toBeVisible()
+    await expectMinimumInteractiveTargets(loading)
+  })
+
+  test('keeps essential forecast controls reachable at an effective 200% zoom', async ({
+    page,
+  }) => {
+    // A 390px CSS viewport becomes roughly 195px wide at 200% browser zoom.
+    await page.setViewportSize({ width: 195, height: 422 })
+    await page.goto('/')
+
+    const inspectorNav = page.getByRole('navigation', { name: 'Mountain information' })
+    const recent = page.getByRole('button', { name: 'Last 72 hours' })
+    const forecast = page.getByRole('button', { name: 'Next 72 hours' })
+    await expect(recent).toBeVisible()
+    await expect(forecast).toBeVisible()
+    await forecast.click()
+    await expect(page.locator('.forecast-confidence-read')).toBeVisible()
+    await expectNoHorizontalInspectorOverflow(page)
+
+    await inspectorNav.getByRole('button', { name: 'Outlook' }).click()
+    const today = page.getByRole('button', { name: /^Today,/ })
+    await today.scrollIntoViewIfNeeded()
+    await expect(today).toBeVisible()
+    await today.click()
+    await expect(today).toHaveAttribute('aria-expanded', 'true')
+    await expectNoHorizontalInspectorOverflow(page)
+
+    await inspectorNav.getByRole('button', { name: 'Layers' }).click()
+    const snowfall = page.getByRole('button', { name: /Snowfall/ })
+    await snowfall.scrollIntoViewIfNeeded()
+    await expect(snowfall).toBeVisible()
+    await expectNoHorizontalInspectorOverflow(page)
+    await expectMinimumInteractiveTargets(page.locator('.workspace-header, .inspector-shell'))
   })
 })

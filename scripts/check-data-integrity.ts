@@ -359,6 +359,45 @@ function validateLatest(value: unknown) {
     if (!['low', 'medium', 'high'].includes(String(summary.confidence))) {
       report('latest.summary.confidence', `expected low, medium, or high; received ${JSON.stringify(summary.confidence)}`)
     }
+    if (summary.recentTerrainSignal !== undefined) {
+      const signal = record(summary.recentTerrainSignal, 'latest.summary.recentTerrainSignal')
+      if (signal) {
+        if (signal.basis !== 'modelled-last-72-hours') {
+          report(
+            'latest.summary.recentTerrainSignal.basis',
+            `expected "modelled-last-72-hours", received ${JSON.stringify(signal.basis)}`,
+          )
+        }
+        if (!['unknown', 'none', 'trace', 'moderate', 'strong'].includes(String(signal.strength))) {
+          report(
+            'latest.summary.recentTerrainSignal.strength',
+            `unsupported strength ${JSON.stringify(signal.strength)}`,
+          )
+        }
+        if (!['low', 'medium', 'high'].includes(String(signal.dataQuality))) {
+          report(
+            'latest.summary.recentTerrainSignal.dataQuality',
+            `unsupported data quality ${JSON.stringify(signal.dataQuality)}`,
+          )
+        }
+        finiteNumber(signal.coverageHours, 'latest.summary.recentTerrainSignal.coverageHours', {
+          min: 0,
+          max: 72,
+          integer: true,
+        })
+        finiteNumber(signal.expectedHours, 'latest.summary.recentTerrainSignal.expectedHours', {
+          min: 72,
+          max: 72,
+          integer: true,
+        })
+        if (signal.dataAgeHours !== null) {
+          finiteNumber(signal.dataAgeHours, 'latest.summary.recentTerrainSignal.dataAgeHours', {
+            min: 0,
+          })
+        }
+        nonEmptyString(signal.reason, 'latest.summary.recentTerrainSignal.reason')
+      }
+    }
     nonEmptyString(summary.headline, 'latest.summary.headline')
     const reasons = array(summary.reasons, 'latest.summary.reasons', true)
     reasons?.forEach((reason, index) => nonEmptyString(reason, `latest.summary.reasons[${index}]`))

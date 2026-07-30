@@ -66,6 +66,16 @@ export type EnsembleSnowfallSummary = {
   }
 }
 
+export type RecentTerrainSignal = {
+  basis: 'modelled-last-72-hours'
+  strength: 'unknown' | 'none' | 'trace' | 'moderate' | 'strong'
+  dataQuality: 'low' | 'medium' | 'high'
+  coverageHours: number
+  expectedHours: 72
+  dataAgeHours: number | null
+  reason: string
+}
+
 export type LatestData = {
   generatedAt: string
   location: string
@@ -104,6 +114,8 @@ export type LatestData = {
     hoursSinceSnow?: number
     temperatureMinC: number
     temperatureMaxC: number
+    recentTerrainSignal?: RecentTerrainSignal
+    /** @deprecated Recent-only compatibility field. Use recentTerrainSignal. */
     confidence: 'low' | 'medium' | 'high'
     headline: string
     reasons: string[]

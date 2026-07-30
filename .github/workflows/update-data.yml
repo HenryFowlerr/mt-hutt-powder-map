@@ -17,11 +17,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 0
       - uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: npm
       - run: npm ci
+      - name: Sync latest main
+        run: git pull --rebase origin main
       - run: npm run update:data
       - run: npm run test:data
       - name: Commit updated data

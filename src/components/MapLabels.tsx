@@ -188,9 +188,23 @@ function buildLabels(terrain: TerrainData, trails: TrailCollection, exaggeration
 }
 
 function estimatedBounds(label: MapLabel, x: number, y: number) {
-  const characterWidth = label.kind === 'area' ? 6.8 : label.kind === 'lift' ? 5.2 : 5
-  const width = Math.max(30, label.text.length * characterWidth + 6)
-  const height = label.kind === 'area' ? 15 : 14
+  // Conservative screen-space metrics for the 11px cartographic type floor
+  // in index.css. Run/lift labels use HALO_STYLE (no padding), while elevation
+  // labels retain their 7px inline padding. These estimates intentionally sit
+  // just above measured SF/system-font bounds so the existing tier budgets
+  // remain maxima and collision pruning gets quieter as labels grow.
+  const metrics: Record<MapLabel['kind'], {
+    characterWidth: number
+    inlinePadding: number
+    height: number
+  }> = {
+    area: { characterWidth: 8, inlinePadding: 0, height: 15 },
+    lift: { characterWidth: 6.8, inlinePadding: 0, height: 15 },
+    run: { characterWidth: 6.2, inlinePadding: 0, height: 15 },
+    elevation: { characterWidth: 6.6, inlinePadding: 14, height: 18 },
+  }
+  const { characterWidth, inlinePadding, height } = metrics[label.kind]
+  const width = Math.max(30, label.text.length * characterWidth + inlinePadding)
   return {
     left: x - width / 2 - 4,
     right: x + width / 2 + 4,
