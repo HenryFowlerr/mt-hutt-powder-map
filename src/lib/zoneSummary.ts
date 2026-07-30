@@ -39,6 +39,10 @@ function anchorFor(trails: TrailCollection, runName: string): [number, number] |
   return [lon, lat]
 }
 
+function roundDepth(value: number) {
+  return value > 0 && value < 1 ? Number(value.toFixed(1)) : Math.round(value)
+}
+
 export function buildZoneSummaries(
   terrain: TerrainData,
   analysis: TerrainAnalysis,
@@ -89,13 +93,13 @@ export function buildZoneSummaries(
 
     if (count === 0) continue
     const { reason } = maxIndex >= 0
-      ? describeCell(maxIndex, terrain, analysis, weather)
+      ? describeCell(maxIndex, terrain, analysis, weather, mode)
       : { reason: 'Limited signal in this zone.' }
 
     summaries.push({
       name,
-      maxCm: Math.round(maxCm),
-      meanCm: Math.round(total / count),
+      maxCm: roundDepth(maxCm),
+      meanCm: roundDepth(total / count),
       score: maxIndex >= 0 ? Number(scoreGrid[maxIndex].toFixed(2)) : 0,
       reason,
       anchorLon: anchor[0],

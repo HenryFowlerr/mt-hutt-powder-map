@@ -9,6 +9,8 @@ import {
   buildPowderDisplayField,
   describeCell,
   powderColorForCm,
+  powderDisplayScale,
+  type PowderDisplayScale,
   type PowderField,
   type PowderMode,
   type PowderWeather,
@@ -33,12 +35,16 @@ type HoverInfo = {
 }
 
 const BAND_COLORS: Array<[number, [number, number, number]]> = [
-  [40, [11, 122, 75]],
-  [30, [30, 158, 86]],
-  [20, [67, 185, 95]],
-  [10, [126, 208, 127]],
-  [5, [195, 229, 142]],
+  [40, [7, 95, 63]],
+  [30, [8, 120, 75]],
+  [20, [12, 150, 89]],
+  [10, [34, 182, 109]],
+  [5, [88, 207, 142]],
+  [2, [136, 223, 172]],
+  [0.5, [184, 236, 203]],
+  [0.15, [159, 228, 184]],
 ]
+const BAND_ALPHAS = [0.86, 0.8, 0.73, 0.65, 0.55, 0.44, 0.34, 0.48]
 
 const TEXTURE_WIDTH = 720
 const TEXTURE_HEIGHT = 840
@@ -46,7 +52,12 @@ const TEXTURE_HEIGHT = 840
 // Bakes the powder cm field into a translucent banded texture draped over
 // a clone of the terrain mesh — irregular, terrain-following patches with
 // feathered edges instead of grid blobs.
-function createPowderTexture(field: PowderField, displayGrid: Float32Array, mode: PowderMode) {
+function createPowderTexture(
+  field: PowderField,
+  displayGrid: Float32Array,
+  mode: PowderMode,
+  scale: PowderDisplayScale,
+) {
   const rawGrid = mode === 'recent' ? field.recentCm : field.forecastCm
   const scoreGrid = mode === 'recent' ? field.recentScore : field.forecastScore
   const canvas = document.createElement('canvas')
@@ -63,7 +74,7 @@ function createPowderTexture(field: PowderField, displayGrid: Float32Array, mode
       const displayCm = sampleGrid(displayGrid, field.width, field.height, gx, gy)
       const offset = (py * TEXTURE_WIDTH + px) * 4
 
-      if (displayCm < 9) {
+      if (displayCm < scale.minimumCm) {
         image.data[offset + 3] = 0
         continue
       }
@@ -71,19 +82,18 @@ function createPowderTexture(field: PowderField, displayGrid: Float32Array, mode
       const cm = sampleGrid(rawGrid, field.width, field.height, gx, gy)
       const score = sampleGrid(scoreGrid, field.width, field.height, gx, gy)
       let color: [number, number, number] = BAND_COLORS[BAND_COLORS.length - 1][1]
-      let bandAlpha = 0.24
+      let bandAlpha = scale.maxCm < 1 ? 0.58 : 0.28
       for (let bandIndex = 0; bandIndex < BAND_COLORS.length; bandIndex += 1) {
         if (cm >= BAND_COLORS[bandIndex][0]) {
           color = BAND_COLORS[bandIndex][1]
-          bandAlpha = [0.85, 0.76, 0.64, 0.48, 0.3][bandIndex]
+          bandAlpha = Math.max(BAND_ALPHAS[bandIndex], scale.maxCm < 1 ? 0.58 : 0)
           break
         }
       }
 
-      // Display field controls where the patch exists; score/depth control
-      // how strongly it reads. This keeps shallow background snow out while
-      // still showing light-green edges around genuinely loaded pockets.
-      const edgeFeather = smoothstep(9, 14, displayCm)
+      // Make modest 5–10 cm events legible too; those are often the most
+      // useful terrain decisions on Mt Hutt, not visual noise.
+      const edgeFeather = smoothstep(scale.minimumCm, scale.usefulCm, displayCm)
       const confidence = smoothstep(0.18, 0.44, score)
       const alpha = edgeFeather * (0.55 + 0.45 * confidence) * bandAlpha
       image.data[offset] = color[0]
@@ -115,16 +125,20 @@ export function PowderOverlay({ terrain, analysis, field, weather }: Props) {
 
   const mode = powderMode === 'off' ? 'recent' : powderMode
   const grid = mode === 'recent' ? field.recentCm : field.forecastCm
+  const displayScale = useMemo(() => powderDisplayScale(field, mode), [field, mode])
   const displayGrid = useMemo(() => buildPowderDisplayField(field, analysis, mode), [field, analysis, mode])
 
   const geometry = useMemo(() => createTerrainGeometry(terrain, exaggeration), [terrain, exaggeration])
-  const texture = useMemo(() => createPowderTexture(field, displayGrid, mode), [field, displayGrid, mode])
+  const texture = useMemo(
+    () => createPowderTexture(field, displayGrid, mode, displayScale),
+    [field, displayGrid, mode, displayScale],
+  )
 
   // Contour outlines from marching squares give the patches crisp,
   // irregular, terrain-anchored edges like snow-depth isolines.
   const contours = useMemo(() => {
     const lines: Array<{ points: THREE.Vector3[]; color: string; key: string }> = []
-    for (const threshold of [10, 20, 30, 40]) {
+    for (const threshold of displayScale.contours) {
       const rings = extractContours(displayGrid, field.width, field.height, threshold)
       rings.forEach((ring, ringIndex) => {
         // Keep pockets down to ~1.5 grid cells so small terrain features
@@ -143,7 +157,7 @@ export function PowderOverlay({ terrain, analysis, field, weather }: Props) {
       })
     }
     return lines
-  }, [displayGrid, field, terrain, exaggeration])
+  }, [displayGrid, displayScale, field, terrain, exaggeration])
 
   useEffect(() => () => geometry.dispose(), [geometry])
   useEffect(() => () => texture.dispose(), [texture])
@@ -158,7 +172,7 @@ export function PowderOverlay({ terrain, analysis, field, weather }: Props) {
     const { lon, lat } = xzToLonLat(event.point.x, event.point.z, terrain)
     const gridPos = lonLatToGrid(lon, lat, terrain)
     const displayCm = sampleGrid(displayGrid, field.width, field.height, gridPos.x, gridPos.y)
-    if (displayCm < 9) {
+    if (displayCm < displayScale.minimumCm) {
       setHover(null)
       return
     }
@@ -168,7 +182,7 @@ export function PowderOverlay({ terrain, analysis, field, weather }: Props) {
     const index =
       Math.round(Math.min(terrain.height - 1, Math.max(0, gridPos.y))) * terrain.width +
       Math.round(Math.min(terrain.width - 1, Math.max(0, gridPos.x)))
-    const { reason, dominantFactor } = describeCell(index, terrain, analysis, weather)
+    const { reason, dominantFactor } = describeCell(index, terrain, analysis, weather, mode)
     setHover({
       position: event.point.clone().add(new THREE.Vector3(0, 0.06, 0)),
       cm,

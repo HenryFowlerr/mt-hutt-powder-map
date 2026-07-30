@@ -56,12 +56,19 @@ export type PowderWeather = {
   forecastMaxGustKph?: number
   forecastTemperatureMaxC?: number
   forecastTemperatureMinC?: number
+  forecastFreezingLevelM?: number
+  forecastRainMm?: number
+  forecastHoursAboveZero?: number
   temperatureMaxC: number
   temperatureMinC: number
   cloudLowPct?: number
   cloudMidPct?: number
   cloudHighPct?: number
   freezingLevelM?: number
+  recentRainMm?: number
+  hoursAboveZero?: number
+  hoursSinceSnow?: number
+  meltFreezeCycles?: number
 }
 
 export type PowderField = {
@@ -82,6 +89,7 @@ type CellFactors = {
   elevationFactor: number
   concavityFactor: number
   coldFactor: number
+  qualityFactor: number
   snowMultiplier: number
   skiable: number
 }
@@ -137,6 +145,23 @@ function cellFactors(
   const cellMaxC = weather.temperatureMaxC - (elevation - REFERENCE_ELEVATION_M) * LAPSE_RATE_C_PER_M
   const coldFactor = cellMaxC <= 0 ? 1 : cellMaxC <= 2 ? 0.55 : 0.1
 
+  // Powder quality degrades after rain, prolonged thaw, refreeze cycles, and
+  // time. These inputs affect skiable softness, not the amount that fell.
+  const rainPenalty = smoothstep(0.5, 10, weather.recentRainMm ?? 0)
+  const thawPenalty = smoothstep(4, 30, weather.hoursAboveZero ?? 0)
+  const refreezePenalty = smoothstep(0.5, 2.5, weather.meltFreezeCycles ?? 0)
+  const agePenalty =
+    weather.hoursSinceSnow === undefined || weather.hoursSinceSnow >= 900
+      ? 0
+      : smoothstep(12, 72, weather.hoursSinceSnow)
+  const qualityFactor = clamp01(
+    coldFactor *
+      (1 - rainPenalty * 0.62) *
+      (1 - thawPenalty * 0.4) *
+      (1 - refreezePenalty * 0.28) *
+      (1 - agePenalty * 0.32),
+  )
+
   // Very steep terrain sheds new snow (sluffing) before it can pile up.
   const sluff = smoothstep(48, 60, slope)
   const snowMultiplier = snowfallMultiplier(elevation, weather.freezingLevelM) * (1 - 0.7 * sluff)
@@ -148,6 +173,7 @@ function cellFactors(
     elevationFactor,
     concavityFactor,
     coldFactor,
+    qualityFactor,
     snowMultiplier,
     skiable: analysis.skiMask[index],
   }
@@ -159,7 +185,7 @@ function scoreCell(snowSignal: number, factors: CellFactors) {
     0.26 * factors.leeFactor +
     0.16 * factors.elevationFactor +
     0.12 * factors.concavityFactor +
-    0.1 * factors.coldFactor -
+    0.1 * factors.qualityFactor -
     0.22 * factors.scourPenalty
   return clamp01(raw) * factors.skiable
 }
@@ -174,8 +200,12 @@ function expectedCm(baseSnowCm: number, factors: CellFactors) {
     0.3,
     Math.min(1.7, 1 + 0.8 * factors.leeFactor - 0.65 * factors.scourPenalty),
   )
-  const settle = 0.85 + 0.15 * factors.coldFactor
-  const cm = fallenCm * redistribution * settle
+  const settle = 0.76 + 0.24 * factors.qualityFactor
+  // This field represents skiable powder rather than settled snow depth.
+  // Warm, rain-affected, aged, or refrozen snow can remain on the ground
+  // while contributing much less soft snow to the skier-facing estimate.
+  const softSnowRetention = 0.55 + 0.45 * factors.qualityFactor
+  const cm = fallenCm * redistribution * settle * softSnowRetention
   // Hard-mask non-skiable backside terrain so patches never appear there.
   return Math.max(0, cm) * smoothstep(0.25, 0.7, factors.skiable)
 }
@@ -202,9 +232,11 @@ export function buildPowderField(
     forecastScore[index] = scoreCell(forecastSignal, forecastFactors)
     recentCm[index] = expectedCm(weather.recentSnowCm, recentFactors)
     forecastCm[index] = expectedCm(weather.forecastSnowCm, forecastFactors)
-    // Below ~2 cm is not a powder signal worth showing.
-    if (recentCm[index] < 2) recentCm[index] = 0
-    if (forecastCm[index] < 2) forecastCm[index] = 0
+    // Keep light events in the field. The display layer decides how strongly
+    // to show them relative to the event, while the centimetre values remain
+    // honest and available to summaries/tooltips.
+    if (recentCm[index] < 0.15) recentCm[index] = 0
+    if (forecastCm[index] < 0.15) forecastCm[index] = 0
   }
 
   return {
@@ -225,6 +257,11 @@ function forecastWeather(weather: PowderWeather): PowderWeather {
     maxGustKph: weather.forecastMaxGustKph ?? weather.maxGustKph,
     temperatureMaxC: weather.forecastTemperatureMaxC ?? weather.temperatureMaxC,
     temperatureMinC: weather.forecastTemperatureMinC ?? weather.temperatureMinC,
+    freezingLevelM: weather.forecastFreezingLevelM ?? weather.freezingLevelM,
+    recentRainMm: weather.forecastRainMm ?? 0,
+    hoursAboveZero: weather.forecastHoursAboveZero ?? 0,
+    hoursSinceSnow: 0,
+    meltFreezeCycles: 0,
   }
 }
 
@@ -264,12 +301,17 @@ export function buildPowderDisplayField(
   const scoreGrid = mode === 'recent' ? field.recentScore : field.forecastScore
   const output = new Float32Array(cmGrid.length)
 
-  const shallowEdgeCm = mode === 'recent' ? 10 : 24
-  const usefulEdgeCm = mode === 'recent' ? 16 : 42
-  const scoreEdge = mode === 'recent' ? 0.22 : 0.34
-  const strongScore = mode === 'recent' ? 0.38 : 0.56
-  const collectorEdge = mode === 'recent' ? 0.24 : 0.34
-  const minimumMask = mode === 'recent' ? 0.18 : 0.26
+  const scale = powderDisplayScale(field, mode)
+  if (scale.maxCm < 0.15) return output
+
+  // The visible threshold scales to the event. A 1 cm dusting stays faint
+  // but visible in the best collectors; a 30 cm storm retains absolute bands.
+  const shallowEdgeCm = scale.minimumCm
+  const usefulEdgeCm = scale.usefulCm
+  const scoreEdge = mode === 'recent' ? 0.12 : 0.14
+  const strongScore = mode === 'recent' ? 0.36 : 0.4
+  const collectorEdge = mode === 'recent' ? 0.16 : 0.2
+  const minimumMask = scale.maxCm < 3 ? 0.08 : mode === 'recent' ? 0.11 : 0.13
 
   for (let row = 0; row < field.height; row += 1) {
     for (let col = 0; col < field.width; col += 1) {
@@ -318,13 +360,16 @@ export function describeCell(
   terrain: TerrainData,
   analysis: TerrainAnalysis,
   weather: PowderWeather,
+  mode: PowderMode = 'recent',
 ): { reason: string; dominantFactor: string } {
-  const factors = cellFactors(index, terrain, analysis, weather)
-  const windFrom = compassLabel(weather.mainWindDirectionDeg)
+  const effectiveWeather = mode === 'forecast' ? forecastWeather(weather) : weather
+  const factors = cellFactors(index, terrain, analysis, effectiveWeather)
+  const windFrom = compassLabel(effectiveWeather.mainWindDirectionDeg)
   const facing = compassLabel(analysis.aspectDeg[index])
 
   const rainAffected =
-    weather.freezingLevelM !== undefined && terrain.heights[index] < weather.freezingLevelM + 100
+    effectiveWeather.freezingLevelM !== undefined &&
+    terrain.heights[index] < effectiveWeather.freezingLevelM + 100
 
   const candidates: Array<[number, string, string]> = [
     [
@@ -355,7 +400,7 @@ export function describeCell(
     [
       rainAffected ? 0.6 : 0,
       'rain line',
-      `Near or below the freezing level (~${Math.round(weather.freezingLevelM ?? 0)} m) — likely wet or rain-affected.`,
+      `Near or below the freezing level (~${Math.round(effectiveWeather.freezingLevelM ?? 0)} m) — likely wet or rain-affected.`,
     ],
   ]
 
@@ -379,13 +424,35 @@ export function fieldMaxCm(field: PowderField, mode: 'recent' | 'forecast') {
   return max
 }
 
-export const POWDER_THRESHOLDS_CM = [5, 10, 20, 30, 40]
+export type PowderDisplayScale = {
+  maxCm: number
+  minimumCm: number
+  usefulCm: number
+  contours: number[]
+}
+
+export function powderDisplayScale(field: PowderField, mode: PowderMode): PowderDisplayScale {
+  const maxCm = fieldMaxCm(field, mode)
+  if (maxCm < 0.15) return { maxCm, minimumCm: Infinity, usefulCm: Infinity, contours: [] }
+
+  const minimumCm = Math.max(0.15, Math.min(5, maxCm * 0.22))
+  const usefulCm = Math.max(minimumCm + 0.08, Math.min(14, maxCm * 0.72))
+  const candidates = [0.5, 1, 2, 5, 10, 20, 30, 40]
+  const contours = candidates.filter((value) => value >= minimumCm && value <= maxCm * 0.96)
+  if (contours.length === 0) contours.push(Number(Math.max(0.15, maxCm * 0.55).toFixed(2)))
+  return { maxCm, minimumCm, usefulCm, contours }
+}
+
+export const POWDER_THRESHOLDS_CM = [0.5, 1, 2, 5, 10, 20, 30, 40]
 
 export function powderColorForCm(cm: number) {
-  if (cm >= 40) return '#0b7a4b' // deep emerald
-  if (cm >= 30) return '#1e9e56'
-  if (cm >= 20) return '#43b95f'
-  if (cm >= 10) return '#7ed07f'
-  if (cm >= 5) return '#c3e58e' // pale yellow-green
-  return '#e9f2c9'
+  if (cm >= 40) return '#075f3f'
+  if (cm >= 30) return '#08784b'
+  if (cm >= 20) return '#0c9659'
+  if (cm >= 10) return '#22b66d'
+  if (cm >= 5) return '#58cf8e'
+  if (cm >= 2) return '#88dfac'
+  if (cm >= 0.5) return '#b8eccb'
+  if (cm >= 0.15) return '#9fe4b8'
+  return '#dff7e7'
 }

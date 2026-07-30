@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import { MountainScene } from './components/MountainScene'
 import { Toolbar } from './components/Toolbar'
-import { WeatherPanel } from './components/WeatherPanel'
+import { WeatherBrief } from './components/WeatherBrief'
 import { ForecastPanel } from './components/ForecastPanel'
+import { BrandHeader } from './components/BrandHeader'
+import { MapLegend } from './components/MapLegend'
 import { buildPowderField, type PowderWeather } from './lib/powderModel'
 import { buildIceField, type IceWeather } from './lib/iceModel'
 import { analyzeTerrain } from './lib/terrainAnalysis'
@@ -63,12 +65,19 @@ function App() {
       forecastMaxGustKph: data.latest.summary.forecastMaxGustKph,
       forecastTemperatureMaxC: data.latest.summary.forecastTemperatureMaxC,
       forecastTemperatureMinC: data.latest.summary.forecastTemperatureMinC,
+      forecastFreezingLevelM: data.latest.summary.forecastFreezingLevelM,
+      forecastRainMm: data.latest.summary.forecastRainMm,
+      forecastHoursAboveZero: data.latest.summary.forecastHoursAboveZero,
       temperatureMaxC: data.latest.summary.temperatureMaxC,
       temperatureMinC: data.latest.summary.temperatureMinC,
       cloudLowPct: data.latest.summary.cloudLowPct,
       cloudMidPct: data.latest.summary.cloudMidPct,
       cloudHighPct: data.latest.summary.cloudHighPct,
-      freezingLevelM: data.latest.summary.freezingLevelM,
+      freezingLevelM: data.latest.summary.recentFreezingLevelM ?? data.latest.summary.freezingLevelM,
+      recentRainMm: data.latest.summary.recentRainMm,
+      hoursAboveZero: data.latest.summary.hoursAboveZero,
+      hoursSinceSnow: data.latest.summary.hoursSinceSnow,
+      meltFreezeCycles: data.latest.summary.meltFreezeCycles,
     }
     const field = buildPowderField(data.terrain, analysis, weather)
     const iceWeather: IceWeather = {
@@ -105,10 +114,12 @@ function App() {
           </div>
         )}
       </div>
+      <BrandHeader generatedAt={data?.latest.generatedAt} />
       <Toolbar />
+      {derived ? <MapLegend field={derived.field} /> : null}
       {data?.latest.daily ? <ForecastPanel daily={data.latest.daily} /> : null}
       {data && derived ? (
-        <WeatherPanel
+        <WeatherBrief
           latest={data.latest}
           field={derived.field}
           terrain={data.terrain}

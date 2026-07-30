@@ -54,11 +54,23 @@ export type LatestData = {
     mainWindDirectionDeg: number
     avgWindKph: number
     maxGustKph?: number
+    currentWindDirectionDeg?: number
+    currentWindKph?: number
+    currentGustKph?: number
+    currentTemperatureC?: number
     forecastWindDirectionDeg?: number
     forecastAvgWindKph?: number
     forecastMaxGustKph?: number
     forecastTemperatureMinC?: number
     forecastTemperatureMaxC?: number
+    recentFreezingLevelM?: number
+    forecastFreezingLevelM?: number
+    forecastRainMm?: number
+    forecastHoursAboveZero?: number
+    stormStartAt?: string
+    stormEndAt?: string
+    stormPeakSnowCm?: number
+    windDirectionSpreadDeg?: number
     cloudLowPct?: number
     cloudMidPct?: number
     cloudHighPct?: number
@@ -102,4 +114,8 @@ export type WeatherHour = {
   windKph: number
   windDirectionDeg: number
   freezingLevelM?: number
+  gustKph?: number
+  rainMm?: number
+  precipitationMm?: number
+  cloudPct?: number
 }

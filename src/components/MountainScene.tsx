@@ -147,7 +147,7 @@ export function MountainScene({
     >
       {/* No fog and no scene lighting: the map look is baked into textures
           so labels and lines stay crisp at every distance. */}
-      <color attach="background" args={['#dbe7f0']} />
+      <color attach="background" args={['#dce9ef']} />
       <TerrainMesh terrain={terrain} analysis={analysis} />
       <PowderOverlay terrain={terrain} analysis={analysis} field={field} weather={weather} />
       <IceOverlay terrain={terrain} analysis={analysis} field={iceField} weather={iceWeather} />

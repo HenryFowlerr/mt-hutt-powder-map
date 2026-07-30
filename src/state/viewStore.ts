@@ -32,7 +32,7 @@ type ViewState = {
 }
 
 export const useViewStore = create<ViewState>((set) => ({
-  powderMode: 'recent',
+  powderMode: 'forecast',
   showIce: false,
   showTrails: true,
   showClouds: false,

@@ -205,13 +205,13 @@ function mixColor(a: [number, number, number], b: [number, number, number], t: n
   return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]
 }
 
-const SNOW_LIT: [number, number, number] = [248, 251, 255] // #f8fbff
-const SNOW_SHADED: [number, number, number] = [207, 232, 245] // #cfe8f5
-const DEEP_SHADOW: [number, number, number] = [143, 184, 206] // #8fb8ce
-const ROCK_LIGHT: [number, number, number] = [126, 136, 142] // lighter grey rock
-const ROCK_DARK: [number, number, number] = [74, 82, 88] // mid grey, not near-black
-const BACKSIDE_HAZE: [number, number, number] = [188, 205, 220] // muted far terrain
-const VALLEY_TINT: [number, number, number] = [210, 212, 205] // low valley floor, kept grey so powder green stands out
+const SNOW_LIT: [number, number, number] = [247, 251, 253]
+const SNOW_SHADED: [number, number, number] = [202, 223, 231]
+const DEEP_SHADOW: [number, number, number] = [112, 151, 169]
+const ROCK_LIGHT: [number, number, number] = [132, 143, 148]
+const ROCK_DARK: [number, number, number] = [69, 79, 85]
+const BACKSIDE_HAZE: [number, number, number] = [198, 213, 221]
+const VALLEY_TINT: [number, number, number] = [199, 207, 201]
 
 // Bakes the whole map look — hillshade, snow palette, rock bands, ski-area
 // emphasis — into one texture draped over the terrain mesh. Lighting is

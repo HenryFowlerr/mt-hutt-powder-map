@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { X } from 'lucide-react'
+import { ConditionGlyph } from './AlpineIcons'
 import { conditionsAdvice } from '../lib/advice'
 import { useViewStore } from '../state/viewStore'
 import type { DailyForecast } from '../types'
@@ -19,6 +20,10 @@ function dayLabel(date: string, index: number) {
   return new Date(`${date}T12:00`).toLocaleDateString('en-NZ', { weekday: 'long', day: 'numeric', month: 'short' })
 }
 
+function elevationTemperature(temperatureC: number, elevationM: number) {
+  return Math.round(temperatureC - (elevationM - 1600) * 0.0065)
+}
+
 export function ForecastPanel({ daily }: Props) {
   const forecastOpen = useViewStore((state) => state.forecastOpen)
   const toggleForecast = useViewStore((state) => state.toggleForecast)
@@ -32,7 +37,7 @@ export function ForecastPanel({ daily }: Props) {
     <aside className="forecast-panel" aria-label="14 day forecast">
       <header className="forecast-header">
         <div>
-          <p className="panel-eyebrow">Mt Hutt · aviation-grade</p>
+          <p className="panel-eyebrow">Mt Hutt · long range</p>
           <h2>14-day forecast</h2>
         </div>
         <button type="button" className="forecast-close" onClick={toggleForecast} aria-label="Close forecast">
@@ -40,7 +45,7 @@ export function ForecastPanel({ daily }: Props) {
         </button>
       </header>
 
-      <p className="forecast-sub">Tap a day for detail. Snowfall bar scaled to the biggest day.</p>
+      <p className="forecast-sub">Select a day for snowfall, wind, freezing level, and layers.</p>
 
       <ul className="forecast-days">
         {daily.map((day, index) => {
@@ -56,15 +61,18 @@ export function ForecastPanel({ daily }: Props) {
           })
           const isOpen = openDay === day.date
           return (
-            <li key={day.date} className={isOpen ? 'open' : ''}>
+            <li key={day.date} className={`${isOpen ? 'open' : ''} ${index >= 7 ? 'long-range' : ''}`}>
               <button
                 type="button"
                 className="forecast-day"
                 onClick={() => setOpenDay(isOpen ? null : day.date)}
                 aria-expanded={isOpen}
               >
-                <span className="fd-icon">{advice.icon}</span>
-                <span className="fd-label">{dayLabel(day.date, index)}</span>
+                <span className="fd-icon"><ConditionGlyph condition={advice.sky} size={19} /></span>
+                <span className="fd-label">
+                  {dayLabel(day.date, index)}
+                  {index >= 7 ? <small>trend</small> : null}
+                </span>
                 <span className="fd-bar-wrap">
                   <span
                     className="fd-bar"
@@ -81,7 +89,7 @@ export function ForecastPanel({ daily }: Props) {
               {isOpen ? (
                 <div className="forecast-detail">
                   <p className="fd-note">
-                    {advice.icon} {advice.sky} · {advice.note}
+                    <ConditionGlyph condition={advice.sky} size={18} /> {advice.sky} · {advice.note}
                   </p>
                   <div className="fd-grid">
                     <div>
@@ -111,6 +119,21 @@ export function ForecastPanel({ daily }: Props) {
                       <span>Feels</span>
                       <strong>{advice.feelsLike}</strong>
                     </div>
+                  </div>
+                  <div className="fd-mountain-profile">
+                    {[
+                      { label: 'Summit', elevation: 2066 },
+                      { label: 'Mid', elevation: 1820 },
+                      { label: 'Base', elevation: 1606 },
+                    ].map((point) => (
+                      <span key={point.label}>
+                        <small>{point.label}</small>
+                        <strong>
+                          {elevationTemperature(day.tempMinC, point.elevation)}° /{' '}
+                          {elevationTemperature(day.tempMaxC, point.elevation)}°
+                        </strong>
+                      </span>
+                    ))}
                   </div>
                   <p className="fd-layers">
                     <strong>Wear:</strong> {advice.layers.join(' · ')}

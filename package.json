@@ -9,6 +9,7 @@
     "fetch:terrain": "tsx scripts/fetch-opentopo-terrain.ts",
     "fetch:trails": "tsx scripts/fetch-osm-trails.ts",
     "update:data": "tsx scripts/fetch-weather.ts && tsx scripts/build-powder-grid.ts",
+    "test:model": "tsx scripts/check-powder-model.ts",
     "lint": "oxlint",
     "preview": "vite preview"
   },

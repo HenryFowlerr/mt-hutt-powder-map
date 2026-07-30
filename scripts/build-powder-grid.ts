@@ -5,7 +5,7 @@ import {
   buildPowderField,
   buildPowderDisplayField,
   describeCell,
-  POWDER_THRESHOLDS_CM,
+  powderDisplayScale,
   type PowderWeather,
 } from '../src/lib/powderModel'
 import { analyzeTerrain } from '../src/lib/terrainAnalysis'
@@ -27,8 +27,21 @@ const weather: PowderWeather = {
   mainWindDirectionDeg: latest.summary.mainWindDirectionDeg,
   avgWindKph: latest.summary.avgWindKph,
   maxGustKph: latest.summary.maxGustKph,
+  forecastWindDirectionDeg: latest.summary.forecastWindDirectionDeg,
+  forecastAvgWindKph: latest.summary.forecastAvgWindKph,
+  forecastMaxGustKph: latest.summary.forecastMaxGustKph,
+  forecastTemperatureMaxC: latest.summary.forecastTemperatureMaxC,
+  forecastTemperatureMinC: latest.summary.forecastTemperatureMinC,
+  forecastFreezingLevelM: latest.summary.forecastFreezingLevelM,
+  forecastRainMm: latest.summary.forecastRainMm,
+  forecastHoursAboveZero: latest.summary.forecastHoursAboveZero,
   temperatureMaxC: latest.summary.temperatureMaxC,
   temperatureMinC: latest.summary.temperatureMinC,
+  freezingLevelM: latest.summary.recentFreezingLevelM ?? latest.summary.freezingLevelM,
+  recentRainMm: latest.summary.recentRainMm,
+  hoursAboveZero: latest.summary.hoursAboveZero,
+  hoursSinceSnow: latest.summary.hoursSinceSnow,
+  meltFreezeCycles: latest.summary.meltFreezeCycles,
 }
 
 const analysis = analyzeTerrain(terrain, trails)
@@ -59,19 +72,29 @@ function buildPolygons(mode: 'recent' | 'forecast'): PowderPolygon[] {
   const grid = mode === 'recent' ? field.recentCm : field.forecastCm
   const displayGrid = buildPowderDisplayField(field, analysis, mode)
   const scores = mode === 'recent' ? field.recentScore : field.forecastScore
+  const scale = powderDisplayScale(field, mode)
   const polygons: PowderPolygon[] = []
   let counter = 0
 
-  for (const threshold of POWDER_THRESHOLDS_CM.filter((cm) => cm >= 10)) {
+  // These polygons are a compact cache for non-browser consumers. The live
+  // app paints the dense field directly, so retaining the largest terrain
+  // signals at up to three useful contour levels is both clearer and far
+  // smaller than serialising every tiny collector.
+  const thresholds = scale.contours.slice(-3)
+  for (const threshold of thresholds) {
     const rings = extractContours(displayGrid, terrain.width, terrain.height, threshold)
-    for (const ring of rings) {
-      if (ringArea(ring) < 3) continue
-      const simplified = simplifyRing(ring, 0.3) as Array<[number, number]>
+      .map((ring) => ({ ring, area: ringArea(ring) }))
+      .filter(({ area }) => area >= 10)
+      .sort((a, b) => b.area - a.area)
+      .slice(0, 12)
+
+    for (const { ring } of rings) {
+      const simplified = simplifyRing(ring, 0.6) as Array<[number, number]>
       if (simplified.length < 3) continue
 
       // Sample cm/score inside the region (at the ring centroid cell).
       const index = ringCentroidIndex(simplified)
-      const { reason, dominantFactor } = describeCell(index, terrain, analysis, weather)
+      const { reason, dominantFactor } = describeCell(index, terrain, analysis, weather, mode)
       counter += 1
 
       polygons.push({

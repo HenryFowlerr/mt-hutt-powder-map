@@ -1,6 +1,9 @@
-# Mt Hutt Powder Map
+# Hutt Powder
 
-A free, static web app for exploring Mt Hutt as a 3D ski map with trails, lifts, weather, and an experimental powder estimate overlay.
+A map-first snow intelligence app for exploring Mt Hutt in 3D with trails, lifts, weather, wind
+loading, and an experimental powder estimate overlay.
+
+The interface and visual-system rules are documented in [`DESIGN.md`](./DESIGN.md).
 
 ## Run Locally
 
@@ -10,6 +13,15 @@ npm run dev
 ```
 
 Real terrain, trail, and weather data is committed in `public/data/`, so the app works straight from a fresh clone.
+
+```bash
+npm run lint
+npm run build
+npm run test:model
+```
+
+The model regression checks cover zero snow, light-event visibility, storm-depth scaling, warm/rain
+degradation, and wind-direction loading.
 
 ## Update Weather
 
@@ -28,7 +40,8 @@ Push to GitHub, enable GitHub Pages for Actions, then run the `Deploy` workflow 
 - `public/data/terrain.json`: 240x280 DEM (~31 m cells) from OpenTopoData `nzdem8m` (LINZ 8 m). Static; refetch manually with `npm run fetch:terrain` if ever needed.
 - `public/data/trails.geojson`: OSM runs/lifts/boundary (cached; `npm run fetch:trails` to refresh), with official-map name/difficulty corrections applied at runtime.
 - `public/data/map-overrides.geojson`: base-area carparks and buildings from OSM (`npx tsx scripts/fetch-map-details.ts` to refresh).
-- `public/data/latest.json`: the only file the scheduled updater touches.
+- `public/data/latest.json`: the only file the scheduled updater touches. Cached terrain contours
+  are intentionally compact; the browser renders the full-resolution field from the summary.
 
 ## Attribution
 
