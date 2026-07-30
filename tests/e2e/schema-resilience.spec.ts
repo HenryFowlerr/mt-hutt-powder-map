@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { loadPublicJson } from './public-fixtures'
 
 test.describe.configure({ mode: 'serial' })
 
@@ -10,12 +11,11 @@ async function corruptFirstResponse(
   corrupt: (value: JsonObject) => JsonObject,
 ) {
   let requests = 0
+  const fixture = await loadPublicJson<JsonObject>(path.replace('data/', ''))
   await page.route(`**/${path}`, async (route) => {
     requests += 1
     if (requests === 1) {
-      const response = await route.fetch()
-      const value = (await response.json()) as JsonObject
-      await route.fulfill({ response, json: corrupt(value) })
+      await route.fulfill({ json: corrupt(fixture) })
       return
     }
     await route.continue()
@@ -84,8 +84,7 @@ test('rejects an invalid hourly value and recovers on retry', async ({ page }) =
 
 test('ignores structurally invalid optional map overrides', async ({ page }) => {
   await page.route('**/data/map-overrides.geojson', async (route) => {
-    const response = await route.fetch()
-    await route.fulfill({ response, json: { type: 'FeatureCollection', features: 'invalid' } })
+    await route.fulfill({ json: { type: 'FeatureCollection', features: 'invalid' } })
   })
 
   await page.goto('/')

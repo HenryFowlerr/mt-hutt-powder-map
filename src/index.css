@@ -180,6 +180,30 @@ summary:focus-visible {
   box-shadow: 0 0 0 4px rgba(21, 146, 103, 0.12);
 }
 
+.brand-freshness.cached {
+  color: #6b4917;
+}
+
+.brand-freshness.cached i {
+  background: #b36a00;
+  box-shadow: 0 0 0 4px rgba(179, 106, 0, 0.14);
+}
+
+.cached-data-notice {
+  display: grid;
+  gap: 2px;
+  padding: 10px 20px;
+  border-bottom: 1px solid rgba(179, 106, 0, 0.22);
+  color: #684516;
+  background: #fff8e8;
+  font-size: var(--text-caption);
+  line-height: 1.4;
+}
+
+.cached-data-notice strong {
+  font-weight: 720;
+}
+
 .brief-topline,
 .section-heading {
   display: flex;
@@ -1652,6 +1676,35 @@ summary:focus-visible {
   background: rgba(8, 127, 209, 0.065);
 }
 
+.map-actions button.compass-action {
+  min-width: 64px;
+  justify-content: center;
+  padding-right: 11px;
+  padding-left: 11px;
+}
+
+.compass-readout {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--muted);
+}
+
+.compass-needle {
+  flex: none;
+  transform-origin: center;
+}
+
+.compass-letter {
+  font-size: var(--text-caption);
+  font-weight: 720;
+  line-height: 1;
+}
+
+.compass-action.north-aligned .compass-readout {
+  color: var(--accent-deep);
+}
+
 .workspace-body {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 388px;
@@ -1779,6 +1832,28 @@ summary:focus-visible {
   line-height: 1.5;
 }
 
+.outlook-issued {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-top: 9px;
+  color: var(--ink-soft);
+  font-size: var(--text-caption);
+  line-height: 1.4;
+}
+
+.outlook-issued strong {
+  color: #8b5211;
+  font-weight: 700;
+}
+
+.fd-trust {
+  margin: -2px 0 10px;
+  color: var(--muted);
+  font-size: var(--text-caption);
+  line-height: 1.45;
+}
+
 .outlook-view .forecast-days {
   border-top: 0;
 }
@@ -1873,8 +1948,19 @@ summary:focus-visible {
 
   .product-identity .brand-copy span,
   .product-identity .brand-freshness,
-  .map-actions button span {
+  .map-actions .action-label {
     display: none;
+  }
+
+  .product-identity .brand-freshness.cached {
+    display: inline-flex;
+    max-width: 118px;
+    margin-left: 8px;
+    padding-left: 8px;
+    overflow: hidden;
+    font-size: 9px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .map-actions {
@@ -1884,6 +1970,11 @@ summary:focus-visible {
   .map-actions button {
     min-width: 44px;
     padding: 0 11px;
+  }
+
+  .map-actions button.compass-action {
+    min-width: 44px;
+    padding: 0 9px;
   }
 
   .workspace-body {

@@ -1,5 +1,11 @@
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
-import { join } from 'node:path'
+import {
+  mkdirSync,
+  readFileSync,
+  renameSync,
+  unlinkSync,
+  writeFileSync,
+} from 'node:fs'
+import { join, resolve } from 'node:path'
 import { summariseGfsEnsemble } from './ensemble-summary'
 import { dateKeyAtZone, openMeteoUnixIso, openMeteoUnixMs } from './weather-time'
 import {
@@ -8,14 +14,20 @@ import {
 } from '../src/lib/recentTerrainSignal'
 import type { EnsembleSnowfallSummary } from '../src/types'
 
-const dataDir = join(process.cwd(), 'public', 'data')
+const dataDir = process.env.MT_HUTT_DATA_DIR
+  ? resolve(process.env.MT_HUTT_DATA_DIR)
+  : join(process.cwd(), 'public', 'data')
 mkdirSync(dataDir, { recursive: true })
 
 const latestPath = join(dataDir, 'latest.json')
 const fallback = JSON.parse(readFileSync(latestPath, 'utf8'))
+const fetchTimeoutMs = Number(process.env.WEATHER_FETCH_TIMEOUT_MS ?? 20_000)
+if (!Number.isFinite(fetchTimeoutMs) || fetchTimeoutMs <= 0) {
+  throw new Error('WEATHER_FETCH_TIMEOUT_MS must be a positive number')
+}
 const lat = -43.49
 const lon = 171.54
-const hourly = [
+const hourlyFields = [
   'temperature_2m',
   'precipitation',
   'rain',
@@ -30,7 +42,67 @@ const hourly = [
   'cloud_cover_high',
   'freezing_level_height',
   'weather_code',
-].join(',')
+]
+const hourly = hourlyFields.join(',')
+
+type WeatherPayload = {
+  hourly: Record<string, number[]> & { time: number[] }
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+function parseWeatherPayload(payload: unknown): WeatherPayload {
+  if (!isRecord(payload) || !isRecord(payload.hourly)) {
+    throw new Error('Open-Meteo response is missing the hourly weather object')
+  }
+
+  const times = payload.hourly.time
+  if (!Array.isArray(times) || times.length < 48) {
+    throw new Error('Open-Meteo response has insufficient hourly timestamps')
+  }
+  const parsedTimes = times.map((time) => {
+    openMeteoUnixMs(time)
+    return time as number
+  })
+  for (let index = 1; index < parsedTimes.length; index += 1) {
+    if (parsedTimes[index] <= parsedTimes[index - 1]) {
+      throw new Error('Open-Meteo hourly timestamps are not strictly increasing')
+    }
+  }
+
+  const parsedHourly: Record<string, number[]> & { time: number[] } = {
+    time: parsedTimes,
+  }
+  for (const field of hourlyFields) {
+    const series = payload.hourly[field]
+    if (!Array.isArray(series) || series.length !== parsedTimes.length) {
+      throw new Error(`Open-Meteo hourly.${field} is missing or has the wrong length`)
+    }
+    if (series.some((value) => typeof value !== 'number' || !Number.isFinite(value))) {
+      throw new Error(`Open-Meteo hourly.${field} contains a non-finite value`)
+    }
+    parsedHourly[field] = series as number[]
+  }
+
+  return { hourly: parsedHourly }
+}
+
+function writeLatestAtomically(contents: string) {
+  const temporaryPath = `${latestPath}.${process.pid}.${Date.now()}.tmp`
+  try {
+    writeFileSync(temporaryPath, contents, { flag: 'wx' })
+    renameSync(temporaryPath, latestPath)
+  } catch (error) {
+    try {
+      unlinkSync(temporaryPath)
+    } catch {
+      // Nothing to clean up when the temporary file was never created.
+    }
+    throw error
+  }
+}
 
 const url = new URL('https://api.open-meteo.com/v1/forecast')
 url.searchParams.set('latitude', String(lat))
@@ -56,7 +128,9 @@ ensembleUrl.searchParams.set('timeformat', 'unixtime')
 
 async function fetchEnsembleSummary(): Promise<EnsembleSnowfallSummary | undefined> {
   try {
-    const response = await fetch(ensembleUrl, { signal: AbortSignal.timeout(15_000) })
+    const response = await fetch(ensembleUrl, {
+      signal: AbortSignal.timeout(Math.min(fetchTimeoutMs, 15_000)),
+    })
     if (!response.ok) throw new Error(`Open-Meteo ensemble ${response.status}`)
     const summary = summariseGfsEnsemble(await response.json())
     if (!summary) throw new Error('Open-Meteo ensemble response had fewer than two valid members')
@@ -77,10 +151,10 @@ async function fetchEnsembleSummary(): Promise<EnsembleSnowfallSummary | undefin
 const ensemblePromise = fetchEnsembleSummary()
 
 try {
-  const response = await fetch(url)
+  const response = await fetch(url, { signal: AbortSignal.timeout(fetchTimeoutMs) })
   if (!response.ok) throw new Error(`Open-Meteo ${response.status}`)
-  const weather = await response.json()
-  const hours: unknown[] = weather.hourly?.time ?? []
+  const weather = parseWeatherPayload(await response.json())
+  const hours: unknown[] = weather.hourly.time
   const hourTimes = hours.map(openMeteoUnixMs)
   const now = Date.now()
 
@@ -92,6 +166,11 @@ try {
     .map((time, index) => ({ time, index }))
     .filter(({ time }) => time > now && time <= now + 72 * 60 * 60 * 1000)
     .map(({ index }) => index)
+  if (recentIndexes.length < 24 || forecastIndexes.length < 24) {
+    throw new Error(
+      `Open-Meteo response has insufficient current coverage (${recentIndexes.length} recent, ${forecastIndexes.length} forecast hours)`,
+    )
+  }
 
   const sum = (field: string, indexes: number[]) =>
     indexes.reduce((total, index) => total + Number(weather.hourly?.[field]?.[index] ?? 0), 0)
@@ -402,10 +481,11 @@ try {
     throw new Error('Open-Meteo response produced non-finite summary values')
   }
 
-  writeFileSync(latestPath, `${JSON.stringify(next, null, 2)}\n`)
+  writeLatestAtomically(`${JSON.stringify(next, null, 2)}\n`)
   console.log(`Updated weather data from Open-Meteo: ${recentSnowCm.toFixed(1)} cm recent snow`)
 } catch (error) {
   // Keep the existing file untouched so the app's "updated X ago" stays
   // honest about how old the data actually is.
-  console.warn(`Weather update failed, keeping previous data: ${error instanceof Error ? error.message : String(error)}`)
+  console.error(`Weather update failed, keeping previous data: ${error instanceof Error ? error.message : String(error)}`)
+  process.exitCode = 1
 }

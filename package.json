@@ -12,6 +12,7 @@
     "test:data": "tsx scripts/check-data-integrity.ts",
     "test:model": "tsx scripts/check-powder-model.ts && tsx scripts/test-weather-time.ts && tsx scripts/check-recent-terrain-signal.ts",
     "test:confidence": "tsx scripts/check-forecast-confidence.ts && tsx scripts/test-ensemble-summary.ts",
+    "test:update-pipeline": "tsx scripts/test-weather-update-failures.ts",
     "test:bundle": "tsx scripts/check-bundle-budget.ts",
     "test:e2e": "npm run build && playwright test",
     "test:e2e:headed": "npm run build && playwright test --headed",

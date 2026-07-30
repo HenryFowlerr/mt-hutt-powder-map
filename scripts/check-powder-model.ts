@@ -5,6 +5,8 @@ import {
   buildPowderDisplayField,
   buildPowderField,
   fieldMaxCm,
+  hourlyPhaseSnowCm,
+  windDirectionalCoherence,
   type PowderField,
   type PowderWeather,
 } from '../src/lib/powderModel'
@@ -53,6 +55,12 @@ function meanAbsoluteDifference(a: Float32Array, b: Float32Array) {
   return total / a.length
 }
 
+function assertFiniteNonNegative(grid: Float32Array, message: string) {
+  for (const value of grid) {
+    assert(Number.isFinite(value) && value >= 0, message)
+  }
+}
+
 function forecastField(overrides: Partial<PowderWeather>): PowderField {
   return buildPowderField(terrain, analysis, { ...baseWeather, ...overrides })
 }
@@ -68,6 +76,52 @@ const dusting = forecastField({ forecastSnowCm: 1.2 })
 const dustingDisplay = buildPowderDisplayField(dusting, analysis, 'forecast')
 assert(fieldMaxCm(dusting, 'forecast') > 0.25, 'a 1.2 cm event must survive the physical field')
 assert(nonZeroCount(dustingDisplay) > 0, 'a small meaningful event must appear on the map')
+
+const changingPhaseHours = [
+  { snowfallCm: 0.7, precipitationMm: 1, freezingLevelM: 1400 },
+  { snowfallCm: 0, precipitationMm: 1, freezingLevelM: 1900 },
+] as const
+assert.equal(
+  hourlyPhaseSnowCm(changingPhaseHours, 1600, 0.7),
+  0.7,
+  'hourly phase adjustment must preserve the official 1600 m total',
+)
+assert(
+  Math.abs(hourlyPhaseSnowCm(changingPhaseHours, 2066, 0.7) - 1.4) < 1e-9,
+  'summit snow must include precipitation that fell as rain at the reference point',
+)
+assert(
+  hourlyPhaseSnowCm(changingPhaseHours, 1300, 0.7) < 0.4,
+  'lower terrain must lose snow when the hourly freezing level makes the phase marginal',
+)
+assert.equal(
+  hourlyPhaseSnowCm(
+    [{ snowfallCm: 3, precipitationMm: undefined, freezingLevelM: undefined }],
+    2066,
+    4.2,
+  ),
+  4.2,
+  'missing hourly phase inputs must preserve the aggregate fallback exactly',
+)
+
+const changingPhase = forecastField({
+  forecastSnowCm: 0.7,
+  forecastFreezingLevelM: 1650,
+  forecastPhaseHours: changingPhaseHours,
+})
+const aggregatePhase = forecastField({
+  forecastSnowCm: 0.7,
+  forecastFreezingLevelM: 1650,
+})
+const changingPhaseDisplay = buildPowderDisplayField(changingPhase, analysis, 'forecast')
+assert(
+  fieldMaxCm(changingPhase, 'forecast') > fieldMaxCm(aggregatePhase, 'forecast') * 1.5,
+  'hourly evolution must recover summit snow hidden by a storm-average freezing level',
+)
+assert(
+  nonZeroCount(changingPhaseDisplay) > 0,
+  'a light summit-only hourly event must remain visible on the map',
+)
 
 const moderate = forecastField({ forecastSnowCm: 8 })
 const deep = forecastField({ forecastSnowCm: 30 })
@@ -97,11 +151,107 @@ assert(
   `warmth, rain, and a high freezing level must reduce skiable powder (${coldDryMax.toFixed(1)} vs ${warmWetMax.toFixed(1)} cm)`,
 )
 
-const northwest = forecastField({ forecastSnowCm: 12, forecastWindDirectionDeg: 315 })
-const southeast = forecastField({ forecastSnowCm: 12, forecastWindDirectionDeg: 135 })
+assert.equal(
+  windDirectionalCoherence(),
+  1,
+  'missing wind spread must preserve the stable-direction fallback',
+)
+assert.equal(
+  windDirectionalCoherence(0),
+  1,
+  'zero wind spread must preserve the stable-direction behavior exactly',
+)
+assert(
+  Math.abs(windDirectionalCoherence(60) - 0.5779248964927293) < 1e-12,
+  'wind coherence must invert the circular spread calculation used by fetch-weather',
+)
+
+const northwest = forecastField({
+  forecastSnowCm: 12,
+  forecastWindDirectionDeg: 315,
+})
+const northwestZeroSpread = forecastField({
+  forecastSnowCm: 12,
+  forecastWindDirectionDeg: 315,
+  forecastWindDirectionSpreadDeg: 0,
+})
+assert.deepEqual(
+  northwestZeroSpread.forecastCm,
+  northwest.forecastCm,
+  'zero spread must preserve forecast centimetres exactly',
+)
+assert.deepEqual(
+  northwestZeroSpread.forecastScore,
+  northwest.forecastScore,
+  'zero spread must preserve forecast scores exactly',
+)
+
+const southeast = forecastField({
+  forecastSnowCm: 12,
+  forecastWindDirectionDeg: 135,
+})
 assert(
   meanAbsoluteDifference(northwest.forecastCm, southeast.forecastCm) > 0.08,
   'changing storm wind direction must move the terrain-loading signal',
+)
+const northwestModerateSpread = forecastField({
+  forecastSnowCm: 12,
+  forecastWindDirectionDeg: 315,
+  forecastWindDirectionSpreadDeg: 60,
+})
+const southeastModerateSpread = forecastField({
+  forecastSnowCm: 12,
+  forecastWindDirectionDeg: 135,
+  forecastWindDirectionSpreadDeg: 60,
+})
+const northwestWideSpread = forecastField({
+  forecastSnowCm: 12,
+  forecastWindDirectionDeg: 315,
+  forecastWindDirectionSpreadDeg: 112,
+})
+const southeastWideSpread = forecastField({
+  forecastSnowCm: 12,
+  forecastWindDirectionDeg: 135,
+  forecastWindDirectionSpreadDeg: 112,
+})
+const stableDirectionDifference = meanAbsoluteDifference(
+  northwest.forecastCm,
+  southeast.forecastCm,
+)
+const moderateDirectionDifference = meanAbsoluteDifference(
+  northwestModerateSpread.forecastCm,
+  southeastModerateSpread.forecastCm,
+)
+const wideDirectionDifference = meanAbsoluteDifference(
+  northwestWideSpread.forecastCm,
+  southeastWideSpread.forecastCm,
+)
+assert(
+  stableDirectionDifference > moderateDirectionDifference &&
+    moderateDirectionDifference > wideDirectionDifference,
+  'directional terrain contrast must decrease monotonically as wind spread increases',
+)
+assertFiniteNonNegative(
+  northwestWideSpread.forecastCm,
+  'wide-spread forecast centimetres must remain finite and non-negative',
+)
+assertFiniteNonNegative(
+  northwestWideSpread.forecastScore,
+  'wide-spread forecast scores must remain finite and non-negative',
+)
+
+const shiftingTrace = forecastField({
+  forecastSnowCm: 0.2,
+  forecastWindDirectionSpreadDeg: 112,
+})
+const shiftingTraceDisplay = buildPowderDisplayField(
+  shiftingTrace,
+  analysis,
+  'forecast',
+)
+assert(
+  nonZeroCount(shiftingTraceDisplay) > 0,
+  'a light event must remain visible even when wind direction shifts widely',
 )
 
 console.log(
@@ -109,9 +259,12 @@ console.log(
     `Powder model checks passed`,
     `trace display cells: ${nonZeroCount(traceDisplay)}`,
     `dusting display cells: ${nonZeroCount(dustingDisplay)}`,
+    `changing-phase max pocket: ${fieldMaxCm(changingPhase, 'forecast').toFixed(1)} cm`,
+    `aggregate-phase max pocket: ${fieldMaxCm(aggregatePhase, 'forecast').toFixed(1)} cm`,
     `8 cm event max pocket: ${fieldMaxCm(moderate, 'forecast').toFixed(1)} cm`,
     `30 cm event max pocket: ${fieldMaxCm(deep, 'forecast').toFixed(1)} cm`,
     `cold/dry max: ${coldDryMax.toFixed(1)} cm`,
     `warm/wet max: ${warmWetMax.toFixed(1)} cm`,
+    `direction contrast stable/moderate/wide: ${stableDirectionDifference.toFixed(2)} / ${moderateDirectionDifference.toFixed(2)} / ${wideDirectionDifference.toFixed(2)} cm`,
   ].join('\n'),
 )

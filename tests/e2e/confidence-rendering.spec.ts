@@ -1,4 +1,5 @@
-import { expect, test, type Page, type Route } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
+import { loadPublicJson } from './public-fixtures'
 
 type LatestFixture = {
   generatedAt: string
@@ -19,10 +20,10 @@ async function interceptLatest(
   page: Page,
   transform: (fixture: LatestFixture) => LatestFixture,
 ) {
-  await page.route('**/data/latest.json', async (route: Route) => {
-    const response = await route.fetch()
-    const fixture = (await response.json()) as LatestFixture
-    await route.fulfill({ response, json: transform(fixture) })
+  const fixture = await loadPublicJson<LatestFixture>('latest.json')
+  const transformed = transform(fixture)
+  await page.route('**/data/latest.json', async (route) => {
+    await route.fulfill({ json: transformed })
   })
 }
 

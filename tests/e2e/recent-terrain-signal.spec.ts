@@ -1,6 +1,7 @@
-import { expect, test, type Page, type Route } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
 import { assessRecentTerrainSignal } from '../../src/lib/recentTerrainSignal'
 import type { LatestData, WeatherHour } from '../../src/types'
+import { loadPublicJson } from './public-fixtures'
 
 function recentHours(endMs: number, count = 72): WeatherHour[] {
   return Array.from({ length: count }, (_, index) => ({
@@ -21,34 +22,31 @@ async function useSignalFixture(
     omitExplicitSignal?: boolean
   },
 ) {
-  await page.route('**/data/latest.json', async (route: Route) => {
-    const response = await route.fetch()
-    const latest = (await response.json()) as LatestData
-    const now = Date.now()
-    const generatedAt = new Date(now - (options.ageHours ?? 0) * 60 * 60 * 1000).toISOString()
-    const observations = recentHours(Date.parse(generatedAt))
-    const recentTerrainSignal = assessRecentTerrainSignal({
-      recentSnowCm: options.recentSnowCm,
-      generatedAt,
-      recentHours: observations,
-    })
-    const summary = {
-      ...latest.summary,
-      recentSnowCm: options.recentSnowCm,
-      forecastSnowCm: options.forecastSnowCm,
-      recentTerrainSignal,
-    }
-    if (options.omitExplicitSignal) delete summary.recentTerrainSignal
+  const latest = await loadPublicJson<LatestData>('latest.json')
+  const now = Date.now()
+  const generatedAt = new Date(now - (options.ageHours ?? 0) * 60 * 60 * 1000).toISOString()
+  const observations = recentHours(Date.parse(generatedAt))
+  const recentTerrainSignal = assessRecentTerrainSignal({
+    recentSnowCm: options.recentSnowCm,
+    generatedAt,
+    recentHours: observations,
+  })
+  const summary = {
+    ...latest.summary,
+    recentSnowCm: options.recentSnowCm,
+    forecastSnowCm: options.forecastSnowCm,
+    recentTerrainSignal,
+  }
+  if (options.omitExplicitSignal) delete summary.recentTerrainSignal
+  const fixture = {
+    ...latest,
+    generatedAt,
+    observations,
+    summary,
+  }
 
-    await route.fulfill({
-      response,
-      json: {
-        ...latest,
-        generatedAt,
-        observations,
-        summary,
-      },
-    })
+  await page.route('**/data/latest.json', async (route) => {
+    await route.fulfill({ json: fixture })
   })
 }
 

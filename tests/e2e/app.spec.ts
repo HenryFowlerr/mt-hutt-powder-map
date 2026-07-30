@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/')
@@ -77,4 +77,81 @@ test('map actions retain clear labels as view state changes', async ({ page }) =
   await viewToggle.click()
   await expect(controls.getByRole('button', { name: 'Switch to perspective view' })).toBeVisible()
   await reset.click()
+})
+
+async function hasCameraRuntime(page: Page) {
+  return page
+    .locator('.map-stage canvas[data-context-guard="ready"]')
+    .waitFor({ state: 'visible', timeout: 8_000 })
+    .then(
+      () => true,
+      () => false,
+    )
+}
+
+test('compass keeps a clear accessible 44px orientation target', async ({ page }) => {
+  const compass = page
+    .getByRole('navigation', { name: 'Map view controls' })
+    .getByRole('button', { name: /Reset map orientation to north/ })
+
+  await expect(compass).toBeVisible()
+  await expect(compass).toHaveAttribute('aria-label', /Reset map orientation to north/)
+  const target = await compass.boundingBox()
+  expect(target).not.toBeNull()
+  expect(target!.width).toBeGreaterThanOrEqual(44)
+  expect(target!.height).toBeGreaterThanOrEqual(44)
+})
+
+test('compass reports the perspective camera bearing and resets north', async ({ page }) => {
+  const cameraRuntimeReady = await hasCameraRuntime(page)
+  test.skip(
+    !cameraRuntimeReady,
+    'The Linux headless renderer did not establish the camera runtime.',
+  )
+
+  const controls = page.getByRole('navigation', { name: 'Map view controls' })
+  const compass = controls.getByRole('button', {
+    name: /Reset map orientation to north/,
+  })
+
+  await expect(compass).toBeVisible()
+  await expect
+    .poll(async () => Number(await compass.getAttribute('data-bearing')))
+    .toBeGreaterThan(1)
+  await expect(compass).toHaveAttribute('data-orientation', 'rotated')
+  await expect(compass).toHaveAttribute('aria-label', /Current bearing \d+ degrees/)
+
+  await compass.click()
+  await expect(compass).toHaveAttribute('data-bearing', '0')
+  await expect(compass).toHaveAttribute('data-orientation', 'north-up')
+  await expect(compass).toHaveAttribute('aria-label', /Currently north up/)
+})
+
+test('compass reports the topographic camera bearing and resets north', async ({ page }) => {
+  const cameraRuntimeReady = await hasCameraRuntime(page)
+  test.skip(
+    !cameraRuntimeReady,
+    'The Linux headless renderer did not establish the camera runtime.',
+  )
+
+  const controls = page.getByRole('navigation', { name: 'Map view controls' })
+  const compass = controls.getByRole('button', {
+    name: /Reset map orientation to north/,
+  })
+  const viewToggle = controls.getByRole('button', {
+    name: 'Switch to topographic view',
+  })
+  await viewToggle.click()
+  await expect(
+    controls.getByRole('button', { name: 'Switch to perspective view' }),
+  ).toBeVisible()
+  await expect
+    .poll(async () => Number(await compass.getAttribute('data-bearing')))
+    .toBeGreaterThan(1)
+  await expect(compass).toHaveAttribute('data-orientation', 'rotated')
+
+  await compass.click()
+  await expect(compass).toHaveAttribute('data-bearing', '0')
+  await expect(compass).toHaveAttribute('data-orientation', 'north-up')
+  await expect(compass).toHaveAttribute('aria-label', /Currently north up/)
 })

@@ -15,6 +15,8 @@ type ViewState = {
   exaggeration: number
   mapView: boolean
   resetCount: number
+  orientationResetCount: number
+  cameraBearing: number
   focusPoint: { lon: number; lat: number } | null
   focusCount: number
   setPowderMode: (mode: PowderMode) => void
@@ -28,6 +30,8 @@ type ViewState = {
   toggleExaggeration: () => void
   toggleMapView: () => void
   resetCamera: () => void
+  resetOrientation: () => void
+  setCameraBearing: (bearing: number) => void
   focusOn: (lon: number, lat: number) => void
   clearFocus: () => void
 }
@@ -44,6 +48,8 @@ export const useViewStore = create<ViewState>((set) => ({
   exaggeration: 1.25,
   mapView: false,
   resetCount: 0,
+  orientationResetCount: 0,
+  cameraBearing: 0,
   focusPoint: null,
   focusCount: 0,
   setPowderMode: (mode) =>
@@ -60,6 +66,15 @@ export const useViewStore = create<ViewState>((set) => ({
   toggleMapView: () =>
     set((state) => ({ mapView: !state.mapView, resetCount: state.resetCount + 1 })),
   resetCamera: () => set((state) => ({ resetCount: state.resetCount + 1, focusPoint: null })),
+  resetOrientation: () =>
+    set((state) => ({ orientationResetCount: state.orientationResetCount + 1 })),
+  setCameraBearing: (bearing) =>
+    set((state) => {
+      const normalizedBearing = ((Math.round(bearing) % 360) + 360) % 360
+      return normalizedBearing === state.cameraBearing
+        ? state
+        : { cameraBearing: normalizedBearing }
+    }),
   // Clicking the same zone again clears the focus and returns to overview.
   focusOn: (lon, lat) =>
     set((state) => {

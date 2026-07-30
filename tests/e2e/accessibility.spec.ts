@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Locator, type Page } from '@playwright/test'
 import type { LatestData } from '../../src/types'
+import { loadPublicJson } from './public-fixtures'
 
 test.describe.configure({ mode: 'serial' })
 test.setTimeout(60_000)
@@ -73,12 +74,17 @@ async function expectNoHighImpactViolations(page: Page) {
 }
 
 async function useMarkerFreeForecast(page: Page) {
+  const latest = await loadPublicJson<LatestData>('latest.json')
+  const markerFree = {
+    ...latest,
+    summary: {
+      ...latest.summary,
+      recentSnowCm: 0,
+      forecastSnowCm: 0,
+    },
+  }
   await page.route('**/data/latest.json', async (route) => {
-    const response = await route.fetch()
-    const latest = (await response.json()) as LatestData
-    latest.summary.recentSnowCm = 0
-    latest.summary.forecastSnowCm = 0
-    await route.fulfill({ response, json: latest })
+    await route.fulfill({ json: markerFree })
   })
 }
 
@@ -94,6 +100,7 @@ test('desktop navigation has a logical focus order and operable state controls',
   const expectedOrder = [
     controls.getByRole('button', { name: 'Switch to topographic view' }),
     controls.getByRole('button', { name: 'Reset map view' }),
+    controls.getByRole('button', { name: /Reset map orientation to north/ }),
     inspector.getByRole('button', { name: 'Brief' }),
     inspector.getByRole('button', { name: 'Outlook' }),
     inspector.getByRole('button', { name: 'Layers' }),
@@ -172,10 +179,13 @@ test.describe('390px mobile accessibility', () => {
 
     const view = page.getByRole('button', { name: 'Switch to topographic view' })
     const reset = page.getByRole('button', { name: 'Reset map view' })
+    const compass = page.getByRole('button', { name: /Reset map orientation to north/ })
     await page.keyboard.press('Tab')
     await expectVisibleFocus(view)
     await page.keyboard.press('Tab')
     await expectVisibleFocus(reset)
+    await page.keyboard.press('Tab')
+    await expectVisibleFocus(compass)
 
     const inspector = page.getByRole('navigation', { name: 'Mountain information' })
     for (const name of ['Brief', 'Outlook', 'Layers']) {

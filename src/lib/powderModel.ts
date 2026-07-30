@@ -32,12 +32,116 @@ function getWindShelter(terrain: TerrainData, windFromDeg: number) {
 const REFERENCE_ELEVATION_M = 1600
 const LAPSE_RATE_C_PER_M = 0.0065
 
-// Per-cell snowfall multiplier: orographic enhancement with height, and a
-// rain cutoff below the freezing level (snow needs ~200 m of cold air).
-function snowfallMultiplier(elevation: number, freezingLevelM?: number) {
+// Aggregate fallback for older data without hourly precipitation/phase.
+// Snow needs a layer of cold air below the 0°C level before reaching terrain.
+function aggregateSnowPhase(elevation: number, freezingLevelM?: number) {
+  return freezingLevelM
+    ? smoothstep(freezingLevelM - 250, freezingLevelM + 100, elevation)
+    : 1
+}
+
+function orographicMultiplier(elevation: number) {
   const orographic = Math.max(0.55, Math.min(1.6, 1 + ((elevation - REFERENCE_ELEVATION_M) / 100) * 0.055))
-  const rainLine = freezingLevelM ? smoothstep(freezingLevelM - 250, freezingLevelM + 100, elevation) : 1
-  return orographic * rainLine
+  return orographic
+}
+
+/**
+ * Circular resultant length recovered from fetch-weather's angular spread.
+ * A stable direction has coherence 1; a widely shifting storm approaches 0.
+ */
+export function windDirectionalCoherence(spreadDeg?: number) {
+  if (spreadDeg === undefined || !Number.isFinite(spreadDeg) || spreadDeg <= 0) {
+    return 1
+  }
+  const spreadRad = (Math.min(180, spreadDeg) * Math.PI) / 180
+  return Math.exp(-0.5 * spreadRad * spreadRad)
+}
+
+export type PowderPhaseHour = {
+  snowfallCm: number
+  precipitationMm?: number
+  freezingLevelM?: number
+}
+
+type PhaseReadyHour = PowderPhaseHour & {
+  precipitationMm: number
+  freezingLevelM: number
+}
+
+function hasPhaseInputs(hour: PowderPhaseHour): hour is PhaseReadyHour {
+  return (
+    Number.isFinite(hour.snowfallCm) &&
+    hour.snowfallCm >= 0 &&
+    hour.precipitationMm !== undefined &&
+    Number.isFinite(hour.precipitationMm) &&
+    hour.precipitationMm >= 0 &&
+    hour.freezingLevelM !== undefined &&
+    Number.isFinite(hour.freezingLevelM)
+  )
+}
+
+/**
+ * Adjusts an official hourly snowfall series from the 1600 m reference point
+ * to another elevation. The reference forecast remains the anchor. Only the
+ * phase difference implied by that hour's precipitation and freezing level is
+ * added or removed, using Open-Meteo's documented 0.7 cm snow per mm water.
+ */
+export function hourlyPhaseSnowCm(
+  hours: readonly PowderPhaseHour[] | undefined,
+  elevationM: number,
+  fallbackSnowCm: number,
+) {
+  if (!hours?.some(hasPhaseInputs)) return fallbackSnowCm
+
+  let total = 0
+  let officialTotal = 0
+  for (const hour of hours) {
+    if (!Number.isFinite(hour.snowfallCm) || hour.snowfallCm < 0) continue
+    const officialSnowCm = hour.snowfallCm
+    officialTotal += officialSnowCm
+    if (!hasPhaseInputs(hour)) {
+      total += officialSnowCm
+      continue
+    }
+
+    const referencePhase = aggregateSnowPhase(REFERENCE_ELEVATION_M, hour.freezingLevelM)
+    const elevationPhase = aggregateSnowPhase(elevationM, hour.freezingLevelM)
+    const phaseShiftCm =
+      hour.precipitationMm * 0.7 * (elevationPhase - referencePhase)
+    total += Math.max(0, officialSnowCm + phaseShiftCm)
+  }
+
+  // The summary snowfall total is authoritative at the reference elevation.
+  // Preserve it exactly even when hourly values have different rounding.
+  return Math.max(0, total + fallbackSnowCm - officialTotal)
+}
+
+function phaseSnowLookup(
+  terrain: TerrainData,
+  hours: readonly PowderPhaseHour[] | undefined,
+  fallbackSnowCm: number,
+) {
+  if (!hours?.some(hasPhaseInputs)) return null
+  const minimum = Math.floor(terrain.minElevation) - 1
+  const maximum = Math.ceil(terrain.maxElevation) + 1
+  const values = new Float32Array(maximum - minimum + 1)
+  for (let elevation = minimum; elevation <= maximum; elevation += 1) {
+    values[elevation - minimum] = hourlyPhaseSnowCm(hours, elevation, fallbackSnowCm)
+  }
+  return { minimum, values }
+}
+
+function lookupSnow(
+  lookup: ReturnType<typeof phaseSnowLookup>,
+  elevation: number,
+  fallbackSnowCm: number,
+) {
+  if (!lookup) return fallbackSnowCm
+  const index = Math.max(
+    0,
+    Math.min(lookup.values.length - 1, Math.round(elevation) - lookup.minimum),
+  )
+  return lookup.values[index]
 }
 
 // Terrain-aware powder deposition model shared by the browser overlay and
@@ -54,11 +158,15 @@ export type PowderWeather = {
   forecastWindDirectionDeg?: number
   forecastAvgWindKph?: number
   forecastMaxGustKph?: number
+  windDirectionSpreadDeg?: number
+  forecastWindDirectionSpreadDeg?: number
   forecastTemperatureMaxC?: number
   forecastTemperatureMinC?: number
   forecastFreezingLevelM?: number
   forecastRainMm?: number
   forecastHoursAboveZero?: number
+  recentPhaseHours?: readonly PowderPhaseHour[]
+  forecastPhaseHours?: readonly PowderPhaseHour[]
   temperatureMaxC: number
   temperatureMinC: number
   cloudLowPct?: number
@@ -99,6 +207,7 @@ function cellFactors(
   terrain: TerrainData,
   analysis: TerrainAnalysis,
   weather: PowderWeather,
+  hourlyPhaseApplied = false,
 ): CellFactors {
   const elevation = terrain.heights[index]
   const slope = analysis.slopeDeg[index]
@@ -115,26 +224,31 @@ function cellFactors(
   const gustKph = weather.maxGustKph ?? weather.avgWindKph * 1.6
   const transportFactor = smoothstep(15, 45, weather.avgWindKph)
   const overScourFactor = smoothstep(55, 85, gustKph)
+  const directionalCoherence = windDirectionalCoherence(
+    weather.windDirectionSpreadDeg,
+  )
 
   const concavityFactor = analysis.gullyFactor[index]
 
   // Upwind horizon (Winstral Sx): deposition behind ridge crests, stripping
   // on open windward ground. This carries more weight than aspect alone —
   // a NE face right behind a crest loads far more than an open NE face.
-  const shelterFactor = smoothstep(2, 13, shelterDeg)
+  const rawShelterFactor = smoothstep(2, 13, shelterDeg)
+  const shelterFactor = rawShelterFactor * directionalCoherence
   const exposureFactor = smoothstep(1, 10, -shelterDeg)
 
   const leeFactor =
-    (0.45 * leeAlignment * aspectRelevance + 0.55 * shelterFactor) *
+    (0.45 * leeAlignment * aspectRelevance + 0.55 * rawShelterFactor) *
     transportFactor *
-    (0.55 + 0.45 * concavityFactor)
+    (0.55 + 0.45 * concavityFactor) *
+    directionalCoherence
 
   // Exposed convex/windward terrain loses snow to wind; worse in gusts.
   const windward = smoothstep(110, 20, angularDifference(aspect, weather.mainWindDirectionDeg)) * aspectRelevance
   const scourPenalty = clamp01(
     analysis.ridgeExposure[index] * (0.3 + 0.5 * transportFactor) +
-      exposureFactor * (0.3 + 0.5 * transportFactor) +
-      windward * transportFactor * 0.3 +
+      exposureFactor * (0.3 + 0.5 * transportFactor) * directionalCoherence +
+      windward * transportFactor * 0.3 * directionalCoherence +
       analysis.ridgeExposure[index] * overScourFactor * 0.4,
   )
 
@@ -164,7 +278,11 @@ function cellFactors(
 
   // Very steep terrain sheds new snow (sluffing) before it can pile up.
   const sluff = smoothstep(48, 60, slope)
-  const snowMultiplier = snowfallMultiplier(elevation, weather.freezingLevelM) * (1 - 0.7 * sluff)
+  const phase = hourlyPhaseApplied
+    ? 1
+    : aggregateSnowPhase(elevation, weather.freezingLevelM)
+  const snowMultiplier =
+    orographicMultiplier(elevation) * phase * (1 - 0.7 * sluff)
 
   return {
     leeFactor,
@@ -224,14 +342,53 @@ export function buildPowderField(
   const recentSignal = clamp01(weather.recentSnowCm / 35)
   const forecastSignal = clamp01(weather.forecastSnowCm / 35)
   const forecastModeWeather = forecastWeather(weather)
+  const recentPhaseLookup = phaseSnowLookup(
+    terrain,
+    weather.recentPhaseHours,
+    weather.recentSnowCm,
+  )
+  const forecastPhaseLookup = phaseSnowLookup(
+    terrain,
+    weather.forecastPhaseHours,
+    weather.forecastSnowCm,
+  )
 
   for (let index = 0; index < size; index += 1) {
-    const recentFactors = cellFactors(index, terrain, analysis, weather)
-    const forecastFactors = cellFactors(index, terrain, analysis, forecastModeWeather)
-    recentScore[index] = scoreCell(recentSignal, recentFactors)
-    forecastScore[index] = scoreCell(forecastSignal, forecastFactors)
-    recentCm[index] = expectedCm(weather.recentSnowCm, recentFactors)
-    forecastCm[index] = expectedCm(weather.forecastSnowCm, forecastFactors)
+    const elevation = terrain.heights[index]
+    const recentBaseSnowCm = lookupSnow(
+      recentPhaseLookup,
+      elevation,
+      weather.recentSnowCm,
+    )
+    const forecastBaseSnowCm = lookupSnow(
+      forecastPhaseLookup,
+      elevation,
+      weather.forecastSnowCm,
+    )
+    const recentFactors = cellFactors(
+      index,
+      terrain,
+      analysis,
+      weather,
+      recentPhaseLookup !== null,
+    )
+    const forecastFactors = cellFactors(
+      index,
+      terrain,
+      analysis,
+      forecastModeWeather,
+      forecastPhaseLookup !== null,
+    )
+    recentScore[index] = scoreCell(
+      recentPhaseLookup ? clamp01(recentBaseSnowCm / 35) : recentSignal,
+      recentFactors,
+    )
+    forecastScore[index] = scoreCell(
+      forecastPhaseLookup ? clamp01(forecastBaseSnowCm / 35) : forecastSignal,
+      forecastFactors,
+    )
+    recentCm[index] = expectedCm(recentBaseSnowCm, recentFactors)
+    forecastCm[index] = expectedCm(forecastBaseSnowCm, forecastFactors)
     // Keep light events in the field. The display layer decides how strongly
     // to show them relative to the event, while the centimetre values remain
     // honest and available to summaries/tooltips.
@@ -255,6 +412,7 @@ function forecastWeather(weather: PowderWeather): PowderWeather {
     mainWindDirectionDeg: weather.forecastWindDirectionDeg ?? weather.mainWindDirectionDeg,
     avgWindKph: weather.forecastAvgWindKph ?? weather.avgWindKph,
     maxGustKph: weather.forecastMaxGustKph ?? weather.maxGustKph,
+    windDirectionSpreadDeg: weather.forecastWindDirectionSpreadDeg,
     temperatureMaxC: weather.forecastTemperatureMaxC ?? weather.temperatureMaxC,
     temperatureMinC: weather.forecastTemperatureMinC ?? weather.temperatureMinC,
     freezingLevelM: weather.forecastFreezingLevelM ?? weather.freezingLevelM,

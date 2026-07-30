@@ -53,9 +53,12 @@ function skiAreaTarget(terrain: TerrainData, trails: TrailCollection, exaggerati
 
 function CameraRig({ terrain, trails }: { terrain: TerrainData; trails: TrailCollection }) {
   const controlsRef = useRef<OrbitControlsImpl | null>(null)
+  const orientationResetCount = useViewStore((state) => state.orientationResetCount)
   const resetCount = useViewStore((state) => state.resetCount)
   const mapView = useViewStore((state) => state.mapView)
   const exaggeration = useViewStore((state) => state.exaggeration)
+  const setCameraBearing = useViewStore((state) => state.setCameraBearing)
+  const lastOrientationResetCount = useRef(orientationResetCount)
 
   const target = useMemo(
     () => skiAreaTarget(terrain, trails, exaggeration),
@@ -72,6 +75,17 @@ function CameraRig({ terrain, trails }: { terrain: TerrainData; trails: TrailCol
     [target],
   )
 
+  const reportBearing = useCallback(() => {
+    const controls = controlsRef.current
+    if (!controls) return
+    const forwardX = controls.target.x - controls.object.position.x
+    const forwardZ = controls.target.z - controls.object.position.z
+    if (Math.hypot(forwardX, forwardZ) < 0.0001) return
+    // World north is -Z and east is +X, matching lonLatToXZ().
+    const bearing = THREE.MathUtils.radToDeg(Math.atan2(forwardX, -forwardZ))
+    setCameraBearing(bearing)
+  }, [setCameraBearing])
+
   useEffect(() => {
     const controls = controlsRef.current
     if (!controls) return
@@ -83,7 +97,26 @@ function CameraRig({ terrain, trails }: { terrain: TerrainData; trails: TrailCol
     }
     controls.target.copy(target)
     controls.update()
-  }, [resetCount, mapView, target, perspectivePosition, orthoPosition])
+    reportBearing()
+  }, [resetCount, mapView, target, perspectivePosition, orthoPosition, reportBearing])
+
+  useEffect(() => {
+    if (orientationResetCount === lastOrientationResetCount.current) return
+    lastOrientationResetCount.current = orientationResetCount
+    const controls = controlsRef.current
+    if (!controls) return
+
+    const offset = controls.object.position.clone().sub(controls.target)
+    const horizontalDistance = Math.max(0.001, Math.hypot(offset.x, offset.z))
+    controls.object.position.set(
+      controls.target.x,
+      controls.target.y + offset.y,
+      controls.target.z + horizontalDistance,
+    )
+    controls.object.up.set(0, 1, 0)
+    controls.update()
+    reportBearing()
+  }, [orientationResetCount, reportBearing])
 
   // Zone click in the panel flies the camera to that zone.
   const focusPoint = useViewStore((state) => state.focusPoint)
@@ -101,8 +134,9 @@ function CameraRig({ terrain, trails }: { terrain: TerrainData; trails: TrailCol
       controls.object.position.copy(zoneTarget.clone().add(new THREE.Vector3(2.5, 2, 2)))
     }
     controls.update()
+    reportBearing()
     // focusCount retriggers the fly-to even for the same zone.
-  }, [focusCount, focusPoint, terrain, exaggeration])
+  }, [focusCount, focusPoint, terrain, exaggeration, reportBearing])
 
   return (
     <>
@@ -121,6 +155,7 @@ function CameraRig({ terrain, trails }: { terrain: TerrainData; trails: TrailCol
         maxDistance={26}
         minZoom={22}
         maxZoom={900}
+        onChange={reportBearing}
       />
     </>
   )

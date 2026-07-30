@@ -16,6 +16,7 @@ import {
   validateTerrainPayload,
   validateTrailPayload,
 } from './lib/dataSchema'
+import { loadVerifiedJson, type DataProvenance } from './lib/dataCache'
 import type { LatestData, TerrainData, TrailCollection } from './types'
 import { useViewStore } from './state/viewStore'
 import './index.css'
@@ -58,6 +59,7 @@ function App() {
   const [data, setData] = useState<AppData | null>(null)
   const [overrides, setOverrides] = useState<TrailCollection | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [dataProvenance, setDataProvenance] = useState<DataProvenance | null>(null)
   const [loadAttempt, setLoadAttempt] = useState(0)
   const inspectorView = useViewStore((state) => state.inspectorView)
   const inspectorScrollRef = useRef<HTMLDivElement>(null)
@@ -70,13 +72,30 @@ function App() {
     let cancelled = false
     setError(null)
     Promise.all([
-      loadJson('data/terrain.json', validateTerrainPayload),
-      loadJson('data/trails.geojson', validateTrailPayload),
-      loadJson('data/latest.json', validateLatestPayload),
+      loadVerifiedJson('data/terrain.json', validateTerrainPayload),
+      loadVerifiedJson('data/trails.geojson', validateTrailPayload),
+      loadVerifiedJson('data/latest.json', validateLatestPayload),
     ])
-      .then(([terrain, trails, latest]) => {
+      .then(([terrainResult, trailsResult, latestResult]) => {
         if (!cancelled) {
-          setData({ terrain, trails: applyTrailOverrides(trails), latest })
+          const cachedResults = [terrainResult, trailsResult, latestResult].filter(
+            (result) => result.provenance.source === 'cache',
+          )
+          const oldestCachedAt = cachedResults
+            .map((result) => result.provenance.cachedAt)
+            .filter((cachedAt): cachedAt is string => Boolean(cachedAt))
+            .sort()[0]
+
+          setData({
+            terrain: terrainResult.value,
+            trails: applyTrailOverrides(trailsResult.value),
+            latest: latestResult.value,
+          })
+          setDataProvenance(
+            oldestCachedAt
+              ? { source: 'cache', cachedAt: oldestCachedAt }
+              : { source: 'network', cachedAt: null },
+          )
         }
       })
       .catch((loadError: unknown) => {
@@ -99,6 +118,14 @@ function App() {
     }
   }, [loadAttempt])
 
+  useEffect(() => {
+    if (dataProvenance?.source !== 'cache') return
+
+    const refreshFromNetwork = () => setLoadAttempt((attempt) => attempt + 1)
+    window.addEventListener('online', refreshFromNetwork)
+    return () => window.removeEventListener('online', refreshFromNetwork)
+  }, [dataProvenance?.source])
+
   // Terrain analysis and the powder field are computed once per data load
   // and shared by the 3D scene and the side panel.
   const derived = useMemo(() => {
@@ -113,11 +140,14 @@ function App() {
       forecastWindDirectionDeg: data.latest.summary.forecastWindDirectionDeg,
       forecastAvgWindKph: data.latest.summary.forecastAvgWindKph,
       forecastMaxGustKph: data.latest.summary.forecastMaxGustKph,
+      forecastWindDirectionSpreadDeg: data.latest.summary.windDirectionSpreadDeg,
       forecastTemperatureMaxC: data.latest.summary.forecastTemperatureMaxC,
       forecastTemperatureMinC: data.latest.summary.forecastTemperatureMinC,
       forecastFreezingLevelM: data.latest.summary.forecastFreezingLevelM,
       forecastRainMm: data.latest.summary.forecastRainMm,
       forecastHoursAboveZero: data.latest.summary.forecastHoursAboveZero,
+      recentPhaseHours: data.latest.observations,
+      forecastPhaseHours: data.latest.forecast.slice(0, 72),
       temperatureMaxC: data.latest.summary.temperatureMaxC,
       temperatureMinC: data.latest.summary.temperatureMinC,
       cloudLowPct: data.latest.summary.cloudLowPct,
@@ -146,7 +176,7 @@ function App() {
   return (
     <main className="app-shell">
       <header className="workspace-header">
-        <BrandHeader generatedAt={data?.latest.generatedAt} />
+        <BrandHeader generatedAt={data?.latest.generatedAt} provenance={dataProvenance} />
         <Toolbar />
       </header>
       <div className="workspace-body">
@@ -191,6 +221,12 @@ function App() {
         <aside className="inspector-shell" aria-label="Mountain information">
           <InspectorNav />
           <div ref={inspectorScrollRef} className="inspector-scroll">
+            {dataProvenance?.source === 'cache' ? (
+              <div className="cached-data-notice" role="note">
+                <strong>Offline data</strong>
+                <span>Showing the last verified mountain update. Fresh data loads when you reconnect.</span>
+              </div>
+            ) : null}
             {inspectorView === 'brief' && data && derived ? (
               <WeatherBrief
                 latest={data.latest}
@@ -203,7 +239,10 @@ function App() {
               />
             ) : null}
             {inspectorView === 'forecast' && data?.latest.daily ? (
-              <ForecastPanel daily={data.latest.daily} />
+              <ForecastPanel
+                daily={data.latest.daily}
+                generatedAt={data.latest.generatedAt}
+              />
             ) : null}
             {inspectorView === 'layers' ? <LayersPanel /> : null}
           </div>
