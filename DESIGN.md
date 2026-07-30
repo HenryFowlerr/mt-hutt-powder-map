@@ -19,6 +19,8 @@ content. Interface chrome should answer three questions quickly:
 - Translucent material is reserved for navigation and floating controls. Content inside the snow
   brief uses dividers and whitespace instead of nested cards.
 - The custom contour-mountain mark and condition glyphs are the core owned visual assets.
+- Weather-state artwork uses the flat Meteocons pack at one primary decision point and in expanded
+  forecast detail. Animated weather art must never repeat down an entire list.
 
 ## Core tokens
 

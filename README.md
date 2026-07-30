@@ -46,6 +46,7 @@ Push to GitHub, enable GitHub Pages for Actions, then run the `Deploy` workflow 
 ## Attribution
 
 - Weather data: Open-Meteo.
+- Weather state artwork: [Meteocons](https://meteocons.com/) by Bas Milius, MIT licensed.
 - Elevation replacement target: LINZ / Toitu Te Whenua open elevation data.
 - Trail data replacement target: OpenStreetMap/OpenSkiMap where available, with ODbL attribution.
 - Official Mt Hutt/NZSki trail map should be used only as a visual reference unless permission/licensing allows more.

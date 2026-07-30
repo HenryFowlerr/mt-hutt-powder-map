@@ -9,7 +9,8 @@ import type { TerrainAnalysis } from '../lib/terrainAnalysis'
 import { buildZoneSummaries } from '../lib/zoneSummary'
 import { useViewStore } from '../state/viewStore'
 import type { LatestData, TerrainData, TrailCollection, WeatherHour } from '../types'
-import { ConditionGlyph, WindArcIcon } from './AlpineIcons'
+import { WindArcIcon } from './AlpineIcons'
+import { Meteocon } from './Meteocon'
 
 type Props = {
   latest: LatestData
@@ -37,6 +38,15 @@ function windCompass(degrees: number) {
 function formatSnowDepth(value: number) {
   if (value > 0 && value < 1) return value.toFixed(1)
   return String(Math.round(value))
+}
+
+function stormTime(value: string | undefined) {
+  if (!value) return null
+  return new Date(value).toLocaleDateString('en-NZ', {
+    weekday: 'short',
+    hour: 'numeric',
+    minute: '2-digit',
+  })
 }
 
 function buildOutlook(forecast: WeatherHour[]): DayOutlook[] {
@@ -152,6 +162,8 @@ export function WeatherBrief({ latest, field, terrain, analysis, trails, weather
       ? (latest.summary.forecastFreezingLevelM ?? latest.summary.freezingLevelM)
       : latest.summary.freezingLevelM
   const snowline = freezingCopy(effectiveFreezingLevel)
+  const stormStart = stormTime(latest.summary.stormStartAt)
+  const stormEnd = stormTime(latest.summary.stormEndAt)
   const mountainProfile = [
     { label: 'Summit', elevation: 2066 },
     { label: 'Mid', elevation: 1820 },
@@ -212,6 +224,19 @@ export function WeatherBrief({ latest, field, terrain, analysis, trails, weather
           </p>
         </section>
 
+        {mode === 'forecast' && stormStart && stormEnd ? (
+          <div className="storm-window-read" aria-label={`Forecast storm window ${stormStart} to ${stormEnd}`}>
+            <span>
+              <small>Storm window</small>
+              <strong>{stormStart} → {stormEnd}</strong>
+            </span>
+            <span>
+              <small>Peak hour</small>
+              <strong>{(latest.summary.stormPeakSnowCm ?? 0).toFixed(1)} cm</strong>
+            </span>
+          </div>
+        ) : null}
+
         {bestDay ? (
           <button type="button" className="ski-window" onClick={toggleForecast}>
             <span>
@@ -245,7 +270,7 @@ export function WeatherBrief({ latest, field, terrain, analysis, trails, weather
 
         <div className="condition-line">
           <span className="condition-glyph">
-            <ConditionGlyph condition={advice.sky} size={25} />
+            <Meteocon condition={advice.sky} size={58} className="primary-meteocon" />
           </span>
           <span>
             <strong>{advice.sky}</strong>
@@ -390,6 +415,11 @@ export function WeatherBrief({ latest, field, terrain, analysis, trails, weather
             <section>
               <h3>Why the map looks this way</h3>
               <p>{mode === 'forecast' ? 'Forecast' : 'Recent'} {windFrom} wind loads sheltered {leeSide}-facing bowls and gullies while exposed ridges are more likely to scour.</p>
+              {mode === 'forecast' && latest.summary.windDirectionSpreadDeg !== undefined ? (
+                <p className="model-calibration">
+                  Wind direction spread: {Math.round(latest.summary.windDirectionSpreadDeg)}° · wider shifts reduce terrain certainty.
+                </p>
+              ) : null}
             </section>
           </div>
         </details>

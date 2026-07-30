@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { X } from 'lucide-react'
 import { ConditionGlyph } from './AlpineIcons'
+import { Meteocon } from './Meteocon'
 import { conditionsAdvice } from '../lib/advice'
 import { useViewStore } from '../state/viewStore'
 import type { DailyForecast } from '../types'
@@ -67,6 +68,11 @@ export function ForecastPanel({ daily }: Props) {
                 className="forecast-day"
                 onClick={() => setOpenDay(isOpen ? null : day.date)}
                 aria-expanded={isOpen}
+                aria-label={`${dayLabel(day.date, index)}, ${
+                  day.snowfallCm >= 0.5 ? `${Math.round(day.snowfallCm)} centimetres snow` : 'no meaningful snow'
+                }, ${Math.round(day.tempMinC)} to ${Math.round(day.tempMaxC)} degrees${
+                  index >= 7 ? ', long-range trend' : ''
+                }`}
               >
                 <span className="fd-icon"><ConditionGlyph condition={advice.sky} size={19} /></span>
                 <span className="fd-label">
@@ -89,7 +95,8 @@ export function ForecastPanel({ daily }: Props) {
               {isOpen ? (
                 <div className="forecast-detail">
                   <p className="fd-note">
-                    <ConditionGlyph condition={advice.sky} size={18} /> {advice.sky} · {advice.note}
+                    <Meteocon condition={advice.sky} size={40} className="forecast-meteocon" />
+                    <span><strong>{advice.sky}</strong> · {advice.note}</span>
                   </p>
                   <div className="fd-grid">
                     <div>
