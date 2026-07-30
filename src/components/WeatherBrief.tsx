@@ -96,7 +96,7 @@ export function WeatherBrief({ latest, field, terrain, analysis, trails, weather
   const setPowderMode = useViewStore((state) => state.setPowderMode)
   const showIce = useViewStore((state) => state.showIce)
   const focusOn = useViewStore((state) => state.focusOn)
-  const toggleForecast = useViewStore((state) => state.toggleForecast)
+  const setInspectorView = useViewStore((state) => state.setInspectorView)
   const mode = powderMode === 'forecast' ? 'forecast' : 'recent'
   const generated = new Date(latest.generatedAt)
   const isStale = Date.now() - generated.getTime() > 24 * 60 * 60 * 1000
@@ -176,8 +176,8 @@ export function WeatherBrief({ latest, field, terrain, analysis, trails, weather
   }))
 
   return (
-    <aside className="snow-brief" aria-label="Mt Hutt snow brief">
-      <div className="brief-scroll">
+    <section className="brief-view" aria-label="Mt Hutt snow brief">
+      <div className="brief-content">
         <div className="brief-topline">
           <span>Snow brief</span>
           <span className={`model-status ${latest.summary.confidence}`}>
@@ -238,7 +238,7 @@ export function WeatherBrief({ latest, field, terrain, analysis, trails, weather
         ) : null}
 
         {bestDay ? (
-          <button type="button" className="ski-window" onClick={toggleForecast}>
+          <button type="button" className="ski-window" onClick={() => setInspectorView('forecast')}>
             <span>
               <small>Best window</small>
               <strong>{bestDay.label}</strong>
@@ -344,7 +344,7 @@ export function WeatherBrief({ latest, field, terrain, analysis, trails, weather
                 <span>Five-day read</span>
                 <h2>The week</h2>
               </div>
-              <button type="button" onClick={toggleForecast}>14 days</button>
+              <button type="button" onClick={() => setInspectorView('forecast')}>14 days</button>
             </div>
             <div className="week-strip">
               {outlook.map((day) => (
@@ -440,6 +440,6 @@ export function WeatherBrief({ latest, field, terrain, analysis, trails, weather
           <small>Experimental terrain model. Never a safety or access decision.</small>
         </footer>
       </div>
-    </aside>
+    </section>
   )
 }

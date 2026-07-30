@@ -16,7 +16,7 @@ export function MapLegend({ field }: Props) {
   const scale = powderDisplayScale(field, mode)
 
   return (
-    <aside className="map-legend" aria-label="Powder depth map legend">
+    <aside className="map-key" aria-label="Powder depth map legend">
       <div className="legend-title">
         <span>
           <i />

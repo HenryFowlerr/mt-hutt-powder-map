@@ -40,14 +40,20 @@ rounding every row or metric into an independent card.
 
 ## Interaction hierarchy
 
+- The interface has three structural regions: a global command bar, the terrain map, and one
+  edge-to-edge inspector. The map is never used as wallpaper behind floating content.
+- Brief, Outlook, and Layers are mutually exclusive inspector views. A person always knows where
+  information will appear, and opening one view never covers another.
 - The snow brief defaults to the next 72 hours because it supports planning.
 - Recent and forecast snow are a two-option segmented control, never independent toggles.
-- Technical map layers live behind one Layers control.
-- The 14-day forecast is a secondary panel, not permanently competing with the map.
+- Technical map layers live in the same inspector as the forecast and snow brief.
+- The 14-day forecast is a secondary workspace view, not another surface over the terrain.
 - Detailed model evidence is available under “Inside the model.”
 - Zone rows move the camera to the actual terrain feature.
 - The map adapts its visual threshold to each event, while legend labels and zone values always
   remain absolute centimetres. A dusting may be faint, but it is never silently discarded.
+- Mobile follows the same hierarchy vertically: command bar, map, inspector navigation, content.
+  It does not turn desktop panels into a stack of overlapping cards.
 
 ## Anti-slop guardrails
 
@@ -59,6 +65,8 @@ rounding every row or metric into an independent card.
 - Add a new colour only when it represents new information on the map.
 - A new surface must have a distinct hierarchy or interaction purpose; otherwise use whitespace and
   a divider.
+- Avoid detached rounded containers for major page regions. Radius belongs to controls and small
+  stateful elements, not to every section of the application.
 
 ## Accessibility and motion
 

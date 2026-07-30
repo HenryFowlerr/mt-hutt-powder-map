@@ -1,15 +1,18 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { MountainScene } from './components/MountainScene'
 import { Toolbar } from './components/Toolbar'
 import { WeatherBrief } from './components/WeatherBrief'
 import { ForecastPanel } from './components/ForecastPanel'
 import { BrandHeader } from './components/BrandHeader'
 import { MapLegend } from './components/MapLegend'
+import { InspectorNav } from './components/InspectorNav'
+import { LayersPanel } from './components/LayersPanel'
 import { buildPowderField, type PowderWeather } from './lib/powderModel'
 import { buildIceField, type IceWeather } from './lib/iceModel'
 import { analyzeTerrain } from './lib/terrainAnalysis'
 import { applyTrailOverrides } from './lib/trailOverrides'
 import type { LatestData, TerrainData, TrailCollection } from './types'
+import { useViewStore } from './state/viewStore'
 import './index.css'
 
 type AppData = {
@@ -30,6 +33,12 @@ function App() {
   const [data, setData] = useState<AppData | null>(null)
   const [overrides, setOverrides] = useState<TrailCollection | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const inspectorView = useViewStore((state) => state.inspectorView)
+  const inspectorScrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    inspectorScrollRef.current?.scrollTo({ top: 0 })
+  }, [inspectorView])
 
   useEffect(() => {
     Promise.all([
@@ -95,40 +104,53 @@ function App() {
 
   return (
     <main className="app-shell">
-      <div className="map-stage">
-        {data && derived ? (
-          <MountainScene
-            terrain={data.terrain}
-            trails={data.trails}
-            analysis={derived.analysis}
-            field={derived.field}
-            weather={derived.weather}
-            iceField={derived.iceField}
-            iceWeather={derived.iceWeather}
-            overrides={overrides}
-          />
-        ) : (
-          <div className="loading-state">
-            <h1>Mt Hutt Powder Map</h1>
-            <p>{error ?? 'Loading mountain data...'}</p>
+      <header className="workspace-header">
+        <BrandHeader generatedAt={data?.latest.generatedAt} />
+        <Toolbar />
+      </header>
+      <div className="workspace-body">
+        <section className="map-stage" aria-label="Interactive Mt Hutt terrain map">
+          {data && derived ? (
+            <MountainScene
+              terrain={data.terrain}
+              trails={data.trails}
+              analysis={derived.analysis}
+              field={derived.field}
+              weather={derived.weather}
+              iceField={derived.iceField}
+              iceWeather={derived.iceWeather}
+              overrides={overrides}
+            />
+          ) : (
+            <div className="loading-state">
+              <h1>Mt Hutt Powder Map</h1>
+              <p>{error ?? 'Loading mountain data...'}</p>
+            </div>
+          )}
+          {derived ? <MapLegend field={derived.field} /> : null}
+        </section>
+
+        <aside className="inspector-shell" aria-label="Mountain information">
+          <InspectorNav />
+          <div ref={inspectorScrollRef} className="inspector-scroll">
+            {inspectorView === 'brief' && data && derived ? (
+              <WeatherBrief
+                latest={data.latest}
+                field={derived.field}
+                terrain={data.terrain}
+                analysis={derived.analysis}
+                trails={data.trails}
+                weather={derived.weather}
+                iceField={derived.iceField}
+              />
+            ) : null}
+            {inspectorView === 'forecast' && data?.latest.daily ? (
+              <ForecastPanel daily={data.latest.daily} />
+            ) : null}
+            {inspectorView === 'layers' ? <LayersPanel /> : null}
           </div>
-        )}
+        </aside>
       </div>
-      <BrandHeader generatedAt={data?.latest.generatedAt} />
-      <Toolbar />
-      {derived ? <MapLegend field={derived.field} /> : null}
-      {data?.latest.daily ? <ForecastPanel daily={data.latest.daily} /> : null}
-      {data && derived ? (
-        <WeatherBrief
-          latest={data.latest}
-          field={derived.field}
-          terrain={data.terrain}
-          analysis={derived.analysis}
-          trails={data.trails}
-          weather={derived.weather}
-          iceField={derived.iceField}
-        />
-      ) : null}
     </main>
   )
 }

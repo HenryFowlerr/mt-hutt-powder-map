@@ -7,7 +7,7 @@ type Props = {
 
 export function BrandHeader({ generatedAt }: Props) {
   return (
-    <header className="brand-header">
+    <div className="product-identity">
       <span className="brand-mark">
         <HuttMark size={32} />
       </span>
@@ -21,6 +21,6 @@ export function BrandHeader({ generatedAt }: Props) {
           ? `Updated ${formatDistanceToNow(new Date(generatedAt), { addSuffix: true })}`
           : 'Loading mountain'}
       </span>
-    </header>
+    </div>
   )
 }

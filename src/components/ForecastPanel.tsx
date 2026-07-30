@@ -1,9 +1,7 @@
 import { useState } from 'react'
-import { X } from 'lucide-react'
 import { ConditionGlyph } from './AlpineIcons'
 import { Meteocon } from './Meteocon'
 import { conditionsAdvice } from '../lib/advice'
-import { useViewStore } from '../state/viewStore'
 import type { DailyForecast } from '../types'
 
 type Props = {
@@ -26,27 +24,17 @@ function elevationTemperature(temperatureC: number, elevationM: number) {
 }
 
 export function ForecastPanel({ daily }: Props) {
-  const forecastOpen = useViewStore((state) => state.forecastOpen)
-  const toggleForecast = useViewStore((state) => state.toggleForecast)
   const [openDay, setOpenDay] = useState<string | null>(null)
-
-  if (!forecastOpen) return null
 
   const maxSnow = Math.max(3, ...daily.map((day) => day.snowfallCm))
 
   return (
-    <aside className="forecast-panel" aria-label="14 day forecast">
-      <header className="forecast-header">
-        <div>
-          <p className="panel-eyebrow">Mt Hutt · long range</p>
-          <h2>14-day forecast</h2>
-        </div>
-        <button type="button" className="forecast-close" onClick={toggleForecast} aria-label="Close forecast">
-          <X size={18} />
-        </button>
+    <section className="outlook-view" aria-label="14 day forecast">
+      <header className="inspector-view-header">
+        <p>Mt Hutt · long range</p>
+        <h1>14-day outlook</h1>
+        <span>Select a day for snowfall, wind, freezing level, and conditions by elevation.</span>
       </header>
-
-      <p className="forecast-sub">Select a day for snowfall, wind, freezing level, and layers.</p>
 
       <ul className="forecast-days">
         {daily.map((day, index) => {
@@ -151,6 +139,6 @@ export function ForecastPanel({ daily }: Props) {
           )
         })}
       </ul>
-    </aside>
+    </section>
   )
 }
