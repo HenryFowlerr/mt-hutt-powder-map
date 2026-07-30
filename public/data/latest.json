@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-07-29T22:15:45.885Z",
+  "generatedAt": "2026-07-30T00:10:16.236Z",
   "location": "Mt Hutt",
   "summary": {
     "recentSnowCm": 0,
     "forecastSnowCm": 5.9,
-    "mainWindDirectionDeg": 297,
+    "mainWindDirectionDeg": 298,
     "avgWindKph": 5,
     "temperatureMinC": -11.4,
     "temperatureMaxC": -0.1,
@@ -12,34 +12,27 @@
     "headline": "Limited recent snow signal; sheltered upper terrain still scores best if snow stayed cold.",
     "reasons": [
       "0 cm estimated snowfall in the last 72 hours from Open-Meteo.",
-      "Mean recent wind around 5 km/h from 297 degrees.",
+      "Mean recent wind around 5 km/h from 298 degrees.",
       "Forecast wind trends 10 km/h from 266 degrees over the next 72 hours.",
       "Terrain score favours cold upper mountain bowls, gullies, and lee-facing aspects."
     ],
-    "maxGustKph": 39,
+    "maxGustKph": 44,
     "forecastWindDirectionDeg": 266,
     "forecastAvgWindKph": 10,
     "forecastMaxGustKph": 106,
     "forecastTemperatureMinC": -11.2,
     "forecastTemperatureMaxC": 0.1,
-    "cloudLowPct": 62,
+    "cloudLowPct": 70,
     "cloudMidPct": 1,
-    "cloudHighPct": 42,
-    "freezingLevelM": 1935,
-    "cloudMeanPct": 77,
+    "cloudHighPct": 43,
+    "freezingLevelM": 1943,
+    "cloudMeanPct": 83,
     "meltFreezeCycles": 0,
     "recentRainMm": 0,
     "hoursAboveZero": 0,
     "hoursSinceSnow": 999
   },
   "observations": [
-    {
-      "time": "2026-07-27T00:00",
-      "temperatureC": -10.6,
-      "snowfallCm": 0,
-      "windKph": 5.1,
-      "windDirectionDeg": 288
-    },
     {
       "time": "2026-07-27T01:00",
       "temperatureC": -10.1,
@@ -529,25 +522,23 @@
       "snowfallCm": 0,
       "windKph": 10,
       "windDirectionDeg": 324
-    }
-  ],
-  "forecast": [
+    },
     {
       "time": "2026-07-29T23:00",
       "temperatureC": -1.9,
       "snowfallCm": 0,
       "windKph": 10.6,
-      "windDirectionDeg": 325,
-      "freezingLevelM": 1960
+      "windDirectionDeg": 325
     },
     {
       "time": "2026-07-30T00:00",
       "temperatureC": -2.9,
       "snowfallCm": 0,
       "windKph": 10.3,
-      "windDirectionDeg": 325,
-      "freezingLevelM": 1940
-    },
+      "windDirectionDeg": 325
+    }
+  ],
+  "forecast": [
     {
       "time": "2026-07-30T01:00",
       "temperatureC": -2.7,
@@ -1875,6 +1866,22 @@
       "windKph": 2.2,
       "windDirectionDeg": 270,
       "freezingLevelM": 2020
+    },
+    {
+      "time": "2026-08-05T23:00",
+      "temperatureC": -7.6,
+      "snowfallCm": 0,
+      "windKph": 2.2,
+      "windDirectionDeg": 265,
+      "freezingLevelM": 2000
+    },
+    {
+      "time": "2026-08-06T00:00",
+      "temperatureC": -7.9,
+      "snowfallCm": 0,
+      "windKph": 2.2,
+      "windDirectionDeg": 265,
+      "freezingLevelM": 1970
     }
   ],
   "powderPolygons": [],
