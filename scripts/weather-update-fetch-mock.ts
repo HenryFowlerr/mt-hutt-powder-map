@@ -3,6 +3,41 @@ import { join } from 'node:path'
 
 const scenario = process.env.WEATHER_FETCH_TEST_SCENARIO
 
+const HOURLY_FIELD_DEFAULTS: Record<string, number> = {
+  temperature_2m: -4,
+  precipitation: 0.4,
+  rain: 0,
+  snowfall: 0.3,
+  snow_depth: 0.8,
+  wind_speed_10m: 32,
+  wind_direction_10m: 360,
+  wind_gusts_10m: 55,
+  cloud_cover: 80,
+  cloud_cover_low: 60,
+  cloud_cover_mid: 40,
+  cloud_cover_high: 20,
+  freezing_level_height: 1200,
+  weather_code: 71,
+}
+
+/**
+ * A well-formed payload blowing straight out of the north. Open-Meteo reports
+ * that bearing as 360, and alternating 359/360 also drives the snow-weighted
+ * averages to round up to 360, so this exercises both ways a published
+ * direction can escape the canonical [0, 360) range.
+ */
+function northWindPayload() {
+  const nowSeconds = Math.floor(Date.now() / 1000)
+  const firstHour = (Math.floor(nowSeconds / 3600) - 72) * 3600
+  const time = Array.from({ length: 145 }, (_, index) => firstHour + index * 3600)
+  const hourly: Record<string, number[]> = { time }
+  for (const [field, value] of Object.entries(HOURLY_FIELD_DEFAULTS)) {
+    hourly[field] = time.map(() => value)
+  }
+  hourly.wind_direction_10m = time.map((_, index) => (index % 2 === 0 ? 360 : 359))
+  return { hourly }
+}
+
 globalThis.fetch = (async (input, init) => {
   const requestUrl = String(input)
   if (requestUrl.includes('ensemble-api.open-meteo.com')) {
@@ -44,6 +79,13 @@ globalThis.fetch = (async (input, init) => {
   if (scenario === 'http') {
     return new Response(JSON.stringify({ error: 'upstream unavailable' }), {
       status: 503,
+      headers: { 'content-type': 'application/json' },
+    })
+  }
+
+  if (scenario === 'north-wind') {
+    return new Response(JSON.stringify(northWindPayload()), {
+      status: 200,
       headers: { 'content-type': 'application/json' },
     })
   }

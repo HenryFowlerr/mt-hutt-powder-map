@@ -73,6 +73,20 @@ async function expectNoHighImpactViolations(page: Page) {
   ).toEqual([])
 }
 
+// The powder field derives per-elevation snow from the hourly series when it
+// carries phase inputs, so zeroing the summary totals alone still leaves a
+// trace signal and its three zone-marker buttons in the tab order. Zero the
+// hourly snowfall and precipitation too, so the focus-order expectations below
+// describe the page deterministically instead of racing the 3D scene.
+function withoutSnowSignal<T extends { snowfallCm: number }>(hours: readonly T[]) {
+  return hours.map((hour) => ({
+    ...hour,
+    snowfallCm: 0,
+    precipitationMm: 0,
+    rainMm: 0,
+  }))
+}
+
 async function useMarkerFreeForecast(page: Page) {
   const latest = await loadPublicJson<LatestData>('latest.json')
   const markerFree = {
@@ -82,6 +96,8 @@ async function useMarkerFreeForecast(page: Page) {
       recentSnowCm: 0,
       forecastSnowCm: 0,
     },
+    observations: withoutSnowSignal(latest.observations),
+    forecast: withoutSnowSignal(latest.forecast),
   }
   await page.route('**/data/latest.json', async (route) => {
     await route.fulfill({ json: markerFree })
@@ -107,6 +123,8 @@ test('desktop navigation has a logical focus order and operable state controls',
     page.getByRole('button', { name: 'Last 72 hours' }),
     page.getByRole('button', { name: 'Next 72 hours' }),
   ]
+
+  await expect(page.locator('button[aria-label^="Focus "]')).toHaveCount(0)
 
   for (const control of expectedOrder) {
     await page.keyboard.press('Tab')

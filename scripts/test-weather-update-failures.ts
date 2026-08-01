@@ -66,10 +66,76 @@ function runFailureScenario(
   }
 }
 
+/**
+ * Due north is the one bearing Open-Meteo publishes as 360 rather than 0, and
+ * rounding a snow-weighted mean of 359.5 or more lands there too. Both used to
+ * be written straight through, which failed the data integrity check and stalled
+ * the hourly update workflow until the wind swung off north.
+ */
+function runNorthWindScenario() {
+  const fixtureDir = mkdtempSync(join(tmpdir(), 'mt-hutt-weather-north-wind-'))
+  const latestPath = join(fixtureDir, 'latest.json')
+  writeFileSync(latestPath, readFileSync(join(projectRoot, 'public', 'data', 'latest.json'), 'utf8'))
+
+  try {
+    const result = spawnSync(
+      process.execPath,
+      ['--import', 'tsx', '--import', mockUrl, updaterPath],
+      {
+        cwd: projectRoot,
+        encoding: 'utf8',
+        env: {
+          ...process.env,
+          MT_HUTT_DATA_DIR: fixtureDir,
+          WEATHER_FETCH_TEST_SCENARIO: 'north-wind',
+        },
+        timeout: 20_000,
+      },
+    )
+
+    assert.equal(
+      result.status,
+      0,
+      `a due-north payload must publish\nstdout:\n${result.stdout}\nstderr:\n${result.stderr}`,
+    )
+
+    const published = JSON.parse(readFileSync(latestPath, 'utf8'))
+    const directions: Array<[string, unknown]> = [
+      ['summary.mainWindDirectionDeg', published.summary.mainWindDirectionDeg],
+      ['summary.currentWindDirectionDeg', published.summary.currentWindDirectionDeg],
+      ['summary.forecastWindDirectionDeg', published.summary.forecastWindDirectionDeg],
+      ...published.observations.map((hour: { windDirectionDeg: unknown }, index: number) => [
+        `observations[${index}].windDirectionDeg`,
+        hour.windDirectionDeg,
+      ] as [string, unknown]),
+      ...published.forecast.map((hour: { windDirectionDeg: unknown }, index: number) => [
+        `forecast[${index}].windDirectionDeg`,
+        hour.windDirectionDeg,
+      ] as [string, unknown]),
+      ...published.daily.map((day: { windDirectionDeg: unknown }, index: number) => [
+        `daily[${index}].windDirectionDeg`,
+        day.windDirectionDeg,
+      ] as [string, unknown]),
+    ]
+
+    assert.ok(directions.length > 100, 'expected the due-north payload to publish a full series')
+    for (const [path, value] of directions) {
+      assert.ok(
+        typeof value === 'number' && Number.isFinite(value) && value >= 0 && value < 360,
+        `${path} must be folded into [0, 360), received ${String(value)}`,
+      )
+    }
+  } finally {
+    rmSync(fixtureDir, { recursive: true, force: true })
+  }
+}
+
 runFailureScenario('timeout', /timed out|timeout|aborted/i)
 runFailureScenario('http', /Open-Meteo 503/)
 runFailureScenario('malformed', /hourly\.temperature_2m is missing or has the wrong length/)
+runNorthWindScenario()
 
 console.log(
   'Weather update failure checks passed: timeout, HTTP, and malformed payloads preserve the last good file and exit non-zero',
 )
+console.log('Weather update north-wind check passed: published bearings stay inside [0, 360)')

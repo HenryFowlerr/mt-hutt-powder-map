@@ -172,6 +172,15 @@ try {
     )
   }
 
+  // Open-Meteo reports due north as 360, and rounding a direction of 359.5 or
+  // more to whole degrees also lands on 360. Both mean the same bearing as 0,
+  // so fold every published direction into [0, 360) — the range the app and
+  // the data integrity check treat as canonical.
+  const normaliseDirectionDeg = (value: number) =>
+    Number.isFinite(value) ? ((value % 360) + 360) % 360 : value
+  const roundDirectionDeg = (value: number) =>
+    Number.isFinite(value) ? normaliseDirectionDeg(Math.round(value)) : value
+
   const sum = (field: string, indexes: number[]) =>
     indexes.reduce((total, index) => total + Number(weather.hourly?.[field]?.[index] ?? 0), 0)
   const avg = (field: string, indexes: number[]) =>
@@ -369,7 +378,7 @@ try {
       tempMaxC: Number(maxValue('temperature_2m', indexes, 0).toFixed(1)),
       windMeanKph: Number(avg('wind_speed_10m', indexes).toFixed(0)),
       gustMaxKph: Number(maxValue('wind_gusts_10m', indexes, 0).toFixed(0)),
-      windDirectionDeg: Number(snowWeightedWindDirection(indexes, windDirection).toFixed(0)),
+      windDirectionDeg: roundDirectionDeg(snowWeightedWindDirection(indexes, windDirection)),
       cloudPct: Number(avg('cloud_cover', indexes).toFixed(0)),
       freezingLevelM: Number(avg('freezing_level_height', indexes).toFixed(0)),
       weatherCode: codeMode(indexes),
@@ -391,14 +400,14 @@ try {
       ...fallback.summary,
       recentSnowCm: Number(recentSnowCm.toFixed(1)),
       forecastSnowCm: Number(forecastSnowCm.toFixed(1)),
-      mainWindDirectionDeg: Number(windDirection.toFixed(0)),
+      mainWindDirectionDeg: roundDirectionDeg(windDirection),
       avgWindKph: Number(wind.toFixed(0)),
       maxGustKph: Number(maxGustKph.toFixed(0)),
-      currentWindDirectionDeg: Number(currentWindDirection.toFixed(0)),
+      currentWindDirectionDeg: roundDirectionDeg(currentWindDirection),
       currentWindKph: Number(currentWindKph.toFixed(0)),
       currentGustKph: Number(currentGustKph.toFixed(0)),
       currentTemperatureC: Number(currentTemperatureC.toFixed(1)),
-      forecastWindDirectionDeg: Number(forecastWindDirection.toFixed(0)),
+      forecastWindDirectionDeg: roundDirectionDeg(forecastWindDirection),
       forecastAvgWindKph: Number(forecastWind.toFixed(0)),
       forecastMaxGustKph: Number(forecastMaxGustKph.toFixed(0)),
       temperatureMinC: Number(temperatureMinC.toFixed(1)),
@@ -440,7 +449,7 @@ try {
       temperatureC: weather.hourly.temperature_2m[index],
       snowfallCm: weather.hourly.snowfall[index],
       windKph: weather.hourly.wind_speed_10m[index],
-      windDirectionDeg: weather.hourly.wind_direction_10m[index],
+      windDirectionDeg: normaliseDirectionDeg(weather.hourly.wind_direction_10m[index]),
       freezingLevelM: weather.hourly.freezing_level_height?.[index],
       gustKph: weather.hourly.wind_gusts_10m?.[index],
       rainMm: weather.hourly.rain?.[index],
@@ -457,7 +466,7 @@ try {
         temperatureC: weather.hourly.temperature_2m[index],
         snowfallCm: weather.hourly.snowfall[index],
         windKph: weather.hourly.wind_speed_10m[index],
-        windDirectionDeg: weather.hourly.wind_direction_10m[index],
+        windDirectionDeg: normaliseDirectionDeg(weather.hourly.wind_direction_10m[index]),
         freezingLevelM: weather.hourly.freezing_level_height?.[index],
         gustKph: weather.hourly.wind_gusts_10m?.[index],
         rainMm: weather.hourly.rain?.[index],
