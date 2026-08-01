@@ -16,6 +16,8 @@ jobs:
   update:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    outputs:
+      published: ${{ steps.commit.outputs.changed }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -32,9 +34,62 @@ jobs:
       - run: npm run update:data
       - run: npm run test:data
       - name: Commit updated data
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add public/data/latest.json
-          git diff --cached --quiet || git commit -m "Update Mt Hutt weather data"
-          git push
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "Update Mt Hutt weather data"
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  # GitHub deliberately does not trigger workflows for pushes made with
+  # GITHUB_TOKEN, so the commit above can never start Deploy. Without this job
+  # the published site keeps whatever data it was built with until a human
+  # pushes, which is how it ended up two days stale.
+  publish:
+    needs: update
+    if: needs.update.outputs.published == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: pages
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      # The browser suite belongs to Deploy, which gates every code change.
+      # Only the data moved here, so re-run the checks that read it plus the
+      # build itself rather than spending a browser install every hour.
+      - run: npm run lint
+      - run: npm run test:model
+      - run: npm run test:confidence
+      - run: npm run test:data
+      - run: npm run build
+      - run: npm run test:bundle
+      - name: Publish dist to gh-pages
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm -rf /tmp/mt-hutt-gh-pages
+          mkdir -p /tmp/mt-hutt-gh-pages
+          cp -R dist/. /tmp/mt-hutt-gh-pages/
+          cd /tmp/mt-hutt-gh-pages
+          git init
+          git checkout -b gh-pages
+          git add .
+          git commit -m "Deploy site"
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push --force origin gh-pages
