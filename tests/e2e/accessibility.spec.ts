@@ -4,7 +4,13 @@ import type { LatestData } from '../../src/types'
 import { loadPublicJson } from './public-fixtures'
 
 test.describe.configure({ mode: 'serial' })
-test.setTimeout(60_000)
+// The focus-order walk costs about 5 s per control on CI: the scene renders
+// continuously on a software rasteriser, so every keypress, focus assertion,
+// and getComputedStyle round trip queues behind a frame. Nine controls plus
+// the outlook interactions ran to 65 s against a 60 s budget once the official
+// status link joined the tab order. Budget for the slow renderer rather than
+// dropping controls from the walk.
+test.setTimeout(150_000)
 
 async function expectVisibleFocus(locator: Locator) {
   await expect(locator).toBeFocused()
