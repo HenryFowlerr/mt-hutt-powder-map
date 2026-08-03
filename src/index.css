@@ -1,3 +1,25 @@
+/* --- Liquid glass -------------------------------------------------------
+   The look is ported from iyinchao/liquid-glass-studio, whose WebGL shader
+   refracts a supplied image or video texture. A shader cannot sample the live
+   DOM or the terrain canvas behind a panel, so the same surface model is built
+   from compositing instead: backdrop blur for the body, an inset rim for
+   Fresnel, and a -45 degree sweep for glare. Values below track that project's
+   defaults so the surfaces read as one material.
+   thickness 20 · fresnel 30/20/20 · glare 30/20/90, convergence 50,
+   opposite 80, angle -45 · shadow expand 25 / factor 15 · white tint. */
+:root {
+  --lg-blur: 20px;
+  --lg-saturate: 1.5;
+  --lg-tint: rgba(250, 253, 254, 0.62);
+  --lg-glare-angle: -45deg;
+  /* Fresnel rim: bright where the surface turns away, faint head-on. */
+  --lg-rim: inset 0 0 0 1px rgba(255, 255, 255, 0.58);
+  --lg-edge-near: inset 0 1.5px 0 -0.5px rgba(255, 255, 255, 0.92);
+  --lg-edge-far: inset 0 -1.5px 0 -0.5px rgba(255, 255, 255, 0.34);
+  /* shadowExpand 25 / shadowFactor 15 */
+  --lg-shadow: 0 10px 25px rgba(9, 30, 42, 0.15);
+}
+
 :root {
   --ink: #09151c;
   --ink-soft: #33444d;
@@ -1647,9 +1669,9 @@ summary:focus-visible {
   min-width: 0;
   padding: 0 18px;
   border-bottom: 1px solid rgba(19, 45, 58, 0.15);
-  background: rgba(248, 251, 252, 0.94);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(22px) saturate(1.15);
+  background: var(--lg-tint);
+  box-shadow: var(--lg-edge-near), var(--lg-edge-far), 0 1px 0 rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturate));
   -webkit-backdrop-filter: blur(22px) saturate(1.15);
 }
 
@@ -1774,7 +1796,10 @@ summary:focus-visible {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   border-bottom: 1px solid var(--hairline-strong);
-  background: rgba(248, 251, 252, 0.96);
+  background: var(--lg-tint);
+  box-shadow: var(--lg-edge-near), var(--lg-edge-far);
+  backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturate));
+  -webkit-backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturate));
 }
 
 .inspector-nav button {
@@ -1938,10 +1963,61 @@ summary:focus-visible {
   padding: 14px 18px 15px;
   border-top: 1px solid rgba(255, 255, 255, 0.48);
   border-right: 1px solid rgba(19, 45, 58, 0.11);
-  background: rgba(242, 248, 250, 0.82);
-  box-shadow: none;
-  backdrop-filter: blur(18px) saturate(1.08);
-  -webkit-backdrop-filter: blur(18px) saturate(1.08);
+  border-top-right-radius: 18px;
+  background: var(--lg-tint);
+  box-shadow: var(--lg-rim), var(--lg-edge-near), var(--lg-shadow);
+  backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturate));
+  -webkit-backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturate));
+}
+
+/* Glare: a specular sweep along -45 degrees with a weaker return highlight on
+   the opposite edge (glareOppositeFactor 80). Screen blend keeps it additive
+   over whatever the panel floats on, and it never takes pointer events. */
+/* Only isolate here — .map-key is absolutely positioned and .workspace-header is
+   already relative, so setting `position` on the shared selector would move them.
+   The pseudo-element needs a positioned ancestor, so .inspector-nav gets one. */
+.workspace-header,
+.map-key,
+.inspector-nav {
+  isolation: isolate;
+}
+
+.inspector-nav {
+  position: relative;
+}
+
+.workspace-header::before,
+.map-key::before,
+.inspector-nav::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  border-radius: inherit;
+  background: linear-gradient(
+    var(--lg-glare-angle),
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.08) 26%,
+    rgba(255, 255, 255, 0) 52%,
+    rgba(255, 255, 255, 0.09) 76%,
+    rgba(255, 255, 255, 0.4) 100%
+  );
+  mix-blend-mode: screen;
+}
+
+/* Respect the OS setting that asks for solid surfaces. */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --lg-tint: rgba(248, 251, 252, 0.97);
+    --lg-blur: 0px;
+  }
+
+  .workspace-header::before,
+  .map-key::before,
+  .inspector-nav::before {
+    display: none;
+  }
 }
 
 .map-key .legend-title {
