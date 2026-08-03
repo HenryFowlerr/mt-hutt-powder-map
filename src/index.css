@@ -8,36 +8,67 @@
    thickness 20 · fresnel 30/20/20 · glare 30/20/90, convergence 50,
    opposite 80, angle -45 · shadow expand 25 / factor 15 · white tint. */
 :root {
-  --lg-blur: 20px;
-  --lg-saturate: 1.5;
-  --lg-tint: rgba(250, 253, 254, 0.62);
-  --lg-glare-angle: -45deg;
-  /* Fresnel rim: bright where the surface turns away, faint head-on. */
-  --lg-rim: inset 0 0 0 1px rgba(255, 255, 255, 0.58);
-  --lg-edge-near: inset 0 1.5px 0 -0.5px rgba(255, 255, 255, 0.92);
-  --lg-edge-far: inset 0 -1.5px 0 -0.5px rgba(255, 255, 255, 0.34);
-  /* shadowExpand 25 / shadowFactor 15 */
-  --lg-shadow: 0 10px 25px rgba(9, 30, 42, 0.15);
+  /* Frost - Medium 16 */
+  --lg-blur: 16px;
+  --lg-saturate: 1.8;
+  /* Opacity 25, over a light scene. Kept above Apple's raw value on the panels
+     that carry body text so label contrast still clears AA. */
+  --lg-tint: rgba(255, 255, 255, 0.62);
+  /* Light Angle 0 — light directly overhead, so the highlight sits on the top
+     edge. The earlier -45deg came from the other project, not from Apple. */
+  --lg-glare-angle: 180deg;
+  /* Refraction 70 / Dispersion 20 read as the rim brightness and its falloff. */
+  --lg-rim: inset 0 0 0 0.5px rgba(255, 255, 255, 0.7);
+  --lg-edge-near: inset 0 1px 0 0 rgba(255, 255, 255, 0.95);
+  --lg-edge-far: inset 0 -1px 0 0 rgba(255, 255, 255, 0.28);
+  /* Depth 30 / Splay 20 */
+  --lg-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
+/* Semantic colour, shape and type tokens taken from the iOS/iPadOS 27 Figma
+   library (file C6KujGruXJzQQUSvddSe11) via the Figma MCP. The label and fill
+   values are Apple's own: Labels/Primary #000000, Labels/Tertiary #3c3c434d,
+   Fills/Secondary #78788029, Separators/Vibrant #e6e6e6, Accents/Blue #0088ff.
+
+   One deliberate divergence: Accents/Blue at 3.0:1 on white fails WCAG AA for
+   body text, and the axe suite gates on that. Small text uses --accent-deep
+   (Apple's own darker link blue, 4.6:1); the bright system blue is kept for
+   large text, fills and glyphs where it passes. */
 :root {
-  --ink: #09151c;
-  --ink-soft: #33444d;
-  --muted: #566b76;
-  --hairline: rgba(18, 43, 56, 0.12);
-  --hairline-strong: rgba(18, 43, 56, 0.19);
+  /* Labels. Apple's own Secondary (0.6) and Tertiary (0.3) alphas measure
+     3.4:1 and 1.7:1 on white, below the 4.5:1 AA floor the axe suite enforces,
+     so the label hue is Apple's but the alphas are raised to clear it. */
+  --ink: #000000;
+  --ink-soft: rgba(60, 60, 67, 0.88);
+  --muted: rgba(60, 60, 67, 0.78);
+  /* Separators */
+  --hairline: rgba(60, 60, 67, 0.18);
+  --hairline-strong: rgba(60, 60, 67, 0.29);
   --snow: #f7fbfd;
   --surface: rgba(248, 251, 252, 0.92);
   --surface-solid: #f8fbfc;
   --frost: rgba(238, 246, 249, 0.76);
-  --accent: #087fd1;
-  --accent-deep: #005eb8;
+  /* Fills */
+  --fill-secondary: rgba(120, 120, 128, 0.16);
+  --fill-tertiary: rgba(120, 120, 128, 0.12);
+  /* Accents */
+  --accent: #0088ff;
+  --accent-deep: #0071e3;
   --accent-pale: #d9f2f7;
   --good: #159267;
   --warning: #d47d2f;
   --danger: #c64b46;
+  /* iOS type ramp: Caption 2 / Caption 1 / Footnote, with SF tracking. */
   --text-caption: 11px;
   --text-secondary: 12px;
+  --text-footnote: 13px;
+  --track-caption: 0.07px;
+  --track-body: -0.41px;
+  --track-title: 0.36px;
+  /* Continuous corner radii */
+  --radius-control: 12px;
+  --radius-card: 16px;
+  --radius-panel: 22px;
   --shadow-panel: 0 24px 60px rgba(11, 34, 46, 0.18), 0 2px 8px rgba(11, 34, 46, 0.08);
   color: var(--ink);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
@@ -262,33 +293,37 @@ summary:focus-visible {
   box-shadow: 0 0 0 4px rgba(212, 125, 47, 0.11);
 }
 
+/* iOS segmented control: Fills/Secondary track, white thumb, 2px inset. The
+   46px height clears the 44px touch minimum with headroom, so sub-pixel layout
+   variation cannot drop it under the bar. */
 .mode-switch {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3px;
+  gap: 2px;
   margin-top: 17px;
-  padding: 3px;
+  padding: 2px;
   border-radius: 11px;
-  background: rgba(102, 127, 141, 0.1);
+  background: var(--fill-secondary);
 }
 
 .mode-switch button {
-  min-height: 44px;
+  min-height: 46px;
   padding: 0 12px;
   border: 0;
-  border-radius: 8px;
-  color: var(--muted);
+  border-radius: 9px;
+  color: var(--ink);
   background: transparent;
-  font-size: 11px;
-  font-weight: 630;
+  font-size: var(--text-footnote);
+  font-weight: 590;
+  letter-spacing: var(--track-caption);
   cursor: pointer;
   transition: color 160ms ease, background 160ms ease, box-shadow 160ms ease;
 }
 
 .mode-switch button.active {
   color: var(--ink);
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 1px 5px rgba(17, 42, 54, 0.12);
+  background: #ffffff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12), 0 3px 1px rgba(0, 0, 0, 0.04);
 }
 
 .official-status-link {
@@ -1997,11 +2032,10 @@ summary:focus-visible {
   border-radius: inherit;
   background: linear-gradient(
     var(--lg-glare-angle),
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(255, 255, 255, 0.08) 26%,
-    rgba(255, 255, 255, 0) 52%,
-    rgba(255, 255, 255, 0.09) 76%,
-    rgba(255, 255, 255, 0.4) 100%
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.12) 18%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0.16) 100%
   );
   mix-blend-mode: screen;
 }
