@@ -326,7 +326,18 @@ export function WeatherBrief({ latest, field, terrain, analysis, trails, weather
             }
           >
             <strong>
-              {forecastRange ? formatSnowRange(forecastRange) : formatSnowDepth(maxCm)}
+              {forecastRange ? (
+                <>
+                  {formatSnowDepth(forecastRange.min)}
+                  {/* The hero's tight negative tracking is tuned for numerals and
+                      closes the en dash onto the digits either side. Give the
+                      dash its own box so it keeps its own size and spacing. */}
+                  <span className="depth-range-dash">–</span>
+                  {formatSnowDepth(forecastRange.max)}
+                </>
+              ) : (
+                formatSnowDepth(maxCm)
+              )}
             </strong>
             <span>cm</span>
           </div>
