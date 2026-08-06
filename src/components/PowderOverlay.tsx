@@ -137,6 +137,7 @@ function VisiblePowderOverlay({
   mode,
 }: Props & { mode: Exclude<PowderMode, 'off'> }) {
   const exaggeration = useViewStore((state) => state.exaggeration)
+  const mapInteracting = useViewStore((state) => state.mapInteracting)
   const [hover, setHover] = useState<HoverInfo | null>(null)
   const lastHoverTime = useRef(0)
 
@@ -175,8 +176,12 @@ function VisiblePowderOverlay({
   }, [displayGrid, displayScale, field, terrain, exaggeration])
 
   useEffect(() => () => texture.dispose(), [texture])
+  useEffect(() => {
+    if (mapInteracting) setHover(null)
+  }, [mapInteracting])
 
   const handleMove = (event: ThreeEvent<PointerEvent>) => {
+    if (mapInteracting) return
     const now = performance.now()
     if (now - lastHoverTime.current < 60) return
     lastHoverTime.current = now

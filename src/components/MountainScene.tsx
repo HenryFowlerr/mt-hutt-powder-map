@@ -1,4 +1,4 @@
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls, OrthographicCamera, PerspectiveCamera } from '@react-three/drei'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
@@ -32,14 +32,28 @@ type Props = {
   overrides?: TrailCollection | null
 }
 
-function CameraRig({ terrain, trails }: { terrain: TerrainData; trails: TrailCollection }) {
+function CameraRig({
+  terrain,
+  trails,
+  restingDpr,
+}: {
+  terrain: TerrainData
+  trails: TrailCollection
+  restingDpr: number
+}) {
   const controlsRef = useRef<OrbitControlsImpl | null>(null)
   const orientationResetCount = useViewStore((state) => state.orientationResetCount)
   const resetCount = useViewStore((state) => state.resetCount)
   const mapView = useViewStore((state) => state.mapView)
   const exaggeration = useViewStore((state) => state.exaggeration)
   const setCameraBearing = useViewStore((state) => state.setCameraBearing)
+  const setMapInteracting = useViewStore((state) => state.setMapInteracting)
+  const setDpr = useThree((state) => state.setDpr)
+  const setEvents = useThree((state) => state.setEvents)
+  const gl = useThree((state) => state.gl)
   const lastOrientationResetCount = useRef(orientationResetCount)
+  const lastBearingPublishAt = useRef(0)
+  const interacting = useRef(false)
 
   const target = useMemo(
     () => skiAreaCenter(terrain, trails, exaggeration),
@@ -56,7 +70,7 @@ function CameraRig({ terrain, trails }: { terrain: TerrainData; trails: TrailCol
     [target],
   )
 
-  const reportBearing = useCallback(() => {
+  const publishBearing = useCallback(() => {
     const controls = controlsRef.current
     if (!controls) return
     const forwardX = controls.target.x - controls.object.position.x
@@ -66,6 +80,43 @@ function CameraRig({ terrain, trails }: { terrain: TerrainData; trails: TrailCol
     const bearing = THREE.MathUtils.radToDeg(Math.atan2(forwardX, -forwardZ))
     setCameraBearing(bearing)
   }, [setCameraBearing])
+
+  const reportBearing = useCallback(() => {
+    const now = performance.now()
+    if (now - lastBearingPublishAt.current < 100) return
+    lastBearingPublishAt.current = now
+    publishBearing()
+  }, [publishBearing])
+
+  const startInteraction = useCallback(() => {
+    if (interacting.current) return
+    interacting.current = true
+    setMapInteracting(true)
+    setEvents({ enabled: false })
+    setDpr(Math.min(1, restingDpr))
+    gl.domElement.dataset.mapInteracting = 'true'
+  }, [gl, restingDpr, setDpr, setEvents, setMapInteracting])
+
+  const endInteraction = useCallback(() => {
+    if (!interacting.current) return
+    interacting.current = false
+    setEvents({ enabled: true })
+    setDpr(restingDpr)
+    setMapInteracting(false)
+    gl.domElement.dataset.mapInteracting = 'false'
+    lastBearingPublishAt.current = performance.now()
+    publishBearing()
+  }, [gl, publishBearing, restingDpr, setDpr, setEvents, setMapInteracting])
+
+  useEffect(
+    () => () => {
+      if (!interacting.current) return
+      setEvents({ enabled: true })
+      setDpr(restingDpr)
+      setMapInteracting(false)
+    },
+    [restingDpr, setDpr, setEvents, setMapInteracting],
+  )
 
   useEffect(() => {
     const controls = controlsRef.current
@@ -78,8 +129,8 @@ function CameraRig({ terrain, trails }: { terrain: TerrainData; trails: TrailCol
     }
     controls.target.copy(target)
     controls.update()
-    reportBearing()
-  }, [resetCount, mapView, target, perspectivePosition, orthoPosition, reportBearing])
+    publishBearing()
+  }, [resetCount, mapView, target, perspectivePosition, orthoPosition, publishBearing])
 
   useEffect(() => {
     if (orientationResetCount === lastOrientationResetCount.current) return
@@ -96,8 +147,8 @@ function CameraRig({ terrain, trails }: { terrain: TerrainData; trails: TrailCol
     )
     controls.object.up.set(0, 1, 0)
     controls.update()
-    reportBearing()
-  }, [orientationResetCount, reportBearing])
+    publishBearing()
+  }, [orientationResetCount, publishBearing])
 
   // Zone click in the panel flies the camera to that zone.
   const focusPoint = useViewStore((state) => state.focusPoint)
@@ -115,9 +166,9 @@ function CameraRig({ terrain, trails }: { terrain: TerrainData; trails: TrailCol
       controls.object.position.copy(zoneTarget.clone().add(new THREE.Vector3(2.5, 2, 2)))
     }
     controls.update()
-    reportBearing()
+    publishBearing()
     // focusCount retriggers the fly-to even for the same zone.
-  }, [focusCount, focusPoint, terrain, exaggeration, reportBearing])
+  }, [focusCount, focusPoint, terrain, exaggeration, publishBearing])
 
   return (
     <>
@@ -136,7 +187,9 @@ function CameraRig({ terrain, trails }: { terrain: TerrainData; trails: TrailCol
         maxDistance={26}
         minZoom={22}
         maxZoom={900}
+        onStart={startInteraction}
         onChange={reportBearing}
+        onEnd={endInteraction}
       />
     </>
   )
@@ -159,6 +212,9 @@ export function MountainScene({
   const [canvasElement, setCanvasElement] = useState<HTMLCanvasElement | null>(null)
   const handleWebglContextLost = useCallback(() => setWebglContextLost(true), [])
   const { animate, dpr, lowPower } = useWebglRuntimeBudget()
+  const animatedWeatherVisible = useViewStore(
+    (state) => state.showClouds || state.showSnowfall || state.showWind,
+  )
   const terrainGeometry = useMemo(
     () => createTerrainGeometry(terrain, exaggeration),
     [terrain, exaggeration],
@@ -186,6 +242,7 @@ export function MountainScene({
   return (
     <Canvas
       dpr={dpr}
+      frameloop={animate && animatedWeatherVisible ? 'always' : 'demand'}
       gl={{ antialias: true }}
       onCreated={({ gl }) => setCanvasElement(gl.domElement)}
       onPointerMissed={() => {
@@ -224,7 +281,7 @@ export function MountainScene({
       <FocusMarker terrain={terrain} />
       <StormLayer terrain={terrain} weather={weather} animate={animate} lowPower={lowPower} />
       <FreezingLevelBand terrain={terrain} freezingLevelM={weather.freezingLevelM} />
-      <CameraRig terrain={terrain} trails={trails} />
+      <CameraRig terrain={terrain} trails={trails} restingDpr={dpr} />
     </Canvas>
   )
 }

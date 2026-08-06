@@ -102,6 +102,37 @@ test('compass keeps a clear accessible 44px orientation target', async ({ page }
   expect(target!.height).toBeGreaterThanOrEqual(44)
 })
 
+test('reduces map workload only while an orbit gesture is active', async ({ page }) => {
+  const cameraRuntimeReady = await hasCameraRuntime(page)
+  test.skip(
+    !cameraRuntimeReady,
+    'The Linux headless renderer did not establish the camera runtime.',
+  )
+
+  const canvas = page.locator('.map-stage canvas[data-context-guard="ready"]')
+  const bounds = await canvas.boundingBox()
+  expect(bounds).not.toBeNull()
+
+  const startX = bounds!.x + bounds!.width * 0.48
+  const startY = bounds!.y + bounds!.height * 0.5
+  await page.mouse.move(startX, startY)
+  await page.mouse.down()
+  await page.mouse.move(startX + 120, startY + 35, { steps: 4 })
+
+  await expect(canvas).toHaveAttribute('data-map-interacting', 'true')
+  await expect
+    .poll(() =>
+      canvas.evaluate((element) => {
+        const mapCanvas = element as HTMLCanvasElement
+        return Math.round((mapCanvas.width / mapCanvas.clientWidth) * 10) / 10
+      }),
+    )
+    .toBeLessThanOrEqual(1)
+
+  await page.mouse.up()
+  await expect(canvas).toHaveAttribute('data-map-interacting', 'false')
+})
+
 test('compass reports the perspective camera bearing and resets north', async ({ page }) => {
   const cameraRuntimeReady = await hasCameraRuntime(page)
   test.skip(

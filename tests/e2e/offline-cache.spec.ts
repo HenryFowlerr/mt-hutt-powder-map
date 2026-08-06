@@ -1,6 +1,11 @@
 import { expect, test, type Page } from '@playwright/test'
 import { loadPublicJson } from './public-fixtures'
 
+// The corrupt-cache case intentionally boots the deferred terrain renderer
+// three times. Allow for cold software WebGL setup in CI without weakening any
+// individual readiness assertion.
+test.setTimeout(60_000)
+
 type DataMode = 'network' | 'offline' | 'corrupt-latest'
 
 async function installRequiredDataSwitch(page: Page) {
@@ -33,7 +38,11 @@ async function installRequiredDataSwitch(page: Page) {
 
 async function expectMountainLoaded(page: Page) {
   await expect(page.getByRole('region', { name: 'Mt Hutt snow brief' })).toBeVisible()
-  await expect(page.locator('.map-stage canvas')).toBeVisible()
+  // Creating the 240×280 terrain textures can take longer than the default
+  // assertion window on a cold software WebGL renderer, especially directly
+  // after a reload. Wait for the real canvas rather than treating the already
+  // rendered brief as proof that the deferred map chunk has finished.
+  await expect(page.locator('.map-stage canvas')).toBeVisible({ timeout: 15_000 })
   await expect(page.getByRole('button', { name: 'Try again' })).toHaveCount(0)
 }
 

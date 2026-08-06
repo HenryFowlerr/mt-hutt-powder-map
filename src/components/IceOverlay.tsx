@@ -76,14 +76,19 @@ export function IceOverlay(props: Props) {
 }
 
 function VisibleIceOverlay({ terrain, analysis, field, weather, geometry }: Props) {
+  const mapInteracting = useViewStore((state) => state.mapInteracting)
   const [hover, setHover] = useState<{ position: THREE.Vector3; risk: number; reason: string } | null>(null)
   const lastHover = useRef(0)
 
   const texture = useMemo(() => createIceTexture(field), [field])
 
   useEffect(() => () => texture.dispose(), [texture])
+  useEffect(() => {
+    if (mapInteracting) setHover(null)
+  }, [mapInteracting])
 
   const handleMove = (event: ThreeEvent<PointerEvent>) => {
+    if (mapInteracting) return
     const now = performance.now()
     if (now - lastHover.current < 60) return
     lastHover.current = now
