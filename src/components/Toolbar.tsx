@@ -20,6 +20,7 @@ export function Toolbar() {
         type="button"
         onClick={toggleMapView}
         aria-label={mapView ? 'Switch to perspective view' : 'Switch to topographic view'}
+        aria-pressed={mapView}
       >
         {mapView ? <ContourIcon size={18} /> : <Map size={17} />}
         <span className="action-label">{mapView ? 'Topographic' : 'Perspective'}</span>

@@ -20,6 +20,7 @@ export function ZoneMarkers({ terrain, trails, analysis, field, weather }: Props
   const exaggeration = useViewStore((state) => state.exaggeration)
   const focusPoint = useViewStore((state) => state.focusPoint)
   const focusOn = useViewStore((state) => state.focusOn)
+  const mapInteracting = useViewStore((state) => state.mapInteracting)
   const mode = powderMode === 'forecast' ? 'forecast' : 'recent'
 
   const zones = useMemo(() => {
@@ -44,12 +45,17 @@ export function ZoneMarkers({ terrain, trails, analysis, field, weather }: Props
             key={zone.name}
             position={zone.position}
             center
-            occlude
+            occlude={!mapInteracting}
             zIndexRange={[5, 0]}
-            style={{ pointerEvents: 'auto' }}
+            style={{ pointerEvents: mapInteracting ? 'none' : 'auto' }}
           >
             <button
               type="button"
+              // The same focus action is available in the ordered zone list
+              // below the map. Keep these overlaid shortcuts out of the
+              // sequential keyboard order so navigation moves from the global
+              // toolbar directly into the inspector.
+              tabIndex={-1}
               aria-label={`Focus ${zone.name}, ranked ${zone.rank}, ${zone.maxCm} centimetres`}
               aria-pressed={selected}
               title={`${zone.rank}. ${zone.name} · ${zone.maxCm} cm`}

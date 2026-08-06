@@ -227,6 +227,7 @@ function overlaps(
 export function MapLabels({ terrain, trails }: Props) {
   const exaggeration = useViewStore((state) => state.exaggeration)
   const showTrails = useViewStore((state) => state.showTrails)
+  const mapInteracting = useViewStore((state) => state.mapInteracting)
   const camera = useThree((state) => state.camera)
   const size = useThree((state) => state.size)
   const [visibleIds, setVisibleIds] = useState<Set<string>>(() => new Set())
@@ -247,6 +248,7 @@ export function MapLabels({ terrain, trails }: Props) {
   // typographic size without colliding as the camera moves. A small label
   // budget keeps the mobile overview deliberately quieter than desktop.
   useFrame(() => {
+    if (mapInteracting) return
     frameCount.current += 1
     if (frameCount.current % 8 !== 0) return
 
@@ -315,7 +317,10 @@ export function MapLabels({ terrain, trails }: Props) {
   return (
     <group>
       {labels
-        .filter((label) => visibleIds.has(label.id))
+        .filter(
+          (label) =>
+            visibleIds.has(label.id) && (!mapInteracting || label.priority <= 3),
+        )
         .map((label) => (
           <Html
             key={label.id}
