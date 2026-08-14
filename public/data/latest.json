@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-08-14T13:42:32.306Z",
+  "generatedAt": "2026-08-14T15:06:49.779Z",
   "location": "Mt Hutt",
   "summary": {
     "recentSnowCm": 0,
     "forecastSnowCm": 18.6,
-    "mainWindDirectionDeg": 311,
+    "mainWindDirectionDeg": 309,
     "avgWindKph": 5,
-    "temperatureMinC": -4.4,
+    "temperatureMinC": -3.1,
     "temperatureMaxC": 3,
     "confidence": "low",
     "headline": "Limited recent snow signal; sheltered upper terrain still scores best if snow stayed cold.",
     "reasons": [
       "0 cm estimated snowfall in the last 72 hours from Open-Meteo.",
-      "Mean recent wind around 5 km/h from 311 degrees.",
+      "Mean recent wind around 5 km/h from 309 degrees.",
       "Forecast wind trends 7 km/h from 178 degrees over the next 72 hours.",
       "Terrain score favours cold upper mountain bowls, gullies, and lee-facing aspects."
     ],
@@ -22,20 +22,20 @@
     "forecastMaxGustKph": 52,
     "forecastTemperatureMinC": -7.6,
     "forecastTemperatureMaxC": -0.2,
-    "cloudLowPct": 1,
+    "cloudLowPct": 5,
     "cloudMidPct": 0,
     "cloudHighPct": 3,
-    "freezingLevelM": 2527,
-    "cloudMeanPct": 4,
+    "freezingLevelM": 2498,
+    "cloudMeanPct": 8,
     "meltFreezeCycles": 2,
     "recentRainMm": 0.9,
     "hoursAboveZero": 41,
     "hoursSinceSnow": 999,
-    "currentWindDirectionDeg": 277,
+    "currentWindDirectionDeg": 257,
     "currentWindKph": 1,
-    "currentGustKph": 16,
-    "currentTemperatureC": -0.6,
-    "recentFreezingLevelM": 2291,
+    "currentGustKph": 12,
+    "currentTemperatureC": -0.3,
+    "recentFreezingLevelM": 2298,
     "forecastFreezingLevelM": 1112,
     "forecastRainMm": 3.8,
     "forecastHoursAboveZero": 0,
@@ -54,30 +54,6 @@
     "stormEndAt": "2026-08-16T08:00:00.000Z"
   },
   "observations": [
-    {
-      "time": "2026-08-11T14:00:00.000Z",
-      "temperatureC": -4.4,
-      "snowfallCm": 0,
-      "windKph": 5,
-      "windDirectionDeg": 311,
-      "freezingLevelM": 2220,
-      "gustKph": 31.3,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 99
-    },
-    {
-      "time": "2026-08-11T15:00:00.000Z",
-      "temperatureC": -3.6,
-      "snowfallCm": 0,
-      "windKph": 5.3,
-      "windDirectionDeg": 308,
-      "freezingLevelM": 2200,
-      "gustKph": 36,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 99
-    },
     {
       "time": "2026-08-11T16:00:00.000Z",
       "temperatureC": -3,
@@ -917,9 +893,7 @@
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 3
-    }
-  ],
-  "forecast": [
+    },
     {
       "time": "2026-08-14T14:00:00.000Z",
       "temperatureC": -0.3,
@@ -943,7 +917,9 @@
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 19
-    },
+    }
+  ],
+  "forecast": [
     {
       "time": "2026-08-14T16:00:00.000Z",
       "temperatureC": -0.3,
@@ -2894,7 +2870,7 @@
       "snowfallCm": 0,
       "windKph": 4.9,
       "windDirectionDeg": 303,
-      "freezingLevelM": 2257.5,
+      "freezingLevelM": 2282.5,
       "gustKph": 21.2,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2906,7 +2882,7 @@
       "snowfallCm": 0,
       "windKph": 5.4,
       "windDirectionDeg": 304,
-      "freezingLevelM": 2240,
+      "freezingLevelM": 2310,
       "gustKph": 21.6,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2918,7 +2894,7 @@
       "snowfallCm": 0,
       "windKph": 5.8,
       "windDirectionDeg": 304,
-      "freezingLevelM": 2227.5,
+      "freezingLevelM": 2362.5,
       "gustKph": 22.3,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2930,11 +2906,35 @@
       "snowfallCm": 0,
       "windKph": 6,
       "windDirectionDeg": 303,
-      "freezingLevelM": 2240,
+      "freezingLevelM": 2380,
       "gustKph": 23,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 33
+    },
+    {
+      "time": "2026-08-21T14:00:00.000Z",
+      "temperatureC": -6.5,
+      "snowfallCm": 0,
+      "windKph": 6.1,
+      "windDirectionDeg": 302,
+      "freezingLevelM": 2340,
+      "gustKph": 24.1,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 28
+    },
+    {
+      "time": "2026-08-21T15:00:00.000Z",
+      "temperatureC": -6.8,
+      "snowfallCm": 0,
+      "windKph": 6.3,
+      "windDirectionDeg": 301,
+      "freezingLevelM": 2300,
+      "gustKph": 25.2,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 22
     }
   ],
   "powderPolygons": [
@@ -5468,8 +5468,8 @@
       "windMeanKph": 5,
       "gustMaxKph": 49,
       "windDirectionDeg": 175,
-      "cloudPct": 75,
-      "freezingLevelM": 1693,
+      "cloudPct": 82,
+      "freezingLevelM": 1617,
       "weatherCode": 75
     },
     {
@@ -5553,7 +5553,7 @@
       "gustMaxKph": 22,
       "windDirectionDeg": 306,
       "cloudPct": 11,
-      "freezingLevelM": 2529,
+      "freezingLevelM": 2533,
       "weatherCode": 0
     },
     {
@@ -5567,7 +5567,7 @@
       "gustMaxKph": 127,
       "windDirectionDeg": 319,
       "cloudPct": 55,
-      "freezingLevelM": 2136,
+      "freezingLevelM": 2129,
       "weatherCode": 1
     },
     {
@@ -5581,7 +5581,7 @@
       "gustMaxKph": 126,
       "windDirectionDeg": 330,
       "cloudPct": 62,
-      "freezingLevelM": 1835,
+      "freezingLevelM": 2258,
       "weatherCode": 53
     },
     {
@@ -5595,7 +5595,7 @@
       "gustMaxKph": 87,
       "windDirectionDeg": 200,
       "cloudPct": 90,
-      "freezingLevelM": 929,
+      "freezingLevelM": 1999,
       "weatherCode": 53
     },
     {
@@ -5609,7 +5609,7 @@
       "gustMaxKph": 85,
       "windDirectionDeg": 204,
       "cloudPct": 78,
-      "freezingLevelM": 1635,
+      "freezingLevelM": 2090,
       "weatherCode": 85
     },
     {
@@ -5623,7 +5623,7 @@
       "gustMaxKph": 58,
       "windDirectionDeg": 228,
       "cloudPct": 25,
-      "freezingLevelM": 2062,
+      "freezingLevelM": 2415,
       "weatherCode": 0
     },
     {
@@ -5637,7 +5637,7 @@
       "gustMaxKph": 71,
       "windDirectionDeg": 319,
       "cloudPct": 58,
-      "freezingLevelM": 2726,
+      "freezingLevelM": 2143,
       "weatherCode": 2
     },
     {
@@ -5651,23 +5651,23 @@
       "gustMaxKph": 78,
       "windDirectionDeg": 315,
       "cloudPct": 31,
-      "freezingLevelM": 2507,
+      "freezingLevelM": 1053,
       "weatherCode": 0
     }
   ],
   "ensemble": {
     "source": "Open-Meteo Ensemble API",
     "model": "gfs_seamless",
-    "generatedAt": "2026-08-14T13:42:32.286Z",
-    "windowStartAt": "2026-08-14T13:00:00.000Z",
-    "windowEndAt": "2026-08-17T12:00:00.000Z",
+    "generatedAt": "2026-08-14T15:06:49.756Z",
+    "windowStartAt": "2026-08-14T15:00:00.000Z",
+    "windowEndAt": "2026-08-17T14:00:00.000Z",
     "windowHours": 72,
     "memberCount": 31,
     "snowfallCm": {
       "p10": 6.1,
       "p50": 9.9,
       "p90": 11.8,
-      "mean": 9.1
+      "mean": 9.2
     },
     "probabilityPct": {
       "atLeast1Cm": 100,
