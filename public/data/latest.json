@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-16T10:38:58.084Z",
+  "generatedAt": "2026-08-16T11:33:31.768Z",
   "location": "Mt Hutt",
   "summary": {
     "recentSnowCm": 17.9,
@@ -22,19 +22,19 @@
     "forecastMaxGustKph": 51,
     "forecastTemperatureMinC": -3.6,
     "forecastTemperatureMaxC": -1.8,
-    "cloudLowPct": 96,
-    "cloudMidPct": 3,
+    "cloudLowPct": 88,
+    "cloudMidPct": 1,
     "cloudHighPct": 0,
-    "freezingLevelM": 1002,
-    "cloudMeanPct": 96,
+    "freezingLevelM": 978,
+    "cloudMeanPct": 88,
     "meltFreezeCycles": 1,
     "recentRainMm": 2.9,
     "hoursAboveZero": 10,
-    "hoursSinceSnow": 4,
-    "currentWindDirectionDeg": 199,
+    "hoursSinceSnow": 5,
+    "currentWindDirectionDeg": 204,
     "currentWindKph": 4,
-    "currentGustKph": 40,
-    "currentTemperatureC": -6.3,
+    "currentGustKph": 39,
+    "currentTemperatureC": -6.6,
     "recentFreezingLevelM": 1121,
     "forecastFreezingLevelM": 1380,
     "forecastRainMm": 1.8,
@@ -54,18 +54,6 @@
     "stormEndAt": "2026-08-18T11:00:00.000Z"
   },
   "observations": [
-    {
-      "time": "2026-08-13T11:00:00.000Z",
-      "temperatureC": -0.7,
-      "snowfallCm": 0,
-      "windKph": 2.4,
-      "windDirectionDeg": 222,
-      "freezingLevelM": 2190,
-      "gustKph": 9.4,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 96
-    },
     {
       "time": "2026-08-13T12:00:00.000Z",
       "temperatureC": -0.6,
@@ -917,9 +905,7 @@
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 77
-    }
-  ],
-  "forecast": [
+    },
     {
       "time": "2026-08-16T11:00:00.000Z",
       "temperatureC": -8.1,
@@ -931,7 +917,9 @@
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 50
-    },
+    }
+  ],
+  "forecast": [
     {
       "time": "2026-08-16T12:00:00.000Z",
       "temperatureC": -10.4,
@@ -2935,6 +2923,18 @@
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 56
+    },
+    {
+      "time": "2026-08-23T11:00:00.000Z",
+      "temperatureC": -5,
+      "snowfallCm": 0,
+      "windKph": 9.9,
+      "windDirectionDeg": 316,
+      "freezingLevelM": 1510,
+      "gustKph": 82.8,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 67
     }
   ],
   "powderPolygons": [
@@ -6290,9 +6290,9 @@
   "ensemble": {
     "source": "Open-Meteo Ensemble API",
     "model": "gfs_seamless",
-    "generatedAt": "2026-08-16T10:38:58.063Z",
-    "windowStartAt": "2026-08-16T10:00:00.000Z",
-    "windowEndAt": "2026-08-19T09:00:00.000Z",
+    "generatedAt": "2026-08-16T11:33:31.744Z",
+    "windowStartAt": "2026-08-16T11:00:00.000Z",
+    "windowEndAt": "2026-08-19T10:00:00.000Z",
     "windowHours": 72,
     "memberCount": 31,
     "snowfallCm": {
