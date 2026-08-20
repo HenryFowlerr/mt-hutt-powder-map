@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-20T18:58:50.279Z",
+  "generatedAt": "2026-08-20T19:45:16.025Z",
   "location": "Mt Hutt",
   "summary": {
     "recentSnowCm": 0.7,
@@ -24,17 +24,17 @@
     "forecastTemperatureMaxC": 0.8,
     "cloudLowPct": 2,
     "cloudMidPct": 0,
-    "cloudHighPct": 11,
-    "freezingLevelM": 2312,
-    "cloudMeanPct": 12,
+    "cloudHighPct": 16,
+    "freezingLevelM": 2415,
+    "cloudMeanPct": 18,
     "meltFreezeCycles": 1,
     "recentRainMm": 3.4,
     "hoursAboveZero": 7,
-    "hoursSinceSnow": 57,
+    "hoursSinceSnow": 58,
     "currentWindDirectionDeg": 309,
     "currentWindKph": 7,
-    "currentGustKph": 26,
-    "currentTemperatureC": -5.8,
+    "currentGustKph": 28,
+    "currentTemperatureC": -6.1,
     "recentFreezingLevelM": 1411,
     "forecastFreezingLevelM": 1657,
     "forecastRainMm": 15.1,
@@ -54,18 +54,6 @@
     "stormEndAt": "2026-08-23T01:00:00.000Z"
   },
   "observations": [
-    {
-      "time": "2026-08-17T19:00:00.000Z",
-      "temperatureC": -6.4,
-      "snowfallCm": 0,
-      "windKph": 6.3,
-      "windDirectionDeg": 233,
-      "freezingLevelM": 1640,
-      "gustKph": 45.4,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 2
-    },
     {
       "time": "2026-08-17T20:00:00.000Z",
       "temperatureC": -5.5,
@@ -917,9 +905,7 @@
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 35
-    }
-  ],
-  "forecast": [
+    },
     {
       "time": "2026-08-20T19:00:00.000Z",
       "temperatureC": -6.9,
@@ -931,7 +917,9 @@
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 37
-    },
+    }
+  ],
+  "forecast": [
     {
       "time": "2026-08-20T20:00:00.000Z",
       "temperatureC": -6.8,
@@ -2935,6 +2923,18 @@
       "rainMm": 0.3,
       "precipitationMm": 0.4,
       "cloudPct": 100
+    },
+    {
+      "time": "2026-08-27T19:00:00.000Z",
+      "temperatureC": 2.3,
+      "snowfallCm": 0,
+      "windKph": 16.7,
+      "windDirectionDeg": 324,
+      "freezingLevelM": 1430,
+      "gustKph": 114.5,
+      "rainMm": 1.3,
+      "precipitationMm": 1.3,
+      "cloudPct": 100
     }
   ],
   "powderPolygons": [
@@ -2949,64 +2949,64 @@
       "coordinates": [
         [
           [
-            171.533464,
+            171.533477,
             -43.477652
           ],
           [
-            171.533405,
+            171.533399,
             -43.478513
           ],
           [
-            171.534326,
+            171.53432,
             -43.479946
           ],
           [
-            171.535839,
+            171.535833,
             -43.48052
           ],
           [
-            171.535299,
+            171.535293,
             -43.48138
           ],
           [
-            171.533377,
+            171.533367,
             -43.48224
           ],
           [
             171.53272,
-            -43.483035
+            -43.483027
           ],
           [
-            171.532596,
+            171.532602,
             -43.48138
           ],
           [
             171.53195,
-            -43.480903
+            -43.480899
           ],
           [
             171.530025,
-            -43.481064
+            -43.48106
           ],
           [
-            171.529403,
+            171.529407,
             -43.48052
           ],
           [
             171.530025,
-            -43.479811
+            -43.479815
           ],
           [
             171.531565,
-            -43.4806
+            -43.480608
           ],
           [
             171.532335,
-            -43.480352
+            -43.48036
           ],
           [
             171.533105,
-            -43.477832
+            -43.477839
           ]
         ]
       ]
@@ -3022,76 +3022,76 @@
       "coordinates": [
         [
           [
-            171.525649,
+            171.525655,
             -43.482527
           ],
           [
-            171.526124,
+            171.52611,
             -43.482527
           ],
           [
-            171.526093,
+            171.526087,
             -43.4831
           ],
           [
             171.526561,
-            -43.48329
+            -43.483294
           ],
           [
             171.527331,
-            -43.482908
+            -43.482915
           ],
           [
             171.529255,
-            -43.482632
+            -43.482635
           ],
           [
             171.530025,
-            -43.482643
+            -43.482646
           ],
           [
-            171.530263,
+            171.53026,
             -43.4831
           ],
           [
             171.529255,
-            -43.484094
+            -43.484091
           ],
           [
             171.52887,
-            -43.48365
+            -43.483642
           ],
           [
             171.5281,
-            -43.483507
+            -43.483504
           ],
           [
             171.527331,
-            -43.484479
+            -43.484471
           ],
           [
             171.526176,
-            -43.483909
+            -43.483905
           ],
           [
             171.523481,
-            -43.484431
+            -43.484427
           ],
           [
-            171.523054,
+            171.52306,
             -43.484247
           ],
           [
             171.523481,
-            -43.483412
+            -43.483419
           ],
           [
             171.524636,
-            -43.483344
+            -43.483348
           ],
           [
             171.525406,
-            -43.482791
+            -43.482797
           ]
         ]
       ]
@@ -3107,31 +3107,31 @@
       "coordinates": [
         [
           [
-            171.526917,
+            171.526921,
             -43.472778
           ],
           [
-            171.531798,
+            171.531794,
             -43.473065
           ],
           [
-            171.531148,
+            171.531138,
             -43.473638
           ],
           [
             171.52964,
-            -43.473831
+            -43.473828
           ],
           [
             171.527715,
-            -43.474517
+            -43.474514
           ],
           [
-            171.527175,
+            171.527178,
             -43.474211
           ],
           [
-            171.526783,
+            171.526787,
             -43.473065
           ]
         ]
@@ -3148,48 +3148,48 @@
       "coordinates": [
         [
           [
-            171.524461,
+            171.524473,
             -43.475932
           ],
           [
             171.525406,
-            -43.475724
+            -43.475731
           ],
           [
-            171.525521,
+            171.525516,
             -43.475932
           ],
           [
-            171.524573,
+            171.524567,
             -43.477366
           ],
           [
-            171.524498,
+            171.524494,
             -43.478226
           ],
           [
-            171.523422,
+            171.523416,
             -43.478799
           ],
           [
-            171.52358,
+            171.523576,
             -43.479946
           ],
           [
             171.521556,
-            -43.479991
+            -43.479987
           ],
           [
-            171.52404,
+            171.524045,
             -43.477079
           ],
           [
-            171.523742,
+            171.523754,
             -43.476219
           ],
           [
             171.524251,
-            -43.476096
+            -43.476105
           ]
         ]
       ]
@@ -3199,46 +3199,46 @@
       "mode": "recent",
       "thresholdCm": 0.5,
       "expectedSnowCm": 1,
-      "score": 0.25,
+      "score": 0.27,
       "reason": "Deposits in the wind shadow just behind the crest upwind (S wind).",
       "dominantFactor": "ridge shelter",
       "coordinates": [
         [
           [
-            171.523011,
+            171.523023,
             -43.490842
           ],
           [
-            171.524103,
+            171.524097,
             -43.490842
           ],
           [
-            171.524049,
+            171.524045,
             -43.491703
           ],
           [
             171.523481,
-            -43.492307
+            -43.492305
           ],
           [
             171.523096,
-            -43.4924
+            -43.492397
           ],
           [
             171.522711,
-            -43.491783
+            -43.491774
           ],
           [
             171.521556,
-            -43.4918
+            -43.491797
           ],
           [
-            171.52063,
+            171.520636,
             -43.491416
           ],
           [
             171.522711,
-            -43.490951
+            -43.490955
           ]
         ]
       ]
@@ -3254,28 +3254,28 @@
       "coordinates": [
         [
           [
-            171.532089,
+            171.532103,
             -43.485681
           ],
           [
-            171.532883,
+            171.53287,
             -43.485681
           ],
           [
-            171.533557,
+            171.533551,
             -43.486254
           ],
           [
             171.531565,
-            -43.487204
+            -43.487202
           ],
           [
-            171.530924,
+            171.530928,
             -43.486541
           ],
           [
             171.53195,
-            -43.485745
+            -43.485752
           ]
         ]
       ]
@@ -3285,34 +3285,38 @@
       "mode": "recent",
       "thresholdCm": 0.5,
       "expectedSnowCm": 1,
-      "score": 0.24,
+      "score": 0.25,
       "reason": "Deposits in the wind shadow just behind the crest upwind (S wind).",
       "dominantFactor": "ridge shelter",
       "coordinates": [
         [
           [
-            171.528349,
+            171.528353,
             -43.468477
           ],
           [
             171.529255,
-            -43.468289
+            -43.468291
           ],
           [
-            171.531446,
+            171.531436,
             -43.46905
           ],
           [
             171.530795,
-            -43.469302
+            -43.469298
           ],
           [
             171.52964,
-            -43.469038
+            -43.469034
           ],
           [
             171.529255,
-            -43.469332
+            -43.469324
+          ],
+          [
+            171.52848,
+            -43.468763
           ]
         ]
       ]
@@ -3322,46 +3326,34 @@
       "mode": "recent",
       "thresholdCm": 0.5,
       "expectedSnowCm": 1,
-      "score": 0.22,
-      "reason": "Deposits in the wind shadow just behind the crest upwind (S wind).",
-      "dominantFactor": "ridge shelter",
+      "score": 0.34,
+      "reason": "Concave E-facing gully/bowl terrain that collects drifting snow.",
+      "dominantFactor": "sheltered gully",
       "coordinates": [
         [
           [
-            171.538846,
-            -43.4831
+            171.528675,
+            -43.488835
           ],
           [
-            171.541774,
-            -43.4831
+            171.530398,
+            -43.488835
           ],
           [
-            171.541188,
-            -43.48332
+            171.530145,
+            -43.489409
           ],
           [
-            171.540803,
-            -43.48397
+            171.52964,
+            -43.489593
           ],
           [
-            171.539649,
-            -43.483126
+            171.52887,
+            -43.489496
           ],
           [
-            171.53898,
-            -43.483387
-          ],
-          [
-            171.538494,
-            -43.484021
-          ],
-          [
-            171.537923,
-            -43.483674
-          ],
-          [
-            171.538494,
-            -43.483341
+            171.528609,
+            -43.489122
           ]
         ]
       ]
@@ -3371,34 +3363,38 @@
       "mode": "recent",
       "thresholdCm": 0.5,
       "expectedSnowCm": 1,
-      "score": 0.34,
-      "reason": "Concave E-facing gully/bowl terrain that collects drifting snow.",
+      "score": 0.24,
+      "reason": "Concave W-facing gully/bowl terrain that collects drifting snow.",
       "dominantFactor": "sheltered gully",
       "coordinates": [
         [
           [
-            171.52867,
-            -43.488835
+            171.5217,
+            -43.472778
           ],
           [
-            171.530409,
-            -43.488835
+            171.523068,
+            -43.472778
           ],
           [
-            171.530148,
-            -43.489409
+            171.522517,
+            -43.473351
           ],
           [
-            171.52964,
-            -43.489596
+            171.522679,
+            -43.473925
           ],
           [
-            171.52887,
-            -43.489499
+            171.522326,
+            -43.474184
           ],
           [
-            171.528606,
-            -43.489122
+            171.521975,
+            -43.473351
+          ],
+          [
+            171.521172,
+            -43.473271
           ]
         ]
       ]
@@ -3408,66 +3404,25 @@
       "mode": "recent",
       "thresholdCm": 0.5,
       "expectedSnowCm": 1,
-      "score": 0.24,
-      "reason": "Concave W-facing gully/bowl terrain that collects drifting snow.",
-      "dominantFactor": "sheltered gully",
-      "coordinates": [
-        [
-          [
-            171.52169,
-            -43.472778
-          ],
-          [
-            171.52308,
-            -43.472778
-          ],
-          [
-            171.522523,
-            -43.473351
-          ],
-          [
-            171.52269,
-            -43.473925
-          ],
-          [
-            171.522326,
-            -43.474192
-          ],
-          [
-            171.521966,
-            -43.473351
-          ],
-          [
-            171.521172,
-            -43.473279
-          ]
-        ]
-      ]
-    },
-    {
-      "id": "recent-011",
-      "mode": "recent",
-      "thresholdCm": 0.5,
-      "expectedSnowCm": 1,
       "score": 0.23,
       "reason": "Deposits in the wind shadow just behind the crest upwind (S wind).",
       "dominantFactor": "ridge shelter",
       "coordinates": [
         [
           [
-            171.530645,
+            171.530651,
             -43.470771
           ],
           [
-            171.532999,
+            171.532993,
             -43.470771
           ],
           [
             171.531565,
-            -43.471504
+            -43.471501
           ],
           [
-            171.530699,
+            171.530703,
             -43.471057
           ]
         ]
@@ -4846,9 +4801,9 @@
       "tempMaxC": 1.4,
       "windMeanKph": 8,
       "gustMaxKph": 57,
-      "windDirectionDeg": 320,
+      "windDirectionDeg": 321,
       "cloudPct": 27,
-      "freezingLevelM": 2740,
+      "freezingLevelM": 2752,
       "weatherCode": 1
     },
     {
@@ -4946,7 +4901,7 @@
       "gustMaxKph": 121,
       "windDirectionDeg": 316,
       "cloudPct": 100,
-      "freezingLevelM": 1906,
+      "freezingLevelM": 1904,
       "weatherCode": 51
     },
     {
@@ -4960,7 +4915,7 @@
       "gustMaxKph": 50,
       "windDirectionDeg": 337,
       "cloudPct": 50,
-      "freezingLevelM": 1756,
+      "freezingLevelM": 1979,
       "weatherCode": 0
     },
     {
@@ -4974,7 +4929,7 @@
       "gustMaxKph": 104,
       "windDirectionDeg": 312,
       "cloudPct": 46,
-      "freezingLevelM": 1973,
+      "freezingLevelM": 1471,
       "weatherCode": 1
     },
     {
@@ -4988,7 +4943,7 @@
       "gustMaxKph": 53,
       "windDirectionDeg": 322,
       "cloudPct": 27,
-      "freezingLevelM": 2852,
+      "freezingLevelM": 1350,
       "weatherCode": 0
     },
     {
@@ -5002,7 +4957,7 @@
       "gustMaxKph": 71,
       "windDirectionDeg": 319,
       "cloudPct": 63,
-      "freezingLevelM": 2831,
+      "freezingLevelM": 1557,
       "weatherCode": 1
     },
     {
@@ -5016,7 +4971,7 @@
       "gustMaxKph": 138,
       "windDirectionDeg": 318,
       "cloudPct": 88,
-      "freezingLevelM": 2489,
+      "freezingLevelM": 1357,
       "weatherCode": 51
     },
     {
@@ -5030,16 +4985,16 @@
       "gustMaxKph": 107,
       "windDirectionDeg": 321,
       "cloudPct": 17,
-      "freezingLevelM": 2597,
+      "freezingLevelM": 1717,
       "weatherCode": 0
     }
   ],
   "ensemble": {
     "source": "Open-Meteo Ensemble API",
     "model": "gfs_seamless",
-    "generatedAt": "2026-08-20T18:58:50.138Z",
-    "windowStartAt": "2026-08-20T18:00:00.000Z",
-    "windowEndAt": "2026-08-23T17:00:00.000Z",
+    "generatedAt": "2026-08-20T19:45:15.923Z",
+    "windowStartAt": "2026-08-20T19:00:00.000Z",
+    "windowEndAt": "2026-08-23T18:00:00.000Z",
     "windowHours": 72,
     "memberCount": 31,
     "snowfallCm": {
