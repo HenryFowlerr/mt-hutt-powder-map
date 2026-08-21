@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-08-21T19:36:46.534Z",
+  "generatedAt": "2026-08-21T20:40:53.190Z",
   "location": "Mt Hutt",
   "summary": {
     "recentSnowCm": 0,
     "forecastSnowCm": 0.5,
-    "mainWindDirectionDeg": 289,
+    "mainWindDirectionDeg": 291,
     "avgWindKph": 6,
     "temperatureMinC": -7.8,
     "temperatureMaxC": 1.7,
@@ -12,33 +12,33 @@
     "headline": "Limited recent snow signal; sheltered upper terrain still scores best if snow stayed cold.",
     "reasons": [
       "0 cm estimated snowfall in the last 72 hours from Open-Meteo.",
-      "Mean recent wind around 6 km/h from 289 degrees.",
+      "Mean recent wind around 6 km/h from 291 degrees.",
       "Forecast wind trends 13 km/h from 318 degrees over the next 72 hours.",
       "Terrain score favours cold upper mountain bowls, gullies, and lee-facing aspects."
     ],
-    "maxGustKph": 55,
+    "maxGustKph": 59,
     "forecastWindDirectionDeg": 318,
     "forecastAvgWindKph": 13,
     "forecastMaxGustKph": 111,
     "forecastTemperatureMinC": -2.7,
     "forecastTemperatureMaxC": 1.5,
-    "cloudLowPct": 77,
-    "cloudMidPct": 2,
-    "cloudHighPct": 65,
-    "freezingLevelM": 2510,
-    "cloudMeanPct": 91,
+    "cloudLowPct": 85,
+    "cloudMidPct": 3,
+    "cloudHighPct": 68,
+    "freezingLevelM": 2328,
+    "cloudMeanPct": 96,
     "meltFreezeCycles": 2,
-    "recentRainMm": 0,
+    "recentRainMm": 0.1,
     "hoursAboveZero": 12,
     "hoursSinceSnow": 999,
     "currentWindDirectionDeg": 328,
     "currentWindKph": 16,
     "currentGustKph": 103,
-    "currentTemperatureC": -2.1,
-    "recentFreezingLevelM": 2432,
+    "currentTemperatureC": -1.5,
+    "recentFreezingLevelM": 2433,
     "forecastFreezingLevelM": 1592,
     "forecastRainMm": 17.4,
-    "forecastHoursAboveZero": 34,
+    "forecastHoursAboveZero": 35,
     "stormPeakSnowCm": 0.1,
     "windDirectionSpreadDeg": 8,
     "recentTerrainSignal": {
@@ -54,18 +54,6 @@
     "stormEndAt": "2026-08-23T03:00:00.000Z"
   },
   "observations": [
-    {
-      "time": "2026-08-18T20:00:00.000Z",
-      "temperatureC": -2,
-      "snowfallCm": 0,
-      "windKph": 7.3,
-      "windDirectionDeg": 200,
-      "freezingLevelM": 1670,
-      "gustKph": 48.2,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 100
-    },
     {
       "time": "2026-08-18T21:00:00.000Z",
       "temperatureC": -0.8,
@@ -917,9 +905,7 @@
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 99
-    }
-  ],
-  "forecast": [
+    },
     {
       "time": "2026-08-21T20:00:00.000Z",
       "temperatureC": -0.6,
@@ -931,7 +917,9 @@
       "rainMm": 0.1,
       "precipitationMm": 0.1,
       "cloudPct": 100
-    },
+    }
+  ],
+  "forecast": [
     {
       "time": "2026-08-21T21:00:00.000Z",
       "temperatureC": -0.3,
@@ -2935,6 +2923,18 @@
       "rainMm": 0.1,
       "precipitationMm": 1.9,
       "cloudPct": 100
+    },
+    {
+      "time": "2026-08-28T20:00:00.000Z",
+      "temperatureC": -2.6,
+      "snowfallCm": 1.26,
+      "windKph": 2.9,
+      "windDirectionDeg": 187,
+      "freezingLevelM": 2960,
+      "gustKph": 28.1,
+      "rainMm": 0.1,
+      "precipitationMm": 1.9,
+      "cloudPct": 100
     }
   ],
   "powderPolygons": [
@@ -2949,19 +2949,19 @@
       "coordinates": [
         [
           [
-            171.526841,
+            171.52684,
             -43.472491
           ],
           [
             171.529255,
-            -43.472578
+            -43.472577
           ],
           [
             171.530025,
-            -43.47283
+            -43.472829
           ],
           [
-            171.530716,
+            171.530717,
             -43.473638
           ],
           [
@@ -2986,7 +2986,7 @@
           ],
           [
             171.526561,
-            -43.472596
+            -43.472595
           ]
         ]
       ]
@@ -3002,7 +3002,7 @@
       "coordinates": [
         [
           [
-            171.531685,
+            171.531684,
             -43.485394
           ],
           [
@@ -3022,12 +3022,12 @@
             -43.487289
           ],
           [
-            171.530492,
+            171.530491,
             -43.486541
           ],
           [
             171.531565,
-            -43.485455
+            -43.485454
           ]
         ]
       ]
@@ -3043,12 +3043,12 @@
       "coordinates": [
         [
           [
-            171.524674,
+            171.524673,
             -43.475072
           ],
           [
             171.525406,
-            -43.47479
+            -43.474789
           ],
           [
             171.525791,
@@ -3063,7 +3063,7 @@
             -43.477139
           ],
           [
-            171.522823,
+            171.522822,
             -43.476219
           ],
           [
@@ -3088,7 +3088,7 @@
       "coordinates": [
         [
           [
-            171.528811,
+            171.528809,
             -43.482527
           ],
           [
@@ -3096,16 +3096,16 @@
             -43.48239
           ],
           [
-            171.530464,
+            171.530465,
             -43.482814
           ],
           [
-            171.53037,
+            171.530371,
             -43.483387
           ],
           [
             171.52964,
-            -43.484113
+            -43.484114
           ],
           [
             171.529255,
@@ -3113,19 +3113,19 @@
           ],
           [
             171.5281,
-            -43.483705
+            -43.483704
           ],
           [
             171.527715,
-            -43.483959
+            -43.483958
           ],
           [
-            171.527352,
+            171.527353,
             -43.483674
           ],
           [
             171.527331,
-            -43.482722
+            -43.482723
           ],
           [
             171.528485,
@@ -3145,7 +3145,7 @@
       "coordinates": [
         [
           [
-            171.530485,
+            171.530484,
             -43.488262
           ],
           [
@@ -3166,7 +3166,7 @@
           ],
           [
             171.528485,
-            -43.489587
+            -43.489588
           ],
           [
             171.528167,
@@ -3174,7 +3174,7 @@
           ],
           [
             171.528485,
-            -43.488481
+            -43.48848
           ],
           [
             171.53041,
@@ -3194,15 +3194,15 @@
       "coordinates": [
         [
           [
-            171.528277,
+            171.528276,
             -43.46819
           ],
           [
-            171.529185,
+            171.529186,
             -43.46819
           ],
           [
-            171.529448,
+            171.529449,
             -43.46905
           ],
           [
@@ -3211,18 +3211,18 @@
           ],
           [
             171.5281,
-            -43.471181
+            -43.471182
           ],
           [
             171.527736,
             -43.470771
           ],
           [
-            171.528732,
+            171.528731,
             -43.469337
           ],
           [
-            171.527819,
+            171.527818,
             -43.468763
           ],
           [
@@ -3243,11 +3243,11 @@
       "coordinates": [
         [
           [
-            171.529909,
+            171.529907,
             -43.479659
           ],
           [
-            171.531053,
+            171.531052,
             -43.48052
           ],
           [
@@ -3260,10 +3260,10 @@
           ],
           [
             171.530025,
-            -43.481186
+            -43.481187
           ],
           [
-            171.529218,
+            171.529217,
             -43.480806
           ],
           [
@@ -3284,19 +3284,19 @@
       "coordinates": [
         [
           [
-            171.526815,
+            171.526814,
             -43.473065
           ],
           [
             171.527331,
-            -43.472886
+            -43.472885
           ],
           [
-            171.528654,
+            171.528661,
             -43.473065
           ],
           [
-            171.528511,
+            171.528514,
             -43.473925
           ],
           [
@@ -3305,7 +3305,7 @@
           ],
           [
             171.526946,
-            -43.473308
+            -43.473309
           ]
         ]
       ]
@@ -3317,13 +3317,13 @@
       "snowfallCm": 0,
       "precipMm": 7,
       "rainMm": 7,
-      "tempMinC": -1.2,
+      "tempMinC": -0.6,
       "tempMaxC": 1.5,
       "windMeanKph": 12,
       "gustMaxKph": 104,
-      "windDirectionDeg": 325,
+      "windDirectionDeg": 324,
       "cloudPct": 97,
-      "freezingLevelM": 1952,
+      "freezingLevelM": 1964,
       "weatherCode": 53
     },
     {
@@ -3512,9 +3512,9 @@
   "ensemble": {
     "source": "Open-Meteo Ensemble API",
     "model": "gfs_seamless",
-    "generatedAt": "2026-08-21T19:36:46.478Z",
-    "windowStartAt": "2026-08-21T19:00:00.000Z",
-    "windowEndAt": "2026-08-24T18:00:00.000Z",
+    "generatedAt": "2026-08-21T20:40:53.167Z",
+    "windowStartAt": "2026-08-21T20:00:00.000Z",
+    "windowEndAt": "2026-08-24T19:00:00.000Z",
     "windowHours": 72,
     "memberCount": 31,
     "snowfallCm": {
