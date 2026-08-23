@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-08-23T10:39:38.650Z",
+  "generatedAt": "2026-08-23T11:34:22.822Z",
   "location": "Mt Hutt",
   "summary": {
     "recentSnowCm": 0.1,
-    "forecastSnowCm": 0.1,
+    "forecastSnowCm": 1.1,
     "mainWindDirectionDeg": 324,
     "avgWindKph": 13,
     "temperatureMinC": -0.8,
@@ -13,34 +13,34 @@
     "reasons": [
       "0.1 cm estimated snowfall in the last 72 hours from Open-Meteo.",
       "Mean recent wind around 13 km/h from 324 degrees.",
-      "Forecast wind trends 7 km/h from 128 degrees over the next 72 hours.",
+      "Forecast wind trends 7 km/h from 124 degrees over the next 72 hours.",
       "Terrain score favours cold upper mountain bowls, gullies, and lee-facing aspects."
     ],
     "maxGustKph": 108,
-    "forecastWindDirectionDeg": 128,
+    "forecastWindDirectionDeg": 124,
     "forecastAvgWindKph": 7,
     "forecastMaxGustKph": 36,
-    "forecastTemperatureMinC": -1.7,
+    "forecastTemperatureMinC": -2.1,
     "forecastTemperatureMaxC": 1.1,
-    "cloudLowPct": 7,
-    "cloudMidPct": 2,
+    "cloudLowPct": 5,
+    "cloudMidPct": 1,
     "cloudHighPct": 0,
-    "freezingLevelM": 1425,
-    "cloudMeanPct": 9,
+    "freezingLevelM": 1423,
+    "cloudMeanPct": 5,
     "meltFreezeCycles": 1,
     "recentRainMm": 15.5,
     "hoursAboveZero": 25,
     "hoursSinceSnow": 999,
     "currentWindDirectionDeg": 303,
-    "currentWindKph": 5,
-    "currentGustKph": 70,
-    "currentTemperatureC": -5.5,
+    "currentWindKph": 4,
+    "currentGustKph": 61,
+    "currentTemperatureC": -6.4,
     "recentFreezingLevelM": 1756,
-    "forecastFreezingLevelM": 2123,
-    "forecastRainMm": 12.5,
+    "forecastFreezingLevelM": 1695,
+    "forecastRainMm": 13.2,
     "forecastHoursAboveZero": 47,
-    "stormPeakSnowCm": 0.1,
-    "windDirectionSpreadDeg": 18,
+    "stormPeakSnowCm": 1.1,
+    "windDirectionSpreadDeg": 7,
     "recentTerrainSignal": {
       "basis": "modelled-last-72-hours",
       "strength": "none",
@@ -51,21 +51,9 @@
       "reason": "72 of 72 recent model hours are available; this is a modelled signal, not measured snowfall."
     },
     "stormStartAt": "2026-08-26T10:00:00.000Z",
-    "stormEndAt": "2026-08-26T10:00:00.000Z"
+    "stormEndAt": "2026-08-26T11:00:00.000Z"
   },
   "observations": [
-    {
-      "time": "2026-08-20T11:00:00.000Z",
-      "temperatureC": -3.7,
-      "snowfallCm": 0,
-      "windKph": 5.3,
-      "windDirectionDeg": 303,
-      "freezingLevelM": 2120,
-      "gustKph": 20.9,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 1
-    },
     {
       "time": "2026-08-20T12:00:00.000Z",
       "temperatureC": -4.9,
@@ -917,9 +905,7 @@
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 3
-    }
-  ],
-  "forecast": [
+    },
     {
       "time": "2026-08-23T11:00:00.000Z",
       "temperatureC": -7.4,
@@ -931,7 +917,9 @@
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 5
-    },
+    }
+  ],
+  "forecast": [
     {
       "time": "2026-08-23T12:00:00.000Z",
       "temperatureC": -7.4,
@@ -2935,6 +2923,18 @@
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 34
+    },
+    {
+      "time": "2026-08-30T11:00:00.000Z",
+      "temperatureC": -2.1,
+      "snowfallCm": 0,
+      "windKph": 6.5,
+      "windDirectionDeg": 309,
+      "freezingLevelM": 1005,
+      "gustKph": 99.4,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 23
     }
   ],
   "powderPolygons": [
@@ -3266,34 +3266,161 @@
       "mode": "forecast",
       "thresholdCm": 1,
       "expectedSnowCm": 2,
-      "score": 0.24,
+      "score": 0.32,
+      "reason": "Deposits behind terrain features across 6 active wind sectors.",
+      "dominantFactor": "ridge shelter",
+      "coordinates": [
+        [
+          [
+            171.528948,
+            -43.482527
+          ],
+          [
+            171.52964,
+            -43.482428
+          ],
+          [
+            171.530433,
+            -43.482814
+          ],
+          [
+            171.52964,
+            -43.484079
+          ],
+          [
+            171.527707,
+            -43.4831
+          ],
+          [
+            171.52887,
+            -43.482594
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "forecast-002",
+      "mode": "forecast",
+      "thresholdCm": 1,
+      "expectedSnowCm": 2,
+      "score": 0.25,
       "reason": "Concave E-facing gully/bowl terrain that collects drifting snow.",
       "dominantFactor": "sheltered gully",
       "coordinates": [
         [
           [
-            171.527314,
-            -43.472778
-          ],
-          [
-            171.528025,
+            171.527222,
             -43.473065
-          ],
-          [
-            171.5281,
-            -43.474354
           ],
           [
             171.527715,
-            -43.474477
+            -43.472831
           ],
           [
-            171.527352,
-            -43.474211
+            171.528485,
+            -43.473054
           ],
           [
-            171.527058,
-            -43.473065
+            171.528854,
+            -43.473351
+          ],
+          [
+            171.528737,
+            -43.473925
+          ],
+          [
+            171.5281,
+            -43.474453
+          ],
+          [
+            171.527459,
+            -43.474498
+          ],
+          [
+            171.526993,
+            -43.473351
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "forecast-003",
+      "mode": "forecast",
+      "thresholdCm": 1,
+      "expectedSnowCm": 2,
+      "score": 0.27,
+      "reason": "Concave SE-facing gully/bowl terrain that collects drifting snow.",
+      "dominantFactor": "sheltered gully",
+      "coordinates": [
+        [
+          [
+            171.5322,
+            -43.485394
+          ],
+          [
+            171.53272,
+            -43.485363
+          ],
+          [
+            171.533327,
+            -43.485968
+          ],
+          [
+            171.53118,
+            -43.486812
+          ],
+          [
+            171.531037,
+            -43.486254
+          ],
+          [
+            171.53195,
+            -43.48546
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "forecast-004",
+      "mode": "forecast",
+      "thresholdCm": 1,
+      "expectedSnowCm": 2,
+      "score": 0.25,
+      "reason": "Deposits behind terrain features across 6 active wind sectors.",
+      "dominantFactor": "ridge shelter",
+      "coordinates": [
+        [
+          [
+            171.524592,
+            -43.475358
+          ],
+          [
+            171.525021,
+            -43.4751
+          ],
+          [
+            171.525791,
+            -43.475254
+          ],
+          [
+            171.526115,
+            -43.475932
+          ],
+          [
+            171.525862,
+            -43.476219
+          ],
+          [
+            171.525406,
+            -43.476509
+          ],
+          [
+            171.524636,
+            -43.476293
+          ],
+          [
+            171.524264,
+            -43.475645
           ]
         ]
       ]
@@ -3486,9 +3613,9 @@
   "ensemble": {
     "source": "Open-Meteo Ensemble API",
     "model": "gfs_seamless",
-    "generatedAt": "2026-08-23T10:39:38.405Z",
-    "windowStartAt": "2026-08-23T10:00:00.000Z",
-    "windowEndAt": "2026-08-26T09:00:00.000Z",
+    "generatedAt": "2026-08-23T11:34:22.794Z",
+    "windowStartAt": "2026-08-23T11:00:00.000Z",
+    "windowEndAt": "2026-08-26T10:00:00.000Z",
     "windowHours": 72,
     "memberCount": 31,
     "snowfallCm": {
