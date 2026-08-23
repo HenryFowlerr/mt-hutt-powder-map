@@ -1,46 +1,46 @@
 {
-  "generatedAt": "2026-08-23T04:51:48.307Z",
+  "generatedAt": "2026-08-23T05:44:24.739Z",
   "location": "Mt Hutt",
   "summary": {
     "recentSnowCm": 0.1,
     "forecastSnowCm": 0,
-    "mainWindDirectionDeg": 318,
+    "mainWindDirectionDeg": 317,
     "avgWindKph": 12,
-    "temperatureMinC": -1.5,
+    "temperatureMinC": -2.5,
     "temperatureMaxC": 1.5,
     "confidence": "low",
     "headline": "Limited recent snow signal; sheltered upper terrain still scores best if snow stayed cold.",
     "reasons": [
       "0.1 cm estimated snowfall in the last 72 hours from Open-Meteo.",
-      "Mean recent wind around 12 km/h from 318 degrees.",
-      "Forecast wind trends 9 km/h from 316 degrees over the next 72 hours.",
+      "Mean recent wind around 12 km/h from 317 degrees.",
+      "Forecast wind trends 8 km/h from 316 degrees over the next 72 hours.",
       "Terrain score favours cold upper mountain bowls, gullies, and lee-facing aspects."
     ],
-    "maxGustKph": 108,
+    "maxGustKph": 107,
     "forecastWindDirectionDeg": 316,
-    "forecastAvgWindKph": 9,
+    "forecastAvgWindKph": 8,
     "forecastMaxGustKph": 92,
     "forecastTemperatureMinC": -7.9,
     "forecastTemperatureMaxC": 3.4,
-    "cloudLowPct": 28,
-    "cloudMidPct": 16,
+    "cloudLowPct": 26,
+    "cloudMidPct": 15,
     "cloudHighPct": 0,
-    "freezingLevelM": 1468,
-    "cloudMeanPct": 38,
+    "freezingLevelM": 1460,
+    "cloudMeanPct": 36,
     "meltFreezeCycles": 1,
     "recentRainMm": 15.4,
     "hoursAboveZero": 25,
     "hoursSinceSnow": 999,
-    "currentWindDirectionDeg": 309,
-    "currentWindKph": 13,
-    "currentGustKph": 102,
-    "currentTemperatureC": -1.1,
-    "recentFreezingLevelM": 1620,
-    "forecastFreezingLevelM": 2077,
-    "forecastRainMm": 9.1,
-    "forecastHoursAboveZero": 38,
+    "currentWindDirectionDeg": 310,
+    "currentWindKph": 12,
+    "currentGustKph": 94,
+    "currentTemperatureC": -1.4,
+    "recentFreezingLevelM": 1608,
+    "forecastFreezingLevelM": 2086,
+    "forecastRainMm": 10.8,
+    "forecastHoursAboveZero": 39,
     "stormPeakSnowCm": 0,
-    "windDirectionSpreadDeg": 17,
+    "windDirectionSpreadDeg": 20,
     "recentTerrainSignal": {
       "basis": "modelled-last-72-hours",
       "strength": "none",
@@ -52,18 +52,6 @@
     }
   },
   "observations": [
-    {
-      "time": "2026-08-20T05:00:00.000Z",
-      "temperatureC": -1,
-      "snowfallCm": 0,
-      "windKph": 0.9,
-      "windDirectionDeg": 281,
-      "freezingLevelM": 2610,
-      "gustKph": 14.8,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 48
-    },
     {
       "time": "2026-08-20T06:00:00.000Z",
       "temperatureC": -3.9,
@@ -915,9 +903,7 @@
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 20
-    }
-  ],
-  "forecast": [
+    },
     {
       "time": "2026-08-23T05:00:00.000Z",
       "temperatureC": -2.5,
@@ -929,7 +915,9 @@
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 26
-    },
+    }
+  ],
+  "forecast": [
     {
       "time": "2026-08-23T06:00:00.000Z",
       "temperatureC": -4.9,
@@ -2933,6 +2921,18 @@
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 48
+    },
+    {
+      "time": "2026-08-30T05:00:00.000Z",
+      "temperatureC": -2.4,
+      "snowfallCm": 0,
+      "windKph": 8.8,
+      "windDirectionDeg": 319,
+      "freezingLevelM": 2160,
+      "gustKph": 78.8,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 57
     }
   ],
   "powderPolygons": [
@@ -2967,7 +2967,7 @@
             -43.477366
           ],
           [
-            171.524547,
+            171.524549,
             -43.477939
           ],
           [
@@ -3111,11 +3111,11 @@
           ],
           [
             171.52964,
-            -43.483891
+            -43.483877
           ],
           [
             171.529255,
-            -43.483986
+            -43.483975
           ],
           [
             171.5281,
@@ -3123,7 +3123,7 @@
           ],
           [
             171.527331,
-            -43.484256
+            -43.484254
           ],
           [
             171.525791,
@@ -3270,40 +3270,40 @@
       "coordinates": [
         [
           [
-            171.52723,
+            171.527082,
             -43.472491
           ],
           [
             171.5281,
-            -43.472606
+            -43.472567
           ],
           [
-            171.528656,
+            171.528705,
             -43.473065
           ],
           [
-            171.528748,
-            -43.473638
-          ],
-          [
-            171.5281,
-            -43.474469
-          ],
-          [
-            171.527384,
-            -43.474498
-          ],
-          [
-            171.527089,
+            171.528588,
             -43.474211
           ],
           [
-            171.52652,
+            171.5281,
+            -43.474666
+          ],
+          [
+            171.527715,
+            -43.474709
+          ],
+          [
+            171.527039,
+            -43.474211
+          ],
+          [
+            171.526475,
             -43.473065
           ],
           [
             171.526946,
-            -43.472591
+            -43.472539
           ]
         ]
       ]
@@ -3319,28 +3319,36 @@
       "coordinates": [
         [
           [
-            171.531777,
+            171.531683,
             -43.485394
           ],
           [
             171.53272,
-            -43.485219
+            -43.48517
           ],
           [
-            171.533455,
+            171.533461,
+            -43.485681
+          ],
+          [
+            171.533416,
             -43.485968
           ],
           [
-            171.53118,
-            -43.487121
+            171.53195,
+            -43.486933
           ],
           [
-            171.530565,
+            171.53118,
+            -43.487081
+          ],
+          [
+            171.5305,
             -43.486541
           ],
           [
             171.531565,
-            -43.485502
+            -43.485455
           ]
         ]
       ]
@@ -3356,23 +3364,27 @@
       "coordinates": [
         [
           [
-            171.528431,
+            171.528348,
             -43.488835
           ],
           [
-            171.530025,
-            -43.488701
+            171.52887,
+            -43.488585
           ],
           [
-            171.530258,
+            171.530025,
+            -43.488633
+          ],
+          [
+            171.530314,
             -43.489122
           ],
           [
             171.529255,
-            -43.489727
+            -43.489769
           ],
           [
-            171.528201,
+            171.528144,
             -43.489122
           ]
         ]
@@ -3389,24 +3401,32 @@
       "coordinates": [
         [
           [
-            171.527256,
+            171.527106,
             -43.472778
           ],
           [
-            171.52824,
+            171.527715,
+            -43.472714
+          ],
+          [
+            171.528332,
             -43.473065
           ],
           [
-            171.528293,
-            -43.473638
+            171.5281,
+            -43.474308
           ],
           [
-            171.527845,
+            171.527715,
+            -43.474432
+          ],
+          [
+            171.527411,
             -43.474211
           ],
           [
             171.526946,
-            -43.472998
+            -43.472891
           ]
         ]
       ]
@@ -3419,12 +3439,12 @@
       "precipMm": 0,
       "rainMm": 0,
       "tempMinC": -7,
-      "tempMaxC": -1.4,
-      "windMeanKph": 6,
-      "gustMaxKph": 83,
+      "tempMaxC": -2.5,
+      "windMeanKph": 5,
+      "gustMaxKph": 82,
       "windDirectionDeg": 304,
-      "cloudPct": 12,
-      "freezingLevelM": 1400,
+      "cloudPct": 11,
+      "freezingLevelM": 1394,
       "weatherCode": 0
     },
     {
@@ -3613,9 +3633,9 @@
   "ensemble": {
     "source": "Open-Meteo Ensemble API",
     "model": "gfs_seamless",
-    "generatedAt": "2026-08-23T04:51:48.273Z",
-    "windowStartAt": "2026-08-23T04:00:00.000Z",
-    "windowEndAt": "2026-08-26T03:00:00.000Z",
+    "generatedAt": "2026-08-23T05:44:24.712Z",
+    "windowStartAt": "2026-08-23T05:00:00.000Z",
+    "windowEndAt": "2026-08-26T04:00:00.000Z",
     "windowHours": 72,
     "memberCount": 31,
     "snowfallCm": {
