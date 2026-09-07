@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-09-06T23:53:58.590Z",
+  "generatedAt": "2026-09-07T04:40:51.854Z",
   "location": "Mt Hutt",
   "summary": {
     "recentSnowCm": 18.5,
-    "forecastSnowCm": 5.3,
+    "forecastSnowCm": 9.5,
     "mainWindDirectionDeg": 178,
     "avgWindKph": 4,
     "temperatureMinC": -5.3,
@@ -13,34 +13,34 @@
     "reasons": [
       "18 cm estimated snowfall in the last 72 hours from Open-Meteo.",
       "Mean recent wind around 4 km/h from 178 degrees.",
-      "Forecast wind trends 5 km/h from 180 degrees over the next 72 hours.",
+      "Forecast wind trends 4 km/h from 162 degrees over the next 72 hours.",
       "Terrain score favours cold upper mountain bowls, gullies, and lee-facing aspects."
     ],
     "maxGustKph": 45,
-    "forecastWindDirectionDeg": 180,
-    "forecastAvgWindKph": 5,
-    "forecastMaxGustKph": 79,
-    "forecastTemperatureMinC": -4.4,
-    "forecastTemperatureMaxC": -1.5,
+    "forecastWindDirectionDeg": 162,
+    "forecastAvgWindKph": 4,
+    "forecastMaxGustKph": 62,
+    "forecastTemperatureMinC": -4.2,
+    "forecastTemperatureMaxC": -1.4,
     "cloudLowPct": 100,
-    "cloudMidPct": 6,
-    "cloudHighPct": 35,
-    "freezingLevelM": 1125,
+    "cloudMidPct": 1,
+    "cloudHighPct": 0,
+    "freezingLevelM": 1223,
     "cloudMeanPct": 100,
     "meltFreezeCycles": 2,
-    "recentRainMm": 9.5,
-    "hoursAboveZero": 27,
-    "hoursSinceSnow": 9,
-    "currentWindDirectionDeg": 128,
-    "currentWindKph": 6,
-    "currentGustKph": 29,
-    "currentTemperatureC": -4.3,
-    "recentFreezingLevelM": 1595,
-    "forecastFreezingLevelM": 1345,
-    "forecastRainMm": 1.9,
+    "recentRainMm": 9.7,
+    "hoursAboveZero": 22,
+    "hoursSinceSnow": 14,
+    "currentWindDirectionDeg": 85,
+    "currentWindKph": 3,
+    "currentGustKph": 18,
+    "currentTemperatureC": -3.4,
+    "recentFreezingLevelM": 1593,
+    "forecastFreezingLevelM": 1254,
+    "forecastRainMm": 2.4,
     "forecastHoursAboveZero": 7,
-    "stormPeakSnowCm": 1.3,
-    "windDirectionSpreadDeg": 38,
+    "stormPeakSnowCm": 2,
+    "windDirectionSpreadDeg": 45,
     "recentTerrainSignal": {
       "basis": "modelled-last-72-hours",
       "strength": "strong",
@@ -50,70 +50,10 @@
       "dataAgeHours": 0,
       "reason": "72 of 72 recent model hours are available; this is a modelled signal, not measured snowfall."
     },
-    "stormStartAt": "2026-09-09T13:00:00.000Z",
-    "stormEndAt": "2026-09-09T23:00:00.000Z"
+    "stormStartAt": "2026-09-09T14:00:00.000Z",
+    "stormEndAt": "2026-09-10T04:00:00.000Z"
   },
   "observations": [
-    {
-      "time": "2026-09-04T00:00:00.000Z",
-      "temperatureC": 3.5,
-      "snowfallCm": 0,
-      "windKph": 18.7,
-      "windDirectionDeg": 312,
-      "freezingLevelM": 1670,
-      "gustKph": 104.4,
-      "rainMm": 0.1,
-      "precipitationMm": 0.1,
-      "cloudPct": 87
-    },
-    {
-      "time": "2026-09-04T01:00:00.000Z",
-      "temperatureC": 3.1,
-      "snowfallCm": 0,
-      "windKph": 17.1,
-      "windDirectionDeg": 312,
-      "freezingLevelM": 1650,
-      "gustKph": 91.1,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 67
-    },
-    {
-      "time": "2026-09-04T02:00:00.000Z",
-      "temperatureC": 2.6,
-      "snowfallCm": 0,
-      "windKph": 17.8,
-      "windDirectionDeg": 306,
-      "freezingLevelM": 1630,
-      "gustKph": 89.3,
-      "rainMm": 0,
-      "precipitationMm": 0.1,
-      "cloudPct": 59
-    },
-    {
-      "time": "2026-09-04T03:00:00.000Z",
-      "temperatureC": 1.8,
-      "snowfallCm": 0,
-      "windKph": 13.9,
-      "windDirectionDeg": 306,
-      "freezingLevelM": 1620,
-      "gustKph": 89.3,
-      "rainMm": 0,
-      "precipitationMm": 0.1,
-      "cloudPct": 30
-    },
-    {
-      "time": "2026-09-04T04:00:00.000Z",
-      "temperatureC": 1.9,
-      "snowfallCm": 0,
-      "windKph": 16.7,
-      "windDirectionDeg": 308,
-      "freezingLevelM": 1630,
-      "gustKph": 87.1,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 34
-    },
     {
       "time": "2026-09-04T05:00:00.000Z",
       "temperatureC": 1,
@@ -848,10 +788,10 @@
     },
     {
       "time": "2026-09-06T18:00:00.000Z",
-      "temperatureC": -4.5,
+      "temperatureC": -4.8,
       "snowfallCm": 0.07,
-      "windKph": 7.1,
-      "windDirectionDeg": 144,
+      "windKph": 6.3,
+      "windDirectionDeg": 149,
       "freezingLevelM": 1110,
       "gustKph": 32.4,
       "rainMm": 0.2,
@@ -860,589 +800,589 @@
     },
     {
       "time": "2026-09-06T19:00:00.000Z",
-      "temperatureC": -4.5,
+      "temperatureC": -4.7,
       "snowfallCm": 0.07,
-      "windKph": 7.3,
-      "windDirectionDeg": 144,
+      "windKph": 6.5,
+      "windDirectionDeg": 136,
       "freezingLevelM": 1110,
-      "gustKph": 28.8,
+      "gustKph": 27.4,
       "rainMm": 0.2,
       "precipitationMm": 0.3,
       "cloudPct": 100
     },
     {
       "time": "2026-09-06T20:00:00.000Z",
-      "temperatureC": -4.4,
+      "temperatureC": -4.5,
       "snowfallCm": 0.07,
-      "windKph": 6.9,
-      "windDirectionDeg": 133,
+      "windKph": 6.2,
+      "windDirectionDeg": 134,
       "freezingLevelM": 1120,
-      "gustKph": 28.8,
-      "rainMm": 0.2,
-      "precipitationMm": 0.3,
+      "gustKph": 25.6,
+      "rainMm": 0.3,
+      "precipitationMm": 0.4,
       "cloudPct": 100
     },
     {
       "time": "2026-09-06T21:00:00.000Z",
       "temperatureC": -4.3,
       "snowfallCm": 0.07,
-      "windKph": 6.2,
-      "windDirectionDeg": 123,
+      "windKph": 5.8,
+      "windDirectionDeg": 124,
       "freezingLevelM": 1130,
-      "gustKph": 26.6,
-      "rainMm": 0.1,
-      "precipitationMm": 0.2,
+      "gustKph": 23.4,
+      "rainMm": 0.2,
+      "precipitationMm": 0.3,
       "cloudPct": 100
     },
     {
       "time": "2026-09-06T22:00:00.000Z",
       "temperatureC": -4.2,
       "snowfallCm": 0.07,
-      "windKph": 4.8,
-      "windDirectionDeg": 115,
+      "windKph": 5.6,
+      "windDirectionDeg": 119,
       "freezingLevelM": 1130,
-      "gustKph": 21.6,
-      "rainMm": 0,
-      "precipitationMm": 0.1,
+      "gustKph": 20.5,
+      "rainMm": 0.1,
+      "precipitationMm": 0.2,
       "cloudPct": 100
     },
     {
       "time": "2026-09-06T23:00:00.000Z",
-      "temperatureC": -3.9,
+      "temperatureC": -4,
       "snowfallCm": 0.07,
-      "windKph": 4.4,
-      "windDirectionDeg": 111,
+      "windKph": 6.2,
+      "windDirectionDeg": 105,
       "freezingLevelM": 1150,
-      "gustKph": 15.8,
+      "gustKph": 18.7,
       "rainMm": 0,
       "precipitationMm": 0.1,
       "cloudPct": 99
-    }
-  ],
-  "forecast": [
+    },
     {
       "time": "2026-09-07T00:00:00.000Z",
-      "temperatureC": -3.4,
+      "temperatureC": -3.5,
       "snowfallCm": 0,
-      "windKph": 4,
-      "windDirectionDeg": 93,
+      "windKph": 3.9,
+      "windDirectionDeg": 77,
       "freezingLevelM": 1230,
-      "gustKph": 14,
+      "gustKph": 18,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 99
+      "cloudPct": 100
     },
     {
       "time": "2026-09-07T01:00:00.000Z",
-      "temperatureC": -3.2,
+      "temperatureC": -3.4,
       "snowfallCm": 0,
       "windKph": 3.4,
-      "windDirectionDeg": 74,
+      "windDirectionDeg": 72,
       "freezingLevelM": 1230,
-      "gustKph": 10.8,
+      "gustKph": 12.2,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 100
     },
     {
       "time": "2026-09-07T02:00:00.000Z",
-      "temperatureC": -3,
+      "temperatureC": -3.2,
       "snowfallCm": 0,
-      "windKph": 2.9,
-      "windDirectionDeg": 83,
+      "windKph": 2.2,
+      "windDirectionDeg": 66,
       "freezingLevelM": 1230,
-      "gustKph": 7.9,
+      "gustKph": 9.4,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 99
+      "cloudPct": 100
     },
     {
       "time": "2026-09-07T03:00:00.000Z",
-      "temperatureC": -2.8,
+      "temperatureC": -3.1,
       "snowfallCm": 0,
-      "windKph": 2.4,
-      "windDirectionDeg": 81,
+      "windKph": 2,
+      "windDirectionDeg": 85,
       "freezingLevelM": 1250,
-      "gustKph": 7.6,
+      "gustKph": 7.9,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 100
     },
     {
       "time": "2026-09-07T04:00:00.000Z",
-      "temperatureC": -2.8,
+      "temperatureC": -3,
       "snowfallCm": 0,
-      "windKph": 2.1,
-      "windDirectionDeg": 59,
+      "windKph": 2.6,
+      "windDirectionDeg": 56,
       "freezingLevelM": 1250,
-      "gustKph": 8.3,
+      "gustKph": 9.7,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 100
+    }
+  ],
+  "forecast": [
+    {
+      "time": "2026-09-07T05:00:00.000Z",
+      "temperatureC": -3,
+      "snowfallCm": 0,
+      "windKph": 3,
+      "windDirectionDeg": 38,
+      "freezingLevelM": 1250,
+      "gustKph": 13.3,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 99
     },
     {
-      "time": "2026-09-07T05:00:00.000Z",
-      "temperatureC": -2.9,
+      "time": "2026-09-07T06:00:00.000Z",
+      "temperatureC": -3.2,
       "snowfallCm": 0,
-      "windKph": 2.2,
-      "windDirectionDeg": 55,
-      "freezingLevelM": 1250,
-      "gustKph": 9.4,
+      "windKph": 2.8,
+      "windDirectionDeg": 27,
+      "freezingLevelM": 1230,
+      "gustKph": 15.5,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 95
     },
     {
-      "time": "2026-09-07T06:00:00.000Z",
-      "temperatureC": -3.7,
-      "snowfallCm": 0,
-      "windKph": 1.5,
-      "windDirectionDeg": 45,
-      "freezingLevelM": 1250,
-      "gustKph": 10.8,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 88
-    },
-    {
       "time": "2026-09-07T07:00:00.000Z",
-      "temperatureC": -4.2,
+      "temperatureC": -4.4,
       "snowfallCm": 0,
-      "windKph": 1.6,
-      "windDirectionDeg": 6,
+      "windKph": 2,
+      "windDirectionDeg": 355,
       "freezingLevelM": 1230,
-      "gustKph": 13.7,
+      "gustKph": 16.6,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 47
+      "cloudPct": 38
     },
     {
       "time": "2026-09-07T08:00:00.000Z",
-      "temperatureC": -5.5,
+      "temperatureC": -5.3,
       "snowfallCm": 0,
-      "windKph": 2.1,
-      "windDirectionDeg": 340,
+      "windKph": 2.3,
+      "windDirectionDeg": 337,
       "freezingLevelM": 1230,
-      "gustKph": 17.3,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 24
-    },
-    {
-      "time": "2026-09-07T09:00:00.000Z",
-      "temperatureC": -6.6,
-      "snowfallCm": 0,
-      "windKph": 2.8,
-      "windDirectionDeg": 320,
-      "freezingLevelM": 1230,
-      "gustKph": 20.5,
+      "gustKph": 19.1,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 30
     },
     {
-      "time": "2026-09-07T10:00:00.000Z",
-      "temperatureC": -7.8,
+      "time": "2026-09-07T09:00:00.000Z",
+      "temperatureC": -6.3,
       "snowfallCm": 0,
-      "windKph": 3,
-      "windDirectionDeg": 303,
-      "freezingLevelM": 1230,
-      "gustKph": 20.9,
+      "windKph": 3.3,
+      "windDirectionDeg": 319,
+      "freezingLevelM": 1240,
+      "gustKph": 22,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 59
+      "cloudPct": 47
+    },
+    {
+      "time": "2026-09-07T10:00:00.000Z",
+      "temperatureC": -7.3,
+      "snowfallCm": 0,
+      "windKph": 3.6,
+      "windDirectionDeg": 303,
+      "freezingLevelM": 1290,
+      "gustKph": 22.3,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 80
     },
     {
       "time": "2026-09-07T11:00:00.000Z",
-      "temperatureC": -8.9,
+      "temperatureC": -8.3,
       "snowfallCm": 0,
-      "windKph": 4,
-      "windDirectionDeg": 297,
-      "freezingLevelM": 1280,
-      "gustKph": 20.9,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 99
-    },
-    {
-      "time": "2026-09-07T12:00:00.000Z",
-      "temperatureC": -9.6,
-      "snowfallCm": 0,
-      "windKph": 4,
-      "windDirectionDeg": 291,
-      "freezingLevelM": 2440,
-      "gustKph": 21.2,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 98
-    },
-    {
-      "time": "2026-09-07T13:00:00.000Z",
-      "temperatureC": -9.4,
-      "snowfallCm": 0,
-      "windKph": 3.6,
-      "windDirectionDeg": 288,
-      "freezingLevelM": 2430,
+      "windKph": 3.9,
+      "windDirectionDeg": 292,
+      "freezingLevelM": 2490,
       "gustKph": 20.5,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 98
+      "cloudPct": 90
     },
     {
-      "time": "2026-09-07T14:00:00.000Z",
-      "temperatureC": -8.2,
+      "time": "2026-09-07T12:00:00.000Z",
+      "temperatureC": -8,
       "snowfallCm": 0,
-      "windKph": 2.1,
-      "windDirectionDeg": 285,
-      "freezingLevelM": 2320,
-      "gustKph": 19.8,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 97
-    },
-    {
-      "time": "2026-09-07T15:00:00.000Z",
-      "temperatureC": -7.7,
-      "snowfallCm": 0,
-      "windKph": 1.3,
-      "windDirectionDeg": 278,
-      "freezingLevelM": 1520,
-      "gustKph": 15.8,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 56
-    },
-    {
-      "time": "2026-09-07T16:00:00.000Z",
-      "temperatureC": -7.5,
-      "snowfallCm": 0,
-      "windKph": 1.1,
-      "windDirectionDeg": 279,
-      "freezingLevelM": 1530,
-      "gustKph": 13.7,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 63
-    },
-    {
-      "time": "2026-09-07T17:00:00.000Z",
-      "temperatureC": -7.2,
-      "snowfallCm": 0,
-      "windKph": 0.7,
-      "windDirectionDeg": 284,
-      "freezingLevelM": 1530,
-      "gustKph": 13,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 94
-    },
-    {
-      "time": "2026-09-07T18:00:00.000Z",
-      "temperatureC": -6.2,
-      "snowfallCm": 0,
-      "windKph": 0.7,
-      "windDirectionDeg": 270,
-      "freezingLevelM": 1540,
-      "gustKph": 11.2,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 88
-    },
-    {
-      "time": "2026-09-07T19:00:00.000Z",
-      "temperatureC": -6.2,
-      "snowfallCm": 0,
-      "windKph": 0.5,
-      "windDirectionDeg": 270,
-      "freezingLevelM": 1550,
-      "gustKph": 10.8,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 85
-    },
-    {
-      "time": "2026-09-07T20:00:00.000Z",
-      "temperatureC": -5.5,
-      "snowfallCm": 0,
-      "windKph": 1.1,
+      "windKph": 3.6,
       "windDirectionDeg": 288,
-      "freezingLevelM": 1550,
-      "gustKph": 10.8,
+      "freezingLevelM": 2520,
+      "gustKph": 20.2,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 81
+      "cloudPct": 87
     },
     {
-      "time": "2026-09-07T21:00:00.000Z",
-      "temperatureC": -3.4,
+      "time": "2026-09-07T13:00:00.000Z",
+      "temperatureC": -8.4,
       "snowfallCm": 0,
-      "windKph": 1.9,
-      "windDirectionDeg": 311,
-      "freezingLevelM": 1540,
-      "gustKph": 11.9,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 54
-    },
-    {
-      "time": "2026-09-07T22:00:00.000Z",
-      "temperatureC": -2,
-      "snowfallCm": 0,
-      "windKph": 1,
-      "windDirectionDeg": 329,
-      "freezingLevelM": 1540,
-      "gustKph": 11.5,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 70
-    },
-    {
-      "time": "2026-09-07T23:00:00.000Z",
-      "temperatureC": -1.6,
-      "snowfallCm": 0,
-      "windKph": 0.6,
-      "windDirectionDeg": 342,
-      "freezingLevelM": 1540,
-      "gustKph": 7.9,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 73
-    },
-    {
-      "time": "2026-09-08T00:00:00.000Z",
-      "temperatureC": -1.1,
-      "snowfallCm": 0,
-      "windKph": 0.4,
-      "windDirectionDeg": 270,
-      "freezingLevelM": 1590,
-      "gustKph": 6.5,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 65
-    },
-    {
-      "time": "2026-09-08T01:00:00.000Z",
-      "temperatureC": -0.7,
-      "snowfallCm": 0,
-      "windKph": 0.4,
-      "windDirectionDeg": 297,
-      "freezingLevelM": 1670,
-      "gustKph": 5,
+      "windKph": 3.3,
+      "windDirectionDeg": 283,
+      "freezingLevelM": 2510,
+      "gustKph": 19.8,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 95
     },
     {
-      "time": "2026-09-08T02:00:00.000Z",
-      "temperatureC": -0.2,
+      "time": "2026-09-07T14:00:00.000Z",
+      "temperatureC": -7.5,
       "snowfallCm": 0,
-      "windKph": 0.5,
+      "windKph": 2.4,
+      "windDirectionDeg": 279,
+      "freezingLevelM": 1550,
+      "gustKph": 18.4,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 93
+    },
+    {
+      "time": "2026-09-07T15:00:00.000Z",
+      "temperatureC": -6.7,
+      "snowfallCm": 0,
+      "windKph": 1.4,
       "windDirectionDeg": 270,
-      "freezingLevelM": 1720,
-      "gustKph": 6.5,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 71
-    },
-    {
-      "time": "2026-09-08T03:00:00.000Z",
-      "temperatureC": -0.1,
-      "snowfallCm": 0,
-      "windKph": 0.5,
-      "windDirectionDeg": 225,
-      "freezingLevelM": 1720,
-      "gustKph": 7.9,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 67
-    },
-    {
-      "time": "2026-09-08T04:00:00.000Z",
-      "temperatureC": -0.3,
-      "snowfallCm": 0,
-      "windKph": 1.6,
-      "windDirectionDeg": 180,
-      "freezingLevelM": 1630,
-      "gustKph": 12.2,
+      "freezingLevelM": 1560,
+      "gustKph": 15.8,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 55
     },
     {
-      "time": "2026-09-08T05:00:00.000Z",
-      "temperatureC": -0.9,
+      "time": "2026-09-07T16:00:00.000Z",
+      "temperatureC": -6.8,
       "snowfallCm": 0,
-      "windKph": 2.7,
-      "windDirectionDeg": 157,
-      "freezingLevelM": 1530,
-      "gustKph": 17.6,
+      "windKph": 0.7,
+      "windDirectionDeg": 270,
+      "freezingLevelM": 1570,
+      "gustKph": 13.3,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 45
+      "cloudPct": 64
+    },
+    {
+      "time": "2026-09-07T17:00:00.000Z",
+      "temperatureC": -6.6,
+      "snowfallCm": 0,
+      "windKph": 0.7,
+      "windDirectionDeg": 270,
+      "freezingLevelM": 1560,
+      "gustKph": 11.2,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 96
+    },
+    {
+      "time": "2026-09-07T18:00:00.000Z",
+      "temperatureC": -5.8,
+      "snowfallCm": 0,
+      "windKph": 0.6,
+      "windDirectionDeg": 252,
+      "freezingLevelM": 1560,
+      "gustKph": 10.8,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 65
+    },
+    {
+      "time": "2026-09-07T19:00:00.000Z",
+      "temperatureC": -6.1,
+      "snowfallCm": 0,
+      "windKph": 0.7,
+      "windDirectionDeg": 270,
+      "freezingLevelM": 1550,
+      "gustKph": 9.7,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 69
+    },
+    {
+      "time": "2026-09-07T20:00:00.000Z",
+      "temperatureC": -5,
+      "snowfallCm": 0,
+      "windKph": 0.7,
+      "windDirectionDeg": 270,
+      "freezingLevelM": 1550,
+      "gustKph": 9.7,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 48
+    },
+    {
+      "time": "2026-09-07T21:00:00.000Z",
+      "temperatureC": -3.2,
+      "snowfallCm": 0,
+      "windKph": 0.6,
+      "windDirectionDeg": 304,
+      "freezingLevelM": 1540,
+      "gustKph": 8.6,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 48
+    },
+    {
+      "time": "2026-09-07T22:00:00.000Z",
+      "temperatureC": -1.6,
+      "snowfallCm": 0,
+      "windKph": 0.4,
+      "windDirectionDeg": 333,
+      "freezingLevelM": 1540,
+      "gustKph": 7.9,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 61
+    },
+    {
+      "time": "2026-09-07T23:00:00.000Z",
+      "temperatureC": -1.1,
+      "snowfallCm": 0,
+      "windKph": 0.2,
+      "windDirectionDeg": 180,
+      "freezingLevelM": 1540,
+      "gustKph": 5.4,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 51
+    },
+    {
+      "time": "2026-09-08T00:00:00.000Z",
+      "temperatureC": -0.7,
+      "snowfallCm": 0,
+      "windKph": 0.6,
+      "windDirectionDeg": 162,
+      "freezingLevelM": 1620,
+      "gustKph": 6.5,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 55
+    },
+    {
+      "time": "2026-09-08T01:00:00.000Z",
+      "temperatureC": -0.3,
+      "snowfallCm": 0,
+      "windKph": 0.2,
+      "windDirectionDeg": 180,
+      "freezingLevelM": 1700,
+      "gustKph": 6.5,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 100
+    },
+    {
+      "time": "2026-09-08T02:00:00.000Z",
+      "temperatureC": -0.3,
+      "snowfallCm": 0,
+      "windKph": 0.5,
+      "windDirectionDeg": 180,
+      "freezingLevelM": 1700,
+      "gustKph": 7.2,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 69
+    },
+    {
+      "time": "2026-09-08T03:00:00.000Z",
+      "temperatureC": -0.6,
+      "snowfallCm": 0,
+      "windKph": 2.5,
+      "windDirectionDeg": 172,
+      "freezingLevelM": 1600,
+      "gustKph": 15.1,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 46
+    },
+    {
+      "time": "2026-09-08T04:00:00.000Z",
+      "temperatureC": -0.9,
+      "snowfallCm": 0,
+      "windKph": 2.8,
+      "windDirectionDeg": 165,
+      "freezingLevelM": 1510,
+      "gustKph": 16.6,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 65
+    },
+    {
+      "time": "2026-09-08T05:00:00.000Z",
+      "temperatureC": -1.5,
+      "snowfallCm": 0,
+      "windKph": 3.8,
+      "windDirectionDeg": 149,
+      "freezingLevelM": 1470,
+      "gustKph": 19.1,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 100
     },
     {
       "time": "2026-09-08T06:00:00.000Z",
-      "temperatureC": -2.4,
+      "temperatureC": -2,
       "snowfallCm": 0,
-      "windKph": 1.8,
-      "windDirectionDeg": 156,
-      "freezingLevelM": 1480,
-      "gustKph": 18,
+      "windKph": 2.7,
+      "windDirectionDeg": 160,
+      "freezingLevelM": 1430,
+      "gustKph": 20.2,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 70
+      "cloudPct": 57
     },
     {
       "time": "2026-09-08T07:00:00.000Z",
-      "temperatureC": -2.8,
+      "temperatureC": -3.3,
       "snowfallCm": 0,
-      "windKph": 1.6,
-      "windDirectionDeg": 186,
+      "windKph": 2.6,
+      "windDirectionDeg": 196,
       "freezingLevelM": 1430,
-      "gustKph": 20.9,
+      "gustKph": 24.5,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 99
+      "cloudPct": 95
     },
     {
       "time": "2026-09-08T08:00:00.000Z",
-      "temperatureC": -3,
+      "temperatureC": -3.3,
       "snowfallCm": 0,
       "windKph": 1.6,
       "windDirectionDeg": 207,
-      "freezingLevelM": 1390,
-      "gustKph": 21.2,
+      "freezingLevelM": 1380,
+      "gustKph": 24.5,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 100
     },
     {
       "time": "2026-09-08T09:00:00.000Z",
-      "temperatureC": -3,
+      "temperatureC": -3.7,
       "snowfallCm": 0,
-      "windKph": 1.8,
-      "windDirectionDeg": 233,
-      "freezingLevelM": 1350,
-      "gustKph": 19.8,
+      "windKph": 1.3,
+      "windDirectionDeg": 236,
+      "freezingLevelM": 1340,
+      "gustKph": 20.9,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 100
     },
     {
       "time": "2026-09-08T10:00:00.000Z",
-      "temperatureC": -4.5,
+      "temperatureC": -5.9,
       "snowfallCm": 0,
-      "windKph": 2.3,
-      "windDirectionDeg": 274,
+      "windKph": 2.2,
+      "windDirectionDeg": 275,
       "freezingLevelM": 1310,
-      "gustKph": 18,
+      "gustKph": 15.5,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 100
+      "cloudPct": 99
     },
     {
       "time": "2026-09-08T11:00:00.000Z",
-      "temperatureC": -6.2,
+      "temperatureC": -8.3,
       "snowfallCm": 0,
-      "windKph": 2.9,
+      "windKph": 2.2,
       "windDirectionDeg": 270,
-      "freezingLevelM": 1280,
-      "gustKph": 16.2,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 98
-    },
-    {
-      "time": "2026-09-08T12:00:00.000Z",
-      "temperatureC": -8.1,
-      "snowfallCm": 0,
-      "windKph": 3.1,
-      "windDirectionDeg": 270,
-      "freezingLevelM": 1260,
-      "gustKph": 16.6,
+      "freezingLevelM": 1300,
+      "gustKph": 14,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 92
     },
     {
-      "time": "2026-09-08T13:00:00.000Z",
-      "temperatureC": -8.9,
+      "time": "2026-09-08T12:00:00.000Z",
+      "temperatureC": -9,
       "snowfallCm": 0,
-      "windKph": 2,
-      "windDirectionDeg": 275,
-      "freezingLevelM": 1230,
-      "gustKph": 14.8,
+      "windKph": 2.2,
+      "windDirectionDeg": 270,
+      "freezingLevelM": 1340,
+      "gustKph": 13.7,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 74
+      "cloudPct": 91
+    },
+    {
+      "time": "2026-09-08T13:00:00.000Z",
+      "temperatureC": -8.8,
+      "snowfallCm": 0,
+      "windKph": 1.8,
+      "windDirectionDeg": 276,
+      "freezingLevelM": 1350,
+      "gustKph": 13,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 48
     },
     {
       "time": "2026-09-08T14:00:00.000Z",
-      "temperatureC": -8.9,
+      "temperatureC": -8.4,
       "snowfallCm": 0,
-      "windKph": 2.4,
-      "windDirectionDeg": 279,
-      "freezingLevelM": 1230,
-      "gustKph": 13.3,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 46
-    },
-    {
-      "time": "2026-09-08T15:00:00.000Z",
-      "temperatureC": -8.7,
-      "snowfallCm": 0,
-      "windKph": 1.8,
-      "windDirectionDeg": 281,
-      "freezingLevelM": 1230,
-      "gustKph": 13.3,
+      "windKph": 1.9,
+      "windDirectionDeg": 287,
+      "freezingLevelM": 1340,
+      "gustKph": 13,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 30
     },
     {
-      "time": "2026-09-08T16:00:00.000Z",
-      "temperatureC": -8.1,
+      "time": "2026-09-08T15:00:00.000Z",
+      "temperatureC": -7.8,
       "snowfallCm": 0,
       "windKph": 1.5,
-      "windDirectionDeg": 291,
-      "freezingLevelM": 1230,
+      "windDirectionDeg": 284,
+      "freezingLevelM": 1490,
       "gustKph": 12.6,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 13
     },
     {
-      "time": "2026-09-08T17:00:00.000Z",
-      "temperatureC": -6.7,
+      "time": "2026-09-08T16:00:00.000Z",
+      "temperatureC": -6.9,
       "snowfallCm": 0,
-      "windKph": 1.2,
-      "windDirectionDeg": 297,
-      "freezingLevelM": 1550,
+      "windKph": 1.1,
+      "windDirectionDeg": 288,
+      "freezingLevelM": 1570,
       "gustKph": 11.9,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 5
-    },
-    {
-      "time": "2026-09-08T18:00:00.000Z",
-      "temperatureC": -5.5,
-      "snowfallCm": 0,
-      "windKph": 1.7,
-      "windDirectionDeg": 302,
-      "freezingLevelM": 1600,
-      "gustKph": 13.7,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 2
     },
     {
-      "time": "2026-09-08T19:00:00.000Z",
-      "temperatureC": -5.2,
+      "time": "2026-09-08T17:00:00.000Z",
+      "temperatureC": -5.6,
       "snowfallCm": 0,
-      "windKph": 1.8,
-      "windDirectionDeg": 294,
-      "freezingLevelM": 1630,
+      "windKph": 1.2,
+      "windDirectionDeg": 297,
+      "freezingLevelM": 1650,
+      "gustKph": 11.9,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 0
+    },
+    {
+      "time": "2026-09-08T18:00:00.000Z",
+      "temperatureC": -5.1,
+      "snowfallCm": 0,
+      "windKph": 1.6,
+      "windDirectionDeg": 297,
+      "freezingLevelM": 1850,
+      "gustKph": 14.4,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 0
+    },
+    {
+      "time": "2026-09-08T19:00:00.000Z",
+      "temperatureC": -4.6,
+      "snowfallCm": 0,
+      "windKph": 1.6,
+      "windDirectionDeg": 297,
+      "freezingLevelM": 1860,
       "gustKph": 15.1,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -1450,48 +1390,48 @@
     },
     {
       "time": "2026-09-08T20:00:00.000Z",
-      "temperatureC": -3.6,
+      "temperatureC": -3.3,
       "snowfallCm": 0,
-      "windKph": 2.5,
-      "windDirectionDeg": 300,
-      "freezingLevelM": 1790,
-      "gustKph": 16.9,
+      "windKph": 2.7,
+      "windDirectionDeg": 302,
+      "freezingLevelM": 1940,
+      "gustKph": 18.4,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 0
     },
     {
       "time": "2026-09-08T21:00:00.000Z",
-      "temperatureC": -1.3,
+      "temperatureC": -1,
       "snowfallCm": 0,
-      "windKph": 4.8,
-      "windDirectionDeg": 312,
-      "freezingLevelM": 1810,
-      "gustKph": 23,
+      "windKph": 4.7,
+      "windDirectionDeg": 310,
+      "freezingLevelM": 2200,
+      "gustKph": 22.3,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 1
     },
     {
       "time": "2026-09-08T22:00:00.000Z",
-      "temperatureC": -0.4,
+      "temperatureC": -0.2,
       "snowfallCm": 0,
-      "windKph": 4.5,
-      "windDirectionDeg": 310,
-      "freezingLevelM": 1860,
-      "gustKph": 24.5,
+      "windKph": 4.7,
+      "windDirectionDeg": 317,
+      "freezingLevelM": 2280,
+      "gustKph": 25.2,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 2
+      "cloudPct": 1
     },
     {
       "time": "2026-09-08T23:00:00.000Z",
-      "temperatureC": 0.1,
+      "temperatureC": 0.2,
       "snowfallCm": 0,
-      "windKph": 5,
-      "windDirectionDeg": 319,
-      "freezingLevelM": 2050,
-      "gustKph": 26.3,
+      "windKph": 5.1,
+      "windDirectionDeg": 321,
+      "freezingLevelM": 2320,
+      "gustKph": 27,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 2
@@ -1500,34 +1440,34 @@
       "time": "2026-09-09T00:00:00.000Z",
       "temperatureC": 0.9,
       "snowfallCm": 0,
-      "windKph": 5.5,
-      "windDirectionDeg": 324,
-      "freezingLevelM": 2180,
-      "gustKph": 30.2,
+      "windKph": 5.8,
+      "windDirectionDeg": 326,
+      "freezingLevelM": 2390,
+      "gustKph": 31.3,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 2
     },
     {
       "time": "2026-09-09T01:00:00.000Z",
-      "temperatureC": 1.5,
+      "temperatureC": 1.4,
       "snowfallCm": 0,
-      "windKph": 6.3,
-      "windDirectionDeg": 333,
-      "freezingLevelM": 1850,
-      "gustKph": 34.6,
+      "windKph": 6.9,
+      "windDirectionDeg": 329,
+      "freezingLevelM": 2440,
+      "gustKph": 37.4,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 2
     },
     {
       "time": "2026-09-09T02:00:00.000Z",
-      "temperatureC": 1.8,
+      "temperatureC": 1.7,
       "snowfallCm": 0,
-      "windKph": 6.7,
-      "windDirectionDeg": 329,
-      "freezingLevelM": 1890,
-      "gustKph": 37.8,
+      "windKph": 7.4,
+      "windDirectionDeg": 331,
+      "freezingLevelM": 2540,
+      "gustKph": 41.4,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 2
@@ -1536,1057 +1476,1057 @@
       "time": "2026-09-09T03:00:00.000Z",
       "temperatureC": 1.8,
       "snowfallCm": 0,
-      "windKph": 7.7,
-      "windDirectionDeg": 330,
-      "freezingLevelM": 2380,
-      "gustKph": 42.5,
+      "windKph": 8.5,
+      "windDirectionDeg": 331,
+      "freezingLevelM": 2590,
+      "gustKph": 47.5,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 4
+      "cloudPct": 20
     },
     {
       "time": "2026-09-09T04:00:00.000Z",
       "temperatureC": 1.2,
       "snowfallCm": 0,
-      "windKph": 7.9,
+      "windKph": 8.7,
       "windDirectionDeg": 330,
       "freezingLevelM": 2620,
-      "gustKph": 46.1,
+      "gustKph": 52.6,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 19
+      "cloudPct": 88
     },
     {
       "time": "2026-09-09T05:00:00.000Z",
-      "temperatureC": 0.4,
+      "temperatureC": 0.3,
       "snowfallCm": 0,
-      "windKph": 8,
+      "windKph": 8.7,
       "windDirectionDeg": 333,
-      "freezingLevelM": 2760,
-      "gustKph": 50.8,
+      "freezingLevelM": 2880,
+      "gustKph": 55.8,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 66
+      "cloudPct": 63
     },
     {
       "time": "2026-09-09T06:00:00.000Z",
-      "temperatureC": -1.5,
+      "temperatureC": -1.2,
       "snowfallCm": 0,
-      "windKph": 8,
+      "windKph": 8.9,
       "windDirectionDeg": 333,
-      "freezingLevelM": 2760,
-      "gustKph": 52.2,
+      "freezingLevelM": 2910,
+      "gustKph": 59.8,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 80
+      "cloudPct": 89
     },
     {
       "time": "2026-09-09T07:00:00.000Z",
-      "temperatureC": -2.4,
+      "temperatureC": -1.4,
       "snowfallCm": 0,
-      "windKph": 8.5,
-      "windDirectionDeg": 328,
-      "freezingLevelM": 2850,
-      "gustKph": 56.9,
+      "windKph": 9.4,
+      "windDirectionDeg": 330,
+      "freezingLevelM": 2930,
+      "gustKph": 64.4,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 81
+      "cloudPct": 86
     },
     {
       "time": "2026-09-09T08:00:00.000Z",
       "temperatureC": -1.8,
       "snowfallCm": 0,
-      "windKph": 9.1,
+      "windKph": 10.3,
       "windDirectionDeg": 322,
-      "freezingLevelM": 2870,
-      "gustKph": 61.6,
+      "freezingLevelM": 1870,
+      "gustKph": 72,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 87
+      "cloudPct": 91
     },
     {
       "time": "2026-09-09T09:00:00.000Z",
-      "temperatureC": -2.3,
+      "temperatureC": -1.8,
       "snowfallCm": 0,
-      "windKph": 10,
-      "windDirectionDeg": 321,
-      "freezingLevelM": 1870,
-      "gustKph": 68.8,
+      "windKph": 12.3,
+      "windDirectionDeg": 322,
+      "freezingLevelM": 1710,
+      "gustKph": 81.7,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 94
+      "cloudPct": 92
     },
     {
       "time": "2026-09-09T10:00:00.000Z",
-      "temperatureC": -2.1,
+      "temperatureC": -1.3,
       "snowfallCm": 0,
-      "windKph": 11.9,
-      "windDirectionDeg": 330,
-      "freezingLevelM": 1730,
-      "gustKph": 79.2,
+      "windKph": 15.3,
+      "windDirectionDeg": 326,
+      "freezingLevelM": 1610,
+      "gustKph": 89.3,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 99
+      "cloudPct": 98
     },
     {
       "time": "2026-09-09T11:00:00.000Z",
-      "temperatureC": -1.5,
+      "temperatureC": -1.4,
       "snowfallCm": 0,
-      "windKph": 14.3,
-      "windDirectionDeg": 329,
-      "freezingLevelM": 1710,
-      "gustKph": 83.5,
+      "windKph": 12.3,
+      "windDirectionDeg": 328,
+      "freezingLevelM": 1550,
+      "gustKph": 90,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 100
+      "cloudPct": 99
     },
     {
       "time": "2026-09-09T12:00:00.000Z",
-      "temperatureC": -2,
+      "temperatureC": -1.6,
       "snowfallCm": 0,
-      "windKph": 8.2,
-      "windDirectionDeg": 311,
-      "freezingLevelM": 1640,
-      "gustKph": 83.9,
+      "windKph": 6.3,
+      "windDirectionDeg": 297,
+      "freezingLevelM": 1610,
+      "gustKph": 82.1,
       "rainMm": 0.1,
       "precipitationMm": 0.1,
-      "cloudPct": 99
+      "cloudPct": 95
     },
     {
       "time": "2026-09-09T13:00:00.000Z",
-      "temperatureC": -2.5,
-      "snowfallCm": 0.07,
-      "windKph": 3.5,
-      "windDirectionDeg": 285,
-      "freezingLevelM": 1660,
-      "gustKph": 68.4,
-      "rainMm": 0.3,
+      "temperatureC": -2.6,
+      "snowfallCm": 0,
+      "windKph": 1.6,
+      "windDirectionDeg": 264,
+      "freezingLevelM": 1670,
+      "gustKph": 62.3,
+      "rainMm": 0.4,
       "precipitationMm": 0.4,
-      "cloudPct": 100
+      "cloudPct": 99
     },
     {
       "time": "2026-09-09T14:00:00.000Z",
-      "temperatureC": -2.8,
-      "snowfallCm": 0.49,
-      "windKph": 2.1,
-      "windDirectionDeg": 232,
-      "freezingLevelM": 1710,
-      "gustKph": 50,
-      "rainMm": 0.4,
-      "precipitationMm": 1.1,
-      "cloudPct": 99
+      "temperatureC": -2.1,
+      "snowfallCm": 0.35,
+      "windKph": 1.8,
+      "windDirectionDeg": 246,
+      "freezingLevelM": 1670,
+      "gustKph": 43.2,
+      "rainMm": 0.7,
+      "precipitationMm": 1.2,
+      "cloudPct": 100
     },
     {
       "time": "2026-09-09T15:00:00.000Z",
       "temperatureC": -1.9,
       "snowfallCm": 0.21,
-      "windKph": 0.9,
-      "windDirectionDeg": 217,
-      "freezingLevelM": 1650,
-      "gustKph": 35.6,
-      "rainMm": 0.7,
-      "precipitationMm": 1,
-      "cloudPct": 99
+      "windKph": 1,
+      "windDirectionDeg": 248,
+      "freezingLevelM": 1540,
+      "gustKph": 33.5,
+      "rainMm": 0.8,
+      "precipitationMm": 1.1,
+      "cloudPct": 100
     },
     {
       "time": "2026-09-09T16:00:00.000Z",
-      "temperatureC": -3.4,
-      "snowfallCm": 0.42,
-      "windKph": 3.5,
-      "windDirectionDeg": 156,
-      "freezingLevelM": 1510,
-      "gustKph": 21.6,
+      "temperatureC": -2.8,
+      "snowfallCm": 0.07,
+      "windKph": 1.1,
+      "windDirectionDeg": 171,
+      "freezingLevelM": 1400,
+      "gustKph": 22.3,
       "rainMm": 0.3,
-      "precipitationMm": 0.9,
+      "precipitationMm": 0.5,
       "cloudPct": 100
     },
     {
       "time": "2026-09-09T17:00:00.000Z",
-      "temperatureC": -3.6,
-      "snowfallCm": 0.98,
-      "windKph": 5.7,
-      "windDirectionDeg": 169,
-      "freezingLevelM": 1290,
-      "gustKph": 23.8,
-      "rainMm": 0,
-      "precipitationMm": 1.4,
+      "temperatureC": -3.4,
+      "snowfallCm": 1.68,
+      "windKph": 4.1,
+      "windDirectionDeg": 167,
+      "freezingLevelM": 1310,
+      "gustKph": 20.9,
+      "rainMm": 0.1,
+      "precipitationMm": 2.5,
       "cloudPct": 100
     },
     {
       "time": "2026-09-09T18:00:00.000Z",
-      "temperatureC": -3.9,
-      "snowfallCm": 1.05,
-      "windKph": 6.4,
-      "windDirectionDeg": 164,
-      "freezingLevelM": 1260,
-      "gustKph": 28.4,
-      "rainMm": 0,
-      "precipitationMm": 1.5,
-      "cloudPct": 100
-    },
-    {
-      "time": "2026-09-09T19:00:00.000Z",
-      "temperatureC": -4.4,
+      "temperatureC": -4,
       "snowfallCm": 1.33,
-      "windKph": 6.1,
-      "windDirectionDeg": 168,
+      "windKph": 5.6,
+      "windDirectionDeg": 149,
       "freezingLevelM": 1230,
-      "gustKph": 29.2,
+      "gustKph": 22,
       "rainMm": 0,
       "precipitationMm": 1.9,
       "cloudPct": 100
     },
     {
-      "time": "2026-09-09T20:00:00.000Z",
-      "temperatureC": -3.9,
-      "snowfallCm": 0.42,
-      "windKph": 3.1,
-      "windDirectionDeg": 170,
+      "time": "2026-09-09T19:00:00.000Z",
+      "temperatureC": -4.2,
+      "snowfallCm": 1.96,
+      "windKph": 4.8,
+      "windDirectionDeg": 143,
       "freezingLevelM": 1230,
-      "gustKph": 27,
+      "gustKph": 20.5,
       "rainMm": 0,
-      "precipitationMm": 0.5,
-      "cloudPct": 92
+      "precipitationMm": 2.8,
+      "cloudPct": 100
+    },
+    {
+      "time": "2026-09-09T20:00:00.000Z",
+      "temperatureC": -4.2,
+      "snowfallCm": 1.47,
+      "windKph": 2.5,
+      "windDirectionDeg": 111,
+      "freezingLevelM": 1150,
+      "gustKph": 17.6,
+      "rainMm": 0,
+      "precipitationMm": 2.1,
+      "cloudPct": 100
     },
     {
       "time": "2026-09-09T21:00:00.000Z",
-      "temperatureC": -4,
-      "snowfallCm": 0,
-      "windKph": 5.4,
-      "windDirectionDeg": 159,
-      "freezingLevelM": 1230,
-      "gustKph": 22.3,
-      "rainMm": 0.1,
-      "precipitationMm": 0.1,
-      "cloudPct": 97
-    },
-    {
-      "time": "2026-09-09T22:00:00.000Z",
-      "temperatureC": -3.5,
-      "snowfallCm": 0.21,
-      "windKph": 3.5,
-      "windDirectionDeg": 285,
-      "freezingLevelM": 1230,
-      "gustKph": 20.2,
+      "temperatureC": -4.1,
+      "snowfallCm": 0.28,
+      "windKph": 1.9,
+      "windDirectionDeg": 326,
+      "freezingLevelM": 1130,
+      "gustKph": 18.7,
       "rainMm": 0,
-      "precipitationMm": 0.3,
-      "cloudPct": 71
-    },
-    {
-      "time": "2026-09-09T23:00:00.000Z",
-      "temperatureC": -2.7,
-      "snowfallCm": 0.07,
-      "windKph": 0.6,
-      "windDirectionDeg": 288,
-      "freezingLevelM": 1230,
-      "gustKph": 19.8,
-      "rainMm": 0,
-      "precipitationMm": 0.1,
-      "cloudPct": 12
-    },
-    {
-      "time": "2026-09-10T00:00:00.000Z",
-      "temperatureC": -2.3,
-      "snowfallCm": 0,
-      "windKph": 0.9,
-      "windDirectionDeg": 180,
-      "freezingLevelM": 1150,
-      "gustKph": 23,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 23
-    },
-    {
-      "time": "2026-09-10T01:00:00.000Z",
-      "temperatureC": -2.1,
-      "snowfallCm": 0.07,
-      "windKph": 2.2,
-      "windDirectionDeg": 180,
-      "freezingLevelM": 1230,
-      "gustKph": 24.5,
-      "rainMm": 0,
-      "precipitationMm": 0.1,
-      "cloudPct": 83
-    },
-    {
-      "time": "2026-09-10T02:00:00.000Z",
-      "temperatureC": -2,
-      "snowfallCm": 0.07,
-      "windKph": 1.4,
-      "windDirectionDeg": 220,
-      "freezingLevelM": 1310,
-      "gustKph": 24.8,
-      "rainMm": 0,
-      "precipitationMm": 0.1,
+      "precipitationMm": 0.4,
       "cloudPct": 98
     },
     {
-      "time": "2026-09-10T03:00:00.000Z",
-      "temperatureC": -2.9,
-      "snowfallCm": 0.77,
-      "windKph": 3,
-      "windDirectionDeg": 287,
-      "freezingLevelM": 1390,
-      "gustKph": 18,
+      "time": "2026-09-09T22:00:00.000Z",
+      "temperatureC": -3.6,
+      "snowfallCm": 0.07,
+      "windKph": 3.3,
+      "windDirectionDeg": 315,
+      "freezingLevelM": 1110,
+      "gustKph": 28.1,
       "rainMm": 0,
-      "precipitationMm": 1.1,
-      "cloudPct": 86
+      "precipitationMm": 0.1,
+      "cloudPct": 34
+    },
+    {
+      "time": "2026-09-09T23:00:00.000Z",
+      "temperatureC": -3,
+      "snowfallCm": 0.07,
+      "windKph": 2.3,
+      "windDirectionDeg": 241,
+      "freezingLevelM": 1120,
+      "gustKph": 23,
+      "rainMm": 0,
+      "precipitationMm": 0.1,
+      "cloudPct": 30
+    },
+    {
+      "time": "2026-09-10T00:00:00.000Z",
+      "temperatureC": -2.8,
+      "snowfallCm": 0.21,
+      "windKph": 3.9,
+      "windDirectionDeg": 193,
+      "freezingLevelM": 1150,
+      "gustKph": 31.3,
+      "rainMm": 0,
+      "precipitationMm": 0.3,
+      "cloudPct": 35
+    },
+    {
+      "time": "2026-09-10T01:00:00.000Z",
+      "temperatureC": -2.6,
+      "snowfallCm": 0.07,
+      "windKph": 3.6,
+      "windDirectionDeg": 180,
+      "freezingLevelM": 1230,
+      "gustKph": 33.1,
+      "rainMm": 0,
+      "precipitationMm": 0.1,
+      "cloudPct": 100
+    },
+    {
+      "time": "2026-09-10T02:00:00.000Z",
+      "temperatureC": -3.9,
+      "snowfallCm": 1.33,
+      "windKph": 4.3,
+      "windDirectionDeg": 185,
+      "freezingLevelM": 1230,
+      "gustKph": 28.8,
+      "rainMm": 0,
+      "precipitationMm": 1.9,
+      "cloudPct": 90
+    },
+    {
+      "time": "2026-09-10T03:00:00.000Z",
+      "temperatureC": -3.6,
+      "snowfallCm": 0.28,
+      "windKph": 2.4,
+      "windDirectionDeg": 222,
+      "freezingLevelM": 1240,
+      "gustKph": 29.5,
+      "rainMm": 0,
+      "precipitationMm": 0.4,
+      "cloudPct": 52
     },
     {
       "time": "2026-09-10T04:00:00.000Z",
-      "temperatureC": -3.3,
-      "snowfallCm": 0.21,
-      "windKph": 3,
-      "windDirectionDeg": 253,
-      "freezingLevelM": 1350,
-      "gustKph": 19.4,
+      "temperatureC": -3.5,
+      "snowfallCm": 0.07,
+      "windKph": 2.7,
+      "windDirectionDeg": 208,
+      "freezingLevelM": 1230,
+      "gustKph": 23.8,
       "rainMm": 0,
-      "precipitationMm": 0.3,
-      "cloudPct": 88
+      "precipitationMm": 0.1,
+      "cloudPct": 62
     },
     {
       "time": "2026-09-10T05:00:00.000Z",
-      "temperatureC": -3.7,
-      "snowfallCm": 0.07,
-      "windKph": 2.7,
-      "windDirectionDeg": 242,
-      "freezingLevelM": 1310,
-      "gustKph": 22.3,
+      "temperatureC": -4.7,
+      "snowfallCm": 0.21,
+      "windKph": 1.5,
+      "windDirectionDeg": 240,
+      "freezingLevelM": 1230,
+      "gustKph": 24.1,
       "rainMm": 0,
-      "precipitationMm": 0.1,
-      "cloudPct": 5
+      "precipitationMm": 0.3,
+      "cloudPct": 42
     },
     {
       "time": "2026-09-10T06:00:00.000Z",
-      "temperatureC": -6.1,
-      "snowfallCm": 0,
-      "windKph": 1.3,
+      "temperatureC": -6.6,
+      "snowfallCm": 0.07,
+      "windKph": 2.5,
       "windDirectionDeg": 270,
-      "freezingLevelM": 1270,
-      "gustKph": 21.6,
+      "freezingLevelM": 1230,
+      "gustKph": 23,
       "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 2
+      "precipitationMm": 0.1,
+      "cloudPct": 28
     },
     {
       "time": "2026-09-10T07:00:00.000Z",
-      "temperatureC": -7.1,
+      "temperatureC": -7.8,
       "snowfallCm": 0,
-      "windKph": 1.1,
-      "windDirectionDeg": 270,
-      "freezingLevelM": 1270,
-      "gustKph": 20.9,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 0
-    },
-    {
-      "time": "2026-09-10T08:00:00.000Z",
-      "temperatureC": -8,
-      "snowfallCm": 0,
-      "windKph": 1.3,
-      "windDirectionDeg": 278,
-      "freezingLevelM": 1280,
-      "gustKph": 19.8,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 4
-    },
-    {
-      "time": "2026-09-10T09:00:00.000Z",
-      "temperatureC": -8.4,
-      "snowfallCm": 0,
-      "windKph": 1.5,
-      "windDirectionDeg": 284,
-      "freezingLevelM": 1280,
-      "gustKph": 19.4,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 10
-    },
-    {
-      "time": "2026-09-10T10:00:00.000Z",
-      "temperatureC": -8,
-      "snowfallCm": 0,
-      "windKph": 2.1,
-      "windDirectionDeg": 285,
-      "freezingLevelM": 1310,
-      "gustKph": 21.2,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 11
-    },
-    {
-      "time": "2026-09-10T11:00:00.000Z",
-      "temperatureC": -7.1,
-      "snowfallCm": 0,
-      "windKph": 2.7,
-      "windDirectionDeg": 290,
-      "freezingLevelM": 1330,
-      "gustKph": 23.8,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 12
-    },
-    {
-      "time": "2026-09-10T12:00:00.000Z",
-      "temperatureC": -6.4,
-      "snowfallCm": 0,
-      "windKph": 3.3,
-      "windDirectionDeg": 292,
-      "freezingLevelM": 1360,
-      "gustKph": 26.3,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 16
-    },
-    {
-      "time": "2026-09-10T13:00:00.000Z",
-      "temperatureC": -6,
-      "snowfallCm": 0,
-      "windKph": 3.7,
-      "windDirectionDeg": 299,
-      "freezingLevelM": 1390,
-      "gustKph": 27.4,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 25
-    },
-    {
-      "time": "2026-09-10T14:00:00.000Z",
-      "temperatureC": -5.8,
-      "snowfallCm": 0,
-      "windKph": 4.1,
-      "windDirectionDeg": 308,
-      "freezingLevelM": 1420,
-      "gustKph": 28.1,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 37
-    },
-    {
-      "time": "2026-09-10T15:00:00.000Z",
-      "temperatureC": -5.7,
-      "snowfallCm": 0,
-      "windKph": 4.7,
-      "windDirectionDeg": 313,
-      "freezingLevelM": 1450,
-      "gustKph": 29.5,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 46
-    },
-    {
-      "time": "2026-09-10T16:00:00.000Z",
-      "temperatureC": -5.9,
-      "snowfallCm": 0,
-      "windKph": 5.9,
-      "windDirectionDeg": 315,
-      "freezingLevelM": 1760,
-      "gustKph": 32.8,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 49
-    },
-    {
-      "time": "2026-09-10T17:00:00.000Z",
-      "temperatureC": -6.2,
-      "snowfallCm": 0,
-      "windKph": 6.9,
-      "windDirectionDeg": 315,
-      "freezingLevelM": 2070,
-      "gustKph": 37.1,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 49
-    },
-    {
-      "time": "2026-09-10T18:00:00.000Z",
-      "temperatureC": -5.9,
-      "snowfallCm": 0,
-      "windKph": 7.8,
-      "windDirectionDeg": 316,
-      "freezingLevelM": 2380,
-      "gustKph": 40.7,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 48
-    },
-    {
-      "time": "2026-09-10T19:00:00.000Z",
-      "temperatureC": -4.6,
-      "snowfallCm": 0,
-      "windKph": 8,
-      "windDirectionDeg": 318,
-      "freezingLevelM": 2300,
-      "gustKph": 42.8,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 49
-    },
-    {
-      "time": "2026-09-10T20:00:00.000Z",
-      "temperatureC": -2.8,
-      "snowfallCm": 0,
-      "windKph": 7.8,
-      "windDirectionDeg": 320,
-      "freezingLevelM": 2220,
-      "gustKph": 44.3,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 50
-    },
-    {
-      "time": "2026-09-10T21:00:00.000Z",
-      "temperatureC": -1.2,
-      "snowfallCm": 0,
-      "windKph": 7.7,
-      "windDirectionDeg": 321,
-      "freezingLevelM": 2140,
-      "gustKph": 45.4,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 47
-    },
-    {
-      "time": "2026-09-10T22:00:00.000Z",
-      "temperatureC": -0.1,
-      "snowfallCm": 0,
-      "windKph": 7.6,
-      "windDirectionDeg": 322,
-      "freezingLevelM": 2050,
-      "gustKph": 46.1,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 37
-    },
-    {
-      "time": "2026-09-10T23:00:00.000Z",
-      "temperatureC": 0.7,
-      "snowfallCm": 0,
-      "windKph": 7.4,
-      "windDirectionDeg": 321,
-      "freezingLevelM": 1950,
-      "gustKph": 46.4,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 24
-    },
-    {
-      "time": "2026-09-11T00:00:00.000Z",
-      "temperatureC": 1.2,
-      "snowfallCm": 0,
-      "windKph": 7.3,
-      "windDirectionDeg": 320,
-      "freezingLevelM": 1860,
-      "gustKph": 46.8,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 15
-    },
-    {
-      "time": "2026-09-11T01:00:00.000Z",
-      "temperatureC": 1.4,
-      "snowfallCm": 0,
-      "windKph": 7.4,
-      "windDirectionDeg": 319,
-      "freezingLevelM": 1860,
-      "gustKph": 47.2,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 16
-    },
-    {
-      "time": "2026-09-11T02:00:00.000Z",
-      "temperatureC": 1.3,
-      "snowfallCm": 0,
-      "windKph": 7.5,
-      "windDirectionDeg": 318,
-      "freezingLevelM": 1850,
-      "gustKph": 47.2,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 23
-    },
-    {
-      "time": "2026-09-11T03:00:00.000Z",
-      "temperatureC": 1,
-      "snowfallCm": 0,
-      "windKph": 7.1,
-      "windDirectionDeg": 317,
-      "freezingLevelM": 1850,
-      "gustKph": 47.5,
+      "windKph": 2.2,
+      "windDirectionDeg": 261,
+      "freezingLevelM": 1210,
+      "gustKph": 23.4,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 26
     },
     {
-      "time": "2026-09-11T04:00:00.000Z",
-      "temperatureC": 0.5,
+      "time": "2026-09-10T08:00:00.000Z",
+      "temperatureC": -9.4,
       "snowfallCm": 0,
-      "windKph": 5.6,
-      "windDirectionDeg": 318,
-      "freezingLevelM": 1880,
-      "gustKph": 49,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 23
-    },
-    {
-      "time": "2026-09-11T05:00:00.000Z",
-      "temperatureC": -0.3,
-      "snowfallCm": 0,
-      "windKph": 3.6,
-      "windDirectionDeg": 319,
-      "freezingLevelM": 1920,
-      "gustKph": 50.4,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 18
-    },
-    {
-      "time": "2026-09-11T06:00:00.000Z",
-      "temperatureC": -1,
-      "snowfallCm": 0,
-      "windKph": 2.1,
-      "windDirectionDeg": 322,
-      "freezingLevelM": 1950,
-      "gustKph": 49.7,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 13
-    },
-    {
-      "time": "2026-09-11T07:00:00.000Z",
-      "temperatureC": -1.8,
-      "snowfallCm": 0,
-      "windKph": 1.7,
-      "windDirectionDeg": 311,
-      "freezingLevelM": 1860,
-      "gustKph": 44.6,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 8
-    },
-    {
-      "time": "2026-09-11T08:00:00.000Z",
-      "temperatureC": -2.6,
-      "snowfallCm": 0,
-      "windKph": 2.1,
-      "windDirectionDeg": 301,
-      "freezingLevelM": 1780,
-      "gustKph": 37.4,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 5
-    },
-    {
-      "time": "2026-09-11T09:00:00.000Z",
-      "temperatureC": -3.4,
-      "snowfallCm": 0,
-      "windKph": 2.6,
-      "windDirectionDeg": 295,
-      "freezingLevelM": 1690,
-      "gustKph": 32,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 6
-    },
-    {
-      "time": "2026-09-11T10:00:00.000Z",
-      "temperatureC": -4.2,
-      "snowfallCm": 0,
-      "windKph": 3.6,
-      "windDirectionDeg": 297,
-      "freezingLevelM": 1630,
-      "gustKph": 30.2,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 18
-    },
-    {
-      "time": "2026-09-11T11:00:00.000Z",
-      "temperatureC": -4.9,
-      "snowfallCm": 0,
-      "windKph": 4.7,
-      "windDirectionDeg": 298,
-      "freezingLevelM": 1560,
-      "gustKph": 30.6,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 35
-    },
-    {
-      "time": "2026-09-11T12:00:00.000Z",
-      "temperatureC": -5.7,
-      "snowfallCm": 0,
-      "windKph": 5.2,
-      "windDirectionDeg": 299,
-      "freezingLevelM": 1500,
-      "gustKph": 31,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 47
-    },
-    {
-      "time": "2026-09-11T13:00:00.000Z",
-      "temperatureC": -6.7,
-      "snowfallCm": 0,
-      "windKph": 4.4,
-      "windDirectionDeg": 297,
-      "freezingLevelM": 1450,
-      "gustKph": 31,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 52
-    },
-    {
-      "time": "2026-09-11T14:00:00.000Z",
-      "temperatureC": -7.7,
-      "snowfallCm": 0,
-      "windKph": 3.1,
-      "windDirectionDeg": 291,
-      "freezingLevelM": 1390,
-      "gustKph": 31.3,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 52
-    },
-    {
-      "time": "2026-09-11T15:00:00.000Z",
-      "temperatureC": -8.2,
-      "snowfallCm": 0,
-      "windKph": 2.1,
-      "windDirectionDeg": 285,
-      "freezingLevelM": 1340,
-      "gustKph": 31,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 48
-    },
-    {
-      "time": "2026-09-11T16:00:00.000Z",
-      "temperatureC": -7.8,
-      "snowfallCm": 0,
-      "windKph": 1.7,
-      "windDirectionDeg": 288,
-      "freezingLevelM": 1300,
-      "gustKph": 28.8,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 38
-    },
-    {
-      "time": "2026-09-11T17:00:00.000Z",
-      "temperatureC": -6.8,
-      "snowfallCm": 0,
-      "windKph": 1.6,
-      "windDirectionDeg": 297,
-      "freezingLevelM": 1270,
-      "gustKph": 25.9,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 24
-    },
-    {
-      "time": "2026-09-11T18:00:00.000Z",
-      "temperatureC": -5.6,
-      "snowfallCm": 0,
-      "windKph": 2.1,
-      "windDirectionDeg": 308,
-      "freezingLevelM": 1230,
-      "gustKph": 24.5,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 13
-    },
-    {
-      "time": "2026-09-11T19:00:00.000Z",
-      "temperatureC": -4.2,
-      "snowfallCm": 0,
-      "windKph": 3.1,
-      "windDirectionDeg": 320,
-      "freezingLevelM": 1700,
-      "gustKph": 26.3,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 8
-    },
-    {
-      "time": "2026-09-11T20:00:00.000Z",
-      "temperatureC": -2.6,
-      "snowfallCm": 0,
-      "windKph": 4.4,
-      "windDirectionDeg": 325,
-      "freezingLevelM": 1700,
-      "gustKph": 29.5,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 6
-    },
-    {
-      "time": "2026-09-11T21:00:00.000Z",
-      "temperatureC": -1.1,
-      "snowfallCm": 0,
-      "windKph": 5.3,
-      "windDirectionDeg": 325,
-      "freezingLevelM": 1700,
-      "gustKph": 32,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 5
-    },
-    {
-      "time": "2026-09-11T22:00:00.000Z",
-      "temperatureC": -0.1,
-      "snowfallCm": 0,
-      "windKph": 5.1,
-      "windDirectionDeg": 321,
-      "freezingLevelM": 1670,
-      "gustKph": 32.4,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 3
-    },
-    {
-      "time": "2026-09-11T23:00:00.000Z",
-      "temperatureC": 0.8,
-      "snowfallCm": 0,
-      "windKph": 4.7,
-      "windDirectionDeg": 313,
-      "freezingLevelM": 1630,
-      "gustKph": 32,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 2
-    },
-    {
-      "time": "2026-09-12T00:00:00.000Z",
-      "temperatureC": 1.5,
-      "snowfallCm": 0,
-      "windKph": 4.9,
-      "windDirectionDeg": 309,
-      "freezingLevelM": 1600,
-      "gustKph": 33.1,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 4
-    },
-    {
-      "time": "2026-09-12T01:00:00.000Z",
-      "temperatureC": 2.2,
-      "snowfallCm": 0,
-      "windKph": 6.5,
-      "windDirectionDeg": 314,
-      "freezingLevelM": 1650,
-      "gustKph": 37.1,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 9
-    },
-    {
-      "time": "2026-09-12T02:00:00.000Z",
-      "temperatureC": 2.8,
-      "snowfallCm": 0,
-      "windKph": 8.7,
-      "windDirectionDeg": 318,
-      "freezingLevelM": 1710,
-      "gustKph": 42.5,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 18
-    },
-    {
-      "time": "2026-09-12T03:00:00.000Z",
-      "temperatureC": 2.9,
-      "snowfallCm": 0,
-      "windKph": 10.3,
-      "windDirectionDeg": 320,
-      "freezingLevelM": 1760,
-      "gustKph": 47.5,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 28
-    },
-    {
-      "time": "2026-09-12T04:00:00.000Z",
-      "temperatureC": 2.3,
-      "snowfallCm": 0,
-      "windKph": 10.5,
-      "windDirectionDeg": 319,
-      "freezingLevelM": 1780,
-      "gustKph": 52.6,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 43
-    },
-    {
-      "time": "2026-09-12T05:00:00.000Z",
-      "temperatureC": 1.3,
-      "snowfallCm": 0,
-      "windKph": 9.9,
-      "windDirectionDeg": 316,
-      "freezingLevelM": 1800,
-      "gustKph": 57.2,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 61
-    },
-    {
-      "time": "2026-09-12T06:00:00.000Z",
-      "temperatureC": 0.3,
-      "snowfallCm": 0,
-      "windKph": 9.2,
-      "windDirectionDeg": 313,
-      "freezingLevelM": 1820,
-      "gustKph": 60.1,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 72
-    },
-    {
-      "time": "2026-09-12T07:00:00.000Z",
-      "temperatureC": -0.5,
-      "snowfallCm": 0,
-      "windKph": 8.4,
-      "windDirectionDeg": 312,
-      "freezingLevelM": 1860,
-      "gustKph": 60.5,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 70
-    },
-    {
-      "time": "2026-09-12T08:00:00.000Z",
-      "temperatureC": -1.3,
-      "snowfallCm": 0,
-      "windKph": 7.4,
-      "windDirectionDeg": 309,
-      "freezingLevelM": 1900,
-      "gustKph": 59.4,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 62
-    },
-    {
-      "time": "2026-09-12T09:00:00.000Z",
-      "temperatureC": -1.9,
-      "snowfallCm": 0,
-      "windKph": 6.8,
-      "windDirectionDeg": 307,
-      "freezingLevelM": 1940,
-      "gustKph": 57.2,
+      "windKph": 1.8,
+      "windDirectionDeg": 276,
+      "freezingLevelM": 1180,
+      "gustKph": 21.6,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 55
     },
     {
-      "time": "2026-09-12T10:00:00.000Z",
-      "temperatureC": -1.7,
+      "time": "2026-09-10T09:00:00.000Z",
+      "temperatureC": -9.9,
       "snowfallCm": 0,
-      "windKph": 7.5,
-      "windDirectionDeg": 316,
-      "freezingLevelM": 1920,
-      "gustKph": 52.2,
+      "windKph": 2,
+      "windDirectionDeg": 280,
+      "freezingLevelM": 1160,
+      "gustKph": 20.2,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 55
+    },
+    {
+      "time": "2026-09-10T10:00:00.000Z",
+      "temperatureC": -9.7,
+      "snowfallCm": 0,
+      "windKph": 2.4,
+      "windDirectionDeg": 287,
+      "freezingLevelM": 1220,
+      "gustKph": 20.5,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 22
+    },
+    {
+      "time": "2026-09-10T11:00:00.000Z",
+      "temperatureC": -10.3,
+      "snowfallCm": 0,
+      "windKph": 2.6,
+      "windDirectionDeg": 286,
+      "freezingLevelM": 1280,
+      "gustKph": 23,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 13
+    },
+    {
+      "time": "2026-09-10T12:00:00.000Z",
+      "temperatureC": -9.6,
+      "snowfallCm": 0,
+      "windKph": 3.1,
+      "windDirectionDeg": 291,
+      "freezingLevelM": 1340,
+      "gustKph": 25.2,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 25
+    },
+    {
+      "time": "2026-09-10T13:00:00.000Z",
+      "temperatureC": -9,
+      "snowfallCm": 0,
+      "windKph": 3.1,
+      "windDirectionDeg": 294,
+      "freezingLevelM": 1380,
+      "gustKph": 25.9,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 20
+    },
+    {
+      "time": "2026-09-10T14:00:00.000Z",
+      "temperatureC": -8.3,
+      "snowfallCm": 0,
+      "windKph": 3.1,
+      "windDirectionDeg": 301,
+      "freezingLevelM": 1420,
+      "gustKph": 26.6,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 17
+    },
+    {
+      "time": "2026-09-10T15:00:00.000Z",
+      "temperatureC": -7.8,
+      "snowfallCm": 0,
+      "windKph": 3.3,
+      "windDirectionDeg": 306,
+      "freezingLevelM": 1460,
+      "gustKph": 28.1,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 19
+    },
+    {
+      "time": "2026-09-10T16:00:00.000Z",
+      "temperatureC": -7.6,
+      "snowfallCm": 0,
+      "windKph": 4.4,
+      "windDirectionDeg": 308,
+      "freezingLevelM": 1680,
+      "gustKph": 31,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 32
+    },
+    {
+      "time": "2026-09-10T17:00:00.000Z",
+      "temperatureC": -7.6,
+      "snowfallCm": 0,
+      "windKph": 5.7,
+      "windDirectionDeg": 311,
+      "freezingLevelM": 1890,
+      "gustKph": 34.2,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 50
+    },
+    {
+      "time": "2026-09-10T18:00:00.000Z",
+      "temperatureC": -7.1,
+      "snowfallCm": 0,
+      "windKph": 6.8,
+      "windDirectionDeg": 312,
+      "freezingLevelM": 2110,
+      "gustKph": 37.1,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 58
     },
     {
-      "time": "2026-09-12T11:00:00.000Z",
-      "temperatureC": -2.1,
+      "time": "2026-09-10T19:00:00.000Z",
+      "temperatureC": -5.8,
       "snowfallCm": 0,
-      "windKph": 7,
-      "windDirectionDeg": 318,
-      "freezingLevelM": 1900,
-      "gustKph": 49,
+      "windKph": 7.3,
+      "windDirectionDeg": 312,
+      "freezingLevelM": 2010,
+      "gustKph": 38.5,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 52
+      "cloudPct": 47
     },
     {
-      "time": "2026-09-12T12:00:00.000Z",
+      "time": "2026-09-10T20:00:00.000Z",
+      "temperatureC": -4.1,
+      "snowfallCm": 0,
+      "windKph": 7.6,
+      "windDirectionDeg": 313,
+      "freezingLevelM": 1900,
+      "gustKph": 39.2,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 25
+    },
+    {
+      "time": "2026-09-10T21:00:00.000Z",
       "temperatureC": -2.5,
       "snowfallCm": 0,
-      "windKph": 6.6,
-      "windDirectionDeg": 317,
-      "freezingLevelM": 1880,
-      "gustKph": 46.4,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 49
-    },
-    {
-      "time": "2026-09-12T13:00:00.000Z",
-      "temperatureC": -2.9,
-      "snowfallCm": 0,
-      "windKph": 6.5,
-      "windDirectionDeg": 316,
-      "freezingLevelM": 1870,
-      "gustKph": 44.3,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 48
-    },
-    {
-      "time": "2026-09-12T14:00:00.000Z",
-      "temperatureC": -3.2,
-      "snowfallCm": 0,
-      "windKph": 6.5,
+      "windKph": 7.5,
       "windDirectionDeg": 314,
-      "freezingLevelM": 1870,
-      "gustKph": 42.1,
+      "freezingLevelM": 1800,
+      "gustKph": 39.6,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 48
+      "cloudPct": 11
     },
     {
-      "time": "2026-09-12T15:00:00.000Z",
-      "temperatureC": -3.6,
+      "time": "2026-09-10T22:00:00.000Z",
+      "temperatureC": -1.3,
+      "snowfallCm": 0,
+      "windKph": 7.1,
+      "windDirectionDeg": 317,
+      "freezingLevelM": 1800,
+      "gustKph": 39.6,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 11
+    },
+    {
+      "time": "2026-09-10T23:00:00.000Z",
+      "temperatureC": -0.2,
       "snowfallCm": 0,
       "windKph": 6.4,
-      "windDirectionDeg": 310,
-      "freezingLevelM": 1860,
-      "gustKph": 40,
+      "windDirectionDeg": 320,
+      "freezingLevelM": 1800,
+      "gustKph": 39.2,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 48
+      "cloudPct": 18
     },
     {
-      "time": "2026-09-12T16:00:00.000Z",
-      "temperatureC": -3.7,
+      "time": "2026-09-11T00:00:00.000Z",
+      "temperatureC": 0.5,
       "snowfallCm": 0,
-      "windKph": 6.6,
-      "windDirectionDeg": 307,
-      "freezingLevelM": 1830,
+      "windKph": 5.8,
+      "windDirectionDeg": 321,
+      "freezingLevelM": 1800,
       "gustKph": 38.2,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 49
+      "cloudPct": 23
     },
     {
-      "time": "2026-09-12T17:00:00.000Z",
-      "temperatureC": -3.7,
+      "time": "2026-09-11T01:00:00.000Z",
+      "temperatureC": 0.8,
       "snowfallCm": 0,
-      "windKph": 6.7,
-      "windDirectionDeg": 306,
-      "freezingLevelM": 1800,
-      "gustKph": 36.7,
-      "rainMm": 0,
-      "precipitationMm": 0,
-      "cloudPct": 51
-    },
-    {
-      "time": "2026-09-12T18:00:00.000Z",
-      "temperatureC": -3.3,
-      "snowfallCm": 0,
-      "windKph": 6.7,
-      "windDirectionDeg": 304,
-      "freezingLevelM": 1770,
+      "windKph": 5.2,
+      "windDirectionDeg": 316,
+      "freezingLevelM": 1840,
       "gustKph": 36,
       "rainMm": 0,
       "precipitationMm": 0,
-      "cloudPct": 52
+      "cloudPct": 21
+    },
+    {
+      "time": "2026-09-11T02:00:00.000Z",
+      "temperatureC": 0.8,
+      "snowfallCm": 0,
+      "windKph": 4.9,
+      "windDirectionDeg": 309,
+      "freezingLevelM": 1880,
+      "gustKph": 33.8,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 16
+    },
+    {
+      "time": "2026-09-11T03:00:00.000Z",
+      "temperatureC": 0.5,
+      "snowfallCm": 0,
+      "windKph": 4.7,
+      "windDirectionDeg": 302,
+      "freezingLevelM": 1920,
+      "gustKph": 32.8,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 13
+    },
+    {
+      "time": "2026-09-11T04:00:00.000Z",
+      "temperatureC": -0.1,
+      "snowfallCm": 0,
+      "windKph": 4.4,
+      "windDirectionDeg": 305,
+      "freezingLevelM": 1940,
+      "gustKph": 34.9,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 16
+    },
+    {
+      "time": "2026-09-11T05:00:00.000Z",
+      "temperatureC": -1,
+      "snowfallCm": 0,
+      "windKph": 4.2,
+      "windDirectionDeg": 313,
+      "freezingLevelM": 1960,
+      "gustKph": 38.5,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 20
+    },
+    {
+      "time": "2026-09-11T06:00:00.000Z",
+      "temperatureC": -1.9,
+      "snowfallCm": 0,
+      "windKph": 4.3,
+      "windDirectionDeg": 318,
+      "freezingLevelM": 1980,
+      "gustKph": 41,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 23
+    },
+    {
+      "time": "2026-09-11T07:00:00.000Z",
+      "temperatureC": -2.5,
+      "snowfallCm": 0,
+      "windKph": 4.7,
+      "windDirectionDeg": 317,
+      "freezingLevelM": 1860,
+      "gustKph": 41,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 21
+    },
+    {
+      "time": "2026-09-11T08:00:00.000Z",
+      "temperatureC": -3.1,
+      "snowfallCm": 0,
+      "windKph": 5.3,
+      "windDirectionDeg": 315,
+      "freezingLevelM": 1740,
+      "gustKph": 40,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 17
+    },
+    {
+      "time": "2026-09-11T09:00:00.000Z",
+      "temperatureC": -3.6,
+      "snowfallCm": 0,
+      "windKph": 5.9,
+      "windDirectionDeg": 313,
+      "freezingLevelM": 1620,
+      "gustKph": 39.2,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 15
+    },
+    {
+      "time": "2026-09-11T10:00:00.000Z",
+      "temperatureC": -3.8,
+      "snowfallCm": 0,
+      "windKph": 6.1,
+      "windDirectionDeg": 313,
+      "freezingLevelM": 1570,
+      "gustKph": 40.3,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 19
+    },
+    {
+      "time": "2026-09-11T11:00:00.000Z",
+      "temperatureC": -4,
+      "snowfallCm": 0,
+      "windKph": 6.4,
+      "windDirectionDeg": 313,
+      "freezingLevelM": 1530,
+      "gustKph": 41.8,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 25
+    },
+    {
+      "time": "2026-09-11T12:00:00.000Z",
+      "temperatureC": -4.1,
+      "snowfallCm": 0,
+      "windKph": 6.5,
+      "windDirectionDeg": 312,
+      "freezingLevelM": 1480,
+      "gustKph": 43.2,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 30
+    },
+    {
+      "time": "2026-09-11T13:00:00.000Z",
+      "temperatureC": -4.4,
+      "snowfallCm": 0,
+      "windKph": 6.6,
+      "windDirectionDeg": 311,
+      "freezingLevelM": 1480,
+      "gustKph": 44.3,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 33
+    },
+    {
+      "time": "2026-09-11T14:00:00.000Z",
+      "temperatureC": -4.6,
+      "snowfallCm": 0,
+      "windKph": 6.8,
+      "windDirectionDeg": 310,
+      "freezingLevelM": 1470,
+      "gustKph": 45.7,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 36
+    },
+    {
+      "time": "2026-09-11T15:00:00.000Z",
+      "temperatureC": -4.8,
+      "snowfallCm": 0,
+      "windKph": 6.8,
+      "windDirectionDeg": 307,
+      "freezingLevelM": 1470,
+      "gustKph": 46.8,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 36
+    },
+    {
+      "time": "2026-09-11T16:00:00.000Z",
+      "temperatureC": -4.9,
+      "snowfallCm": 0,
+      "windKph": 6.6,
+      "windDirectionDeg": 305,
+      "freezingLevelM": 1460,
+      "gustKph": 48.2,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 33
+    },
+    {
+      "time": "2026-09-11T17:00:00.000Z",
+      "temperatureC": -5,
+      "snowfallCm": 0,
+      "windKph": 6.2,
+      "windDirectionDeg": 303,
+      "freezingLevelM": 1440,
+      "gustKph": 49.3,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 29
+    },
+    {
+      "time": "2026-09-11T18:00:00.000Z",
+      "temperatureC": -4.6,
+      "snowfallCm": 0,
+      "windKph": 5.9,
+      "windDirectionDeg": 301,
+      "freezingLevelM": 1430,
+      "gustKph": 50,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 24
+    },
+    {
+      "time": "2026-09-11T19:00:00.000Z",
+      "temperatureC": -3.6,
+      "snowfallCm": 0,
+      "windKph": 5.5,
+      "windDirectionDeg": 302,
+      "freezingLevelM": 1410,
+      "gustKph": 50,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 20
+    },
+    {
+      "time": "2026-09-11T20:00:00.000Z",
+      "temperatureC": -2.3,
+      "snowfallCm": 0,
+      "windKph": 5.1,
+      "windDirectionDeg": 302,
+      "freezingLevelM": 1390,
+      "gustKph": 49.7,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 16
+    },
+    {
+      "time": "2026-09-11T21:00:00.000Z",
+      "temperatureC": -1,
+      "snowfallCm": 0,
+      "windKph": 4.5,
+      "windDirectionDeg": 304,
+      "freezingLevelM": 1370,
+      "gustKph": 47.9,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 13
+    },
+    {
+      "time": "2026-09-11T22:00:00.000Z",
+      "temperatureC": 0,
+      "snowfallCm": 0,
+      "windKph": 3.6,
+      "windDirectionDeg": 307,
+      "freezingLevelM": 1410,
+      "gustKph": 43.6,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 10
+    },
+    {
+      "time": "2026-09-11T23:00:00.000Z",
+      "temperatureC": 0.9,
+      "snowfallCm": 0,
+      "windKph": 2.3,
+      "windDirectionDeg": 315,
+      "freezingLevelM": 1450,
+      "gustKph": 37.8,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 8
+    },
+    {
+      "time": "2026-09-12T00:00:00.000Z",
+      "temperatureC": 1.6,
+      "snowfallCm": 0,
+      "windKph": 1.5,
+      "windDirectionDeg": 324,
+      "freezingLevelM": 1490,
+      "gustKph": 33.1,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 8
+    },
+    {
+      "time": "2026-09-12T01:00:00.000Z",
+      "temperatureC": 2.2,
+      "snowfallCm": 0,
+      "windKph": 1.4,
+      "windDirectionDeg": 320,
+      "freezingLevelM": 1560,
+      "gustKph": 31,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 11
+    },
+    {
+      "time": "2026-09-12T02:00:00.000Z",
+      "temperatureC": 2.5,
+      "snowfallCm": 0,
+      "windKph": 1.7,
+      "windDirectionDeg": 302,
+      "freezingLevelM": 1620,
+      "gustKph": 30.2,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 16
+    },
+    {
+      "time": "2026-09-12T03:00:00.000Z",
+      "temperatureC": 2.5,
+      "snowfallCm": 0,
+      "windKph": 1.9,
+      "windDirectionDeg": 292,
+      "freezingLevelM": 1690,
+      "gustKph": 29.2,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 20
+    },
+    {
+      "time": "2026-09-12T04:00:00.000Z",
+      "temperatureC": 1.7,
+      "snowfallCm": 0,
+      "windKph": 1.7,
+      "windDirectionDeg": 288,
+      "freezingLevelM": 1690,
+      "gustKph": 27,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 24
+    },
+    {
+      "time": "2026-09-12T05:00:00.000Z",
+      "temperatureC": 0.5,
+      "snowfallCm": 0,
+      "windKph": 1.3,
+      "windDirectionDeg": 278,
+      "freezingLevelM": 1700,
+      "gustKph": 24.8,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 27
+    },
+    {
+      "time": "2026-09-12T06:00:00.000Z",
+      "temperatureC": -0.7,
+      "snowfallCm": 0,
+      "windKph": 1.3,
+      "windDirectionDeg": 286,
+      "freezingLevelM": 1700,
+      "gustKph": 24.5,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 28
+    },
+    {
+      "time": "2026-09-12T07:00:00.000Z",
+      "temperatureC": -1.8,
+      "snowfallCm": 0,
+      "windKph": 2.3,
+      "windDirectionDeg": 299,
+      "freezingLevelM": 1720,
+      "gustKph": 26.6,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 25
+    },
+    {
+      "time": "2026-09-12T08:00:00.000Z",
+      "temperatureC": -2.8,
+      "snowfallCm": 0,
+      "windKph": 3.7,
+      "windDirectionDeg": 309,
+      "freezingLevelM": 1730,
+      "gustKph": 30.6,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 20
+    },
+    {
+      "time": "2026-09-12T09:00:00.000Z",
+      "temperatureC": -3.7,
+      "snowfallCm": 0,
+      "windKph": 5,
+      "windDirectionDeg": 311,
+      "freezingLevelM": 1750,
+      "gustKph": 34.2,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 16
+    },
+    {
+      "time": "2026-09-12T10:00:00.000Z",
+      "temperatureC": -4.3,
+      "snowfallCm": 0,
+      "windKph": 6,
+      "windDirectionDeg": 311,
+      "freezingLevelM": 1750,
+      "gustKph": 37.8,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 15
+    },
+    {
+      "time": "2026-09-12T11:00:00.000Z",
+      "temperatureC": -4.7,
+      "snowfallCm": 0,
+      "windKph": 6.8,
+      "windDirectionDeg": 310,
+      "freezingLevelM": 1760,
+      "gustKph": 41,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 15
+    },
+    {
+      "time": "2026-09-12T12:00:00.000Z",
+      "temperatureC": -4.9,
+      "snowfallCm": 0,
+      "windKph": 7.4,
+      "windDirectionDeg": 309,
+      "freezingLevelM": 1760,
+      "gustKph": 43.9,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 20
+    },
+    {
+      "time": "2026-09-12T13:00:00.000Z",
+      "temperatureC": -4.7,
+      "snowfallCm": 0,
+      "windKph": 7.7,
+      "windDirectionDeg": 309,
+      "freezingLevelM": 1790,
+      "gustKph": 45.4,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 35
+    },
+    {
+      "time": "2026-09-12T14:00:00.000Z",
+      "temperatureC": -4.2,
+      "snowfallCm": 0,
+      "windKph": 7.5,
+      "windDirectionDeg": 310,
+      "freezingLevelM": 1810,
+      "gustKph": 46.1,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 55
+    },
+    {
+      "time": "2026-09-12T15:00:00.000Z",
+      "temperatureC": -3.8,
+      "snowfallCm": 0,
+      "windKph": 7.3,
+      "windDirectionDeg": 310,
+      "freezingLevelM": 1840,
+      "gustKph": 46.4,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 67
+    },
+    {
+      "time": "2026-09-12T16:00:00.000Z",
+      "temperatureC": -3.5,
+      "snowfallCm": 0,
+      "windKph": 7.2,
+      "windDirectionDeg": 309,
+      "freezingLevelM": 1850,
+      "gustKph": 46.8,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 63
+    },
+    {
+      "time": "2026-09-12T17:00:00.000Z",
+      "temperatureC": -3.2,
+      "snowfallCm": 0,
+      "windKph": 6.9,
+      "windDirectionDeg": 309,
+      "freezingLevelM": 1870,
+      "gustKph": 47.2,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 50
+    },
+    {
+      "time": "2026-09-12T18:00:00.000Z",
+      "temperatureC": -3.1,
+      "snowfallCm": 0,
+      "windKph": 6.8,
+      "windDirectionDeg": 307,
+      "freezingLevelM": 1880,
+      "gustKph": 47.2,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 41
     },
     {
       "time": "2026-09-12T19:00:00.000Z",
@@ -2594,7 +2534,7 @@
       "snowfallCm": 0,
       "windKph": 6.7,
       "windDirectionDeg": 304,
-      "freezingLevelM": 1780,
+      "freezingLevelM": 1850,
       "gustKph": 36.4,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2606,7 +2546,7 @@
       "snowfallCm": 0,
       "windKph": 6.7,
       "windDirectionDeg": 304,
-      "freezingLevelM": 1800,
+      "freezingLevelM": 1810,
       "gustKph": 37.4,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2618,7 +2558,7 @@
       "snowfallCm": 0,
       "windKph": 6.7,
       "windDirectionDeg": 304,
-      "freezingLevelM": 1810,
+      "freezingLevelM": 1780,
       "gustKph": 38.9,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2630,7 +2570,7 @@
       "snowfallCm": 0,
       "windKph": 6.8,
       "windDirectionDeg": 305,
-      "freezingLevelM": 1860,
+      "freezingLevelM": 1800,
       "gustKph": 40.3,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2642,7 +2582,7 @@
       "snowfallCm": 0,
       "windKph": 6.7,
       "windDirectionDeg": 306,
-      "freezingLevelM": 1910,
+      "freezingLevelM": 1830,
       "gustKph": 41.8,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2654,7 +2594,7 @@
       "snowfallCm": 0,
       "windKph": 6.6,
       "windDirectionDeg": 307,
-      "freezingLevelM": 1960,
+      "freezingLevelM": 1850,
       "gustKph": 42.8,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2666,7 +2606,7 @@
       "snowfallCm": 0,
       "windKph": 6.3,
       "windDirectionDeg": 309,
-      "freezingLevelM": 1980,
+      "freezingLevelM": 1890,
       "gustKph": 43.2,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2678,7 +2618,7 @@
       "snowfallCm": 0,
       "windKph": 6,
       "windDirectionDeg": 311,
-      "freezingLevelM": 2010,
+      "freezingLevelM": 1920,
       "gustKph": 43.6,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2690,7 +2630,7 @@
       "snowfallCm": 0,
       "windKph": 5.7,
       "windDirectionDeg": 314,
-      "freezingLevelM": 2030,
+      "freezingLevelM": 1960,
       "gustKph": 43.9,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2702,7 +2642,7 @@
       "snowfallCm": 0,
       "windKph": 5.2,
       "windDirectionDeg": 316,
-      "freezingLevelM": 1970,
+      "freezingLevelM": 1940,
       "gustKph": 43.6,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2714,7 +2654,7 @@
       "snowfallCm": 0,
       "windKph": 5,
       "windDirectionDeg": 319,
-      "freezingLevelM": 1910,
+      "freezingLevelM": 1920,
       "gustKph": 43.2,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2726,7 +2666,7 @@
       "snowfallCm": 0,
       "windKph": 4.6,
       "windDirectionDeg": 321,
-      "freezingLevelM": 1850,
+      "freezingLevelM": 1900,
       "gustKph": 42.1,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2738,7 +2678,7 @@
       "snowfallCm": 0,
       "windKph": 4.4,
       "windDirectionDeg": 322,
-      "freezingLevelM": 1800,
+      "freezingLevelM": 1870,
       "gustKph": 40.3,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2750,7 +2690,7 @@
       "snowfallCm": 0,
       "windKph": 4.2,
       "windDirectionDeg": 320,
-      "freezingLevelM": 1760,
+      "freezingLevelM": 1830,
       "gustKph": 38.2,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2762,7 +2702,7 @@
       "snowfallCm": 0,
       "windKph": 4,
       "windDirectionDeg": 321,
-      "freezingLevelM": 1710,
+      "freezingLevelM": 1800,
       "gustKph": 35.6,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2774,7 +2714,7 @@
       "snowfallCm": 0,
       "windKph": 3.8,
       "windDirectionDeg": 319,
-      "freezingLevelM": 1690,
+      "freezingLevelM": 1810,
       "gustKph": 32.8,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2786,7 +2726,7 @@
       "snowfallCm": 0,
       "windKph": 3.7,
       "windDirectionDeg": 317,
-      "freezingLevelM": 1660,
+      "freezingLevelM": 1830,
       "gustKph": 30.2,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2798,7 +2738,7 @@
       "snowfallCm": 0,
       "windKph": 3.3,
       "windDirectionDeg": 315,
-      "freezingLevelM": 1640,
+      "freezingLevelM": 1840,
       "gustKph": 28.1,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2810,7 +2750,7 @@
       "snowfallCm": 0,
       "windKph": 2.9,
       "windDirectionDeg": 313,
-      "freezingLevelM": 1600,
+      "freezingLevelM": 1880,
       "gustKph": 26.3,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2822,7 +2762,7 @@
       "snowfallCm": 0,
       "windKph": 2.3,
       "windDirectionDeg": 309,
-      "freezingLevelM": 1560,
+      "freezingLevelM": 1910,
       "gustKph": 24.5,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2834,7 +2774,7 @@
       "snowfallCm": 0,
       "windKph": 1.9,
       "windDirectionDeg": 299,
-      "freezingLevelM": 1520,
+      "freezingLevelM": 1950,
       "gustKph": 23,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2846,7 +2786,7 @@
       "snowfallCm": 0,
       "windKph": 1.3,
       "windDirectionDeg": 286,
-      "freezingLevelM": 1520,
+      "freezingLevelM": 1950,
       "gustKph": 21.6,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2858,7 +2798,7 @@
       "snowfallCm": 0,
       "windKph": 0.9,
       "windDirectionDeg": 281,
-      "freezingLevelM": 1510,
+      "freezingLevelM": 1940,
       "gustKph": 20.5,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2870,7 +2810,7 @@
       "snowfallCm": 0,
       "windKph": 0.6,
       "windDirectionDeg": 288,
-      "freezingLevelM": 1510,
+      "freezingLevelM": 1940,
       "gustKph": 19.8,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2882,7 +2822,7 @@
       "snowfallCm": 0,
       "windKph": 0.7,
       "windDirectionDeg": 346,
-      "freezingLevelM": 1470,
+      "freezingLevelM": 1890,
       "gustKph": 19.4,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2894,7 +2834,7 @@
       "snowfallCm": 0,
       "windKph": 1.7,
       "windDirectionDeg": 13,
-      "freezingLevelM": 1420,
+      "freezingLevelM": 1840,
       "gustKph": 19.4,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2906,7 +2846,7 @@
       "snowfallCm": 0,
       "windKph": 3,
       "windDirectionDeg": 17,
-      "freezingLevelM": 1380,
+      "freezingLevelM": 1790,
       "gustKph": 20.2,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2918,7 +2858,7 @@
       "snowfallCm": 0,
       "windKph": 4.3,
       "windDirectionDeg": 17,
-      "freezingLevelM": 1705,
+      "freezingLevelM": 1810,
       "gustKph": 20.5,
       "rainMm": 0,
       "precipitationMm": 0,
@@ -2930,8 +2870,68 @@
       "snowfallCm": 0,
       "windKph": 5.3,
       "windDirectionDeg": 18,
-      "freezingLevelM": 2030,
+      "freezingLevelM": 1820,
       "gustKph": 21.6,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 0
+    },
+    {
+      "time": "2026-09-14T00:00:00.000Z",
+      "temperatureC": 4.7,
+      "snowfallCm": 0,
+      "windKph": 5.8,
+      "windDirectionDeg": 16,
+      "freezingLevelM": 1840,
+      "gustKph": 22.7,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 1
+    },
+    {
+      "time": "2026-09-14T01:00:00.000Z",
+      "temperatureC": 5,
+      "snowfallCm": 0,
+      "windKph": 5.8,
+      "windDirectionDeg": 14,
+      "freezingLevelM": 1880,
+      "gustKph": 24.1,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 0
+    },
+    {
+      "time": "2026-09-14T02:00:00.000Z",
+      "temperatureC": 4.9,
+      "snowfallCm": 0,
+      "windKph": 5.3,
+      "windDirectionDeg": 10,
+      "freezingLevelM": 1930,
+      "gustKph": 26.6,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 0
+    },
+    {
+      "time": "2026-09-14T03:00:00.000Z",
+      "temperatureC": 4.6,
+      "snowfallCm": 0,
+      "windKph": 4.7,
+      "windDirectionDeg": 4,
+      "freezingLevelM": 1970,
+      "gustKph": 28.8,
+      "rainMm": 0,
+      "precipitationMm": 0,
+      "cloudPct": 0
+    },
+    {
+      "time": "2026-09-14T04:00:00.000Z",
+      "temperatureC": 4.2,
+      "snowfallCm": 0,
+      "windKph": 4.2,
+      "windDirectionDeg": 355,
+      "freezingLevelM": 1960,
+      "gustKph": 31.3,
       "rainMm": 0,
       "precipitationMm": 0,
       "cloudPct": 0
@@ -2949,124 +2949,120 @@
       "coordinates": [
         [
           [
-            171.531904,
+            171.531891,
             -43.476505
           ],
           [
             171.533105,
-            -43.476393
+            -43.476387
           ],
           [
-            171.534003,
+            171.534011,
             -43.477079
           ],
           [
-            171.534519,
+            171.534527,
             -43.477652
           ],
           [
-            171.534363,
+            171.534375,
             -43.478513
           ],
           [
             171.535029,
-            -43.479815
+            -43.479809
           ],
           [
-            171.539483,
+            171.539444,
             -43.479946
           ],
           [
-            171.538264,
+            171.538254,
             -43.479086
           ],
           [
             171.538879,
-            -43.478413
+            -43.478402
           ],
           [
-            171.540435,
+            171.540643,
             -43.479086
           ],
           [
-            171.540805,
-            -43.479373
-          ],
-          [
-            171.540681,
+            171.540693,
             -43.479659
           ],
           [
             171.539264,
-            -43.480969
+            -43.480977
           ],
           [
             171.537724,
-            -43.481788
+            -43.481794
           ],
           [
             171.536184,
-            -43.482102
+            -43.482108
           ],
           [
             171.535414,
-            -43.482637
+            -43.482645
           ],
           [
             171.533874,
-            -43.482408
+            -43.482413
           ],
           [
             171.53272,
-            -43.483518
+            -43.483525
           ],
           [
             171.532335,
-            -43.483518
+            -43.483525
           ],
           [
-            171.531973,
+            171.531966,
             -43.4831
           ],
           [
-            171.532233,
+            171.532226,
             -43.481667
           ],
           [
             171.531565,
-            -43.481365
+            -43.48137
           ],
           [
             171.530025,
-            -43.48155
+            -43.481555
           ],
           [
-            171.528887,
+            171.52888,
             -43.48052
           ],
           [
-            171.529648,
-            -43.479373
+            171.52964,
+            -43.479368
           ],
           [
-            171.53161,
+            171.531599,
             -43.479659
           ],
           [
-            171.531822,
+            171.531811,
             -43.478513
           ],
           [
             171.53118,
-            -43.478471
+            -43.478477
           ],
           [
-            171.530487,
+            171.530479,
             -43.477939
           ],
           [
             171.531565,
-            -43.476755
+            -43.476746
           ]
         ]
       ]
@@ -3082,140 +3078,140 @@
       "coordinates": [
         [
           [
-            171.525343,
+            171.525331,
             -43.481953
           ],
           [
             171.526946,
-            -43.481897
+            -43.481892
           ],
           [
             171.5281,
-            -43.482442
+            -43.482437
           ],
           [
             171.530025,
-            -43.482254
+            -43.482249
           ],
           [
-            171.530768,
+            171.530774,
             -43.482814
           ],
           [
-            171.530534,
+            171.530541,
             -43.483674
           ],
           [
             171.529255,
-            -43.484817
+            -43.484823
           ],
           [
-            171.52887,
-            -43.484815
+            171.528865,
+            -43.484821
           ],
           [
             171.5281,
-            -43.484086
+            -43.484094
           ],
           [
             171.527331,
-            -43.485239
+            -43.485246
           ],
           [
             171.526561,
-            -43.485663
+            -43.485671
           ],
           [
-            171.526204,
+            171.526194,
             -43.485394
           ],
           [
-            171.526327,
+            171.52632,
             -43.484534
           ],
           [
             171.525791,
-            -43.484314
+            -43.484319
           ],
           [
-            171.523365,
+            171.523377,
             -43.485108
           ],
           [
-            171.523782,
+            171.523793,
             -43.485681
           ],
           [
             171.523481,
-            -43.486187
+            -43.486195
           ],
           [
             171.522326,
-            -43.485894
+            -43.4859
           ],
           [
             171.520402,
-            -43.486206
+            -43.486218
           ],
           [
             171.519632,
-            -43.486966
+            -43.486975
           ],
           [
-            171.51847,
+            171.518451,
             -43.486828
           ],
           [
-            171.518215,
+            171.518203,
             -43.486254
           ],
           [
-            171.519802,
+            171.519792,
             -43.484821
           ],
           [
-            171.520402,
-            -43.483428
+            171.520069,
+            -43.483674
           ],
           [
-            171.521172,
-            -43.483179
+            171.520787,
+            -43.483148
           ],
           [
-            171.521485,
+            171.521516,
             -43.483387
           ],
           [
-            171.521143,
+            171.521153,
             -43.483674
           ],
           [
             171.521556,
-            -43.483951
+            -43.483941
           ],
           [
-            171.521898,
+            171.521886,
             -43.483674
           ],
           [
-            171.521602,
+            171.521582,
             -43.483387
           ],
           [
-            171.521766,
+            171.521754,
             -43.482814
           ],
           [
             171.523481,
-            -43.482511
+            -43.482505
           ],
           [
             171.524251,
-            -43.482764
+            -43.482758
           ],
           [
             171.525021,
-            -43.482188
+            -43.48218
           ]
         ]
       ]
@@ -3231,88 +3227,88 @@
       "coordinates": [
         [
           [
-            171.525125,
+            171.525113,
             -43.474785
           ],
           [
-            171.525879,
+            171.525891,
             -43.474785
           ],
           [
-            171.526442,
+            171.526449,
             -43.476219
           ],
           [
-            171.525537,
+            171.525544,
             -43.477079
           ],
           [
-            171.525014,
-            -43.478513
+            171.525021,
+            -43.478518
           ],
           [
-            171.524038,
+            171.524049,
             -43.479086
           ],
           [
-            171.524238,
+            171.524245,
             -43.479659
           ],
           [
-            171.523846,
+            171.523853,
             -43.480233
           ],
           [
             171.523096,
-            -43.480684
+            -43.480689
           ],
           [
             171.521941,
-            -43.480585
+            -43.480591
           ],
           [
             171.520787,
-            -43.480858
+            -43.480863
           ],
           [
             171.519247,
-            -43.482442
+            -43.482448
           ],
           [
             171.516167,
-            -43.48312
+            -43.483134
           ],
           [
-            171.51614,
+            171.516128,
             -43.482527
           ],
           [
             171.517322,
-            -43.481686
+            -43.481675
           ],
           [
-            171.517382,
+            171.517355,
             -43.481093
           ],
           [
             171.518477,
-            -43.480889
+            -43.480883
           ],
           [
-            171.521467,
+            171.521459,
             -43.479086
           ],
           [
-            171.520528,
+            171.520519,
             -43.477939
           ],
           [
-            171.522057,
+            171.522049,
             -43.476219
           ],
           [
             171.525021,
-            -43.474835
+            -43.474829
           ]
         ]
       ]
@@ -3321,143 +3317,143 @@
       "id": "recent-004",
       "mode": "recent",
       "thresholdCm": 5,
-      "expectedSnowCm": 10,
-      "score": 0.32,
+      "expectedSnowCm": 11,
+      "score": 0.33,
       "reason": "High elevation (1831 m) keeping snow cold and dry.",
       "dominantFactor": "elevation",
       "coordinates": [
         [
           [
-            171.531703,
+            171.531691,
             -43.485394
           ],
           [
             171.53272,
-            -43.485175
+            -43.485169
           ],
           [
             171.534644,
-            -43.486227
+            -43.486218
           ],
           [
             171.536184,
-            -43.486351
+            -43.486345
           ],
           [
             171.537339,
-            -43.487408
+            -43.487401
           ],
           [
             171.539264,
-            -43.48731
+            -43.487304
           ],
           [
-            171.54015,
+            171.540159,
             -43.487975
           ],
           [
-            171.539485,
+            171.539494,
             -43.489122
           ],
           [
             171.539649,
-            -43.489754
+            -43.489743
           ],
           [
             171.540418,
-            -43.490125
+            -43.490018
           ],
           [
             171.541958,
-            -43.489229
+            -43.489223
           ],
           [
             171.542728,
-            -43.489573
+            -43.489562
           ],
           [
-            171.542695,
+            171.542709,
             -43.489982
           ],
           [
-            171.541703,
+            171.541718,
             -43.490269
           ],
           [
             171.540803,
-            -43.49107
+            -43.491078
           ],
           [
             171.540033,
-            -43.49097
+            -43.490977
           ],
           [
-            171.538679,
+            171.538669,
             -43.489982
           ],
           [
             171.538494,
-            -43.489082
+            -43.489092
           ],
           [
             171.538109,
-            -43.488912
+            -43.488919
           ],
           [
-            171.537005,
+            171.536978,
             -43.489122
           ],
           [
-            171.536973,
+            171.536964,
             -43.488262
           ],
           [
             171.536184,
-            -43.487877
+            -43.487884
           ],
           [
-            171.535605,
+            171.535618,
             -43.487975
           ],
           [
-            171.535654,
+            171.535664,
             -43.488835
           ],
           [
             171.535029,
-            -43.489106
+            -43.489113
           ],
           [
-            171.534398,
+            171.534389,
             -43.488262
           ],
           [
-            171.534767,
+            171.534758,
             -43.487401
           ],
           [
             171.534259,
-            -43.486853
+            -43.486862
           ],
           [
             171.533105,
-            -43.486849
+            -43.486855
           ],
           [
             171.531565,
-            -43.487584
+            -43.487593
           ],
           [
-            171.530885,
+            171.530877,
             -43.487115
           ],
           [
-            171.530497,
+            171.530489,
             -43.486541
           ],
           [
             171.531565,
-            -43.485463
+            -43.485457
           ]
         ]
       ]
@@ -3473,64 +3469,64 @@
       "coordinates": [
         [
           [
-            171.528296,
+            171.528285,
             -43.467903
           ],
           [
             171.529255,
-            -43.467813
+            -43.467808
           ],
           [
             171.53118,
-            -43.468495
+            -43.468489
           ],
           [
             171.532335,
-            -43.468529
+            -43.468521
           ],
           [
-            171.533183,
+            171.53319,
             -43.46991
           ],
           [
-            171.533964,
+            171.533975,
             -43.470484
           ],
           [
-            171.533964,
+            171.533976,
             -43.471057
           ],
           [
             171.53195,
-            -43.471891
+            -43.471897
           ],
           [
             171.530795,
-            -43.471797
+            -43.471802
           ],
           [
             171.52964,
-            -43.470847
+            -43.470853
           ],
           [
             171.527331,
-            -43.471505
+            -43.471512
           ],
           [
-            171.527109,
+            171.527099,
             -43.471057
           ],
           [
-            171.528097,
+            171.528087,
             -43.470197
           ],
           [
-            171.526936,
+            171.526929,
             -43.469624
           ],
           [
             171.5281,
-            -43.468044
+            -43.468037
           ]
         ]
       ]
@@ -3546,84 +3542,80 @@
       "coordinates": [
         [
           [
-            171.543918,
+            171.543905,
             -43.490556
           ],
           [
-            171.544268,
-            -43.490379
+            171.544653,
+            -43.490465
           ],
           [
-            171.545038,
-            -43.490656
-          ],
-          [
-            171.54571,
+            171.545718,
             -43.491416
           ],
           [
-            171.545724,
+            171.545732,
             -43.492563
           ],
           [
-            171.544565,
+            171.544573,
             -43.493423
           ],
           [
-            171.545308,
+            171.54532,
             -43.494857
           ],
           [
             171.544653,
-            -43.495086
+            -43.495092
           ],
           [
             171.543883,
-            -43.494647
+            -43.494665
           ],
           [
-            171.543512,
+            171.543544,
             -43.494857
           ],
           [
-            171.544425,
+            171.544434,
             -43.495717
           ],
           [
             171.544268,
-            -43.496034
+            -43.496043
           ],
           [
             171.541188,
-            -43.495277
+            -43.495286
           ],
           [
-            171.540526,
+            171.540514,
             -43.494857
           ],
           [
-            171.54139,
+            171.541379,
             -43.49371
           ],
           [
-            171.541045,
+            171.541035,
             -43.491989
           ],
           [
             171.541573,
-            -43.491588
+            -43.49158
           ],
           [
             171.542343,
-            -43.491646
+            -43.491634
           ],
           [
             171.543498,
-            -43.491177
+            -43.491167
           ],
           [
             171.543883,
-            -43.490609
+            -43.490589
           ]
         ]
       ]
@@ -3639,80 +3631,80 @@
       "coordinates": [
         [
           [
-            171.542158,
+            171.542137,
             -43.48224
           ],
           [
             171.543113,
-            -43.482094
+            -43.482085
           ],
           [
-            171.543445,
+            171.543457,
             -43.482527
           ],
           [
-            171.54171,
+            171.541724,
             -43.483674
           ],
           [
             171.541573,
-            -43.484555
+            -43.484564
           ],
           [
             171.540418,
-            -43.484633
+            -43.484654
           ],
           [
-            171.540719,
+            171.54073,
             -43.485108
           ],
           [
-            171.541491,
+            171.541502,
             -43.485394
           ],
           [
             171.541188,
-            -43.48591
+            -43.485919
           ],
           [
             171.540418,
-            -43.48603
+            -43.486036
           ],
           [
-            171.538985,
+            171.538963,
             -43.485681
           ],
           [
-            171.538672,
+            171.538664,
             -43.484821
           ],
           [
             171.537724,
-            -43.484217
+            -43.484223
           ],
           [
-            171.537494,
+            171.537504,
             -43.485108
           ],
           [
             171.536954,
-            -43.485369
+            -43.485374
           ],
           [
-            171.535951,
+            171.535944,
             -43.484821
           ],
           [
-            171.53699,
+            171.536983,
             -43.483674
           ],
           [
             171.538879,
-            -43.482694
+            -43.482689
           ],
           [
             171.541958,
-            -43.482323
+            -43.482314
           ]
         ]
       ]
@@ -3728,44 +3720,44 @@
       "coordinates": [
         [
           [
-            171.526544,
-            -43.472491
-          ],
-          [
-            171.527715,
-            -43.472205
+            171.527314,
+            -43.472204
           ],
           [
             171.53195,
-            -43.472506
+            -43.472501
           ],
           [
-            171.532644,
+            171.532664,
             -43.472778
           ],
           [
             171.531565,
-            -43.474112
+            -43.474117
           ],
           [
             171.530025,
-            -43.474501
+            -43.474506
           ],
           [
             171.52887,
-            -43.474409
+            -43.474413
           ],
           [
             171.527715,
-            -43.474989
+            -43.474994
           ],
           [
-            171.526668,
+            171.526662,
             -43.474211
           ],
           [
-            171.52629,
-            -43.472778
+            171.526281,
+            -43.473065
+          ],
+          [
+            171.526946,
+            -43.47229
           ]
         ]
       ]
@@ -3774,83 +3766,83 @@
       "id": "recent-009",
       "mode": "recent",
       "thresholdCm": 5,
-      "expectedSnowCm": 12,
+      "expectedSnowCm": 13,
       "score": 0.43,
       "reason": "Deposits in the wind shadow just behind the crest upwind (S wind).",
       "dominantFactor": "ridge shelter",
       "coordinates": [
         [
           [
-            171.52472,
+            171.524708,
             -43.489982
           ],
           [
             171.525406,
-            -43.489784
+            -43.489775
           ],
           [
-            171.525677,
+            171.525689,
             -43.489982
           ],
           [
-            171.525984,
+            171.525991,
             -43.491129
           ],
           [
-            171.525643,
+            171.525664,
             -43.491416
           ],
           [
-            171.524923,
+            171.524945,
             -43.491416
           ],
           [
-            171.524192,
+            171.5242,
             -43.492276
           ],
           [
             171.523096,
-            -43.492799
+            -43.492805
           ],
           [
             171.521941,
-            -43.492099
+            -43.492105
           ],
           [
             171.521556,
-            -43.492283
+            -43.492289
           ],
           [
             171.520402,
-            -43.491862
+            -43.491869
           ],
           [
             171.519247,
-            -43.491804
+            -43.491814
           ],
           [
-            171.518016,
+            171.518003,
             -43.491129
           ],
           [
             171.518862,
-            -43.490759
+            -43.490749
           ],
           [
             171.520787,
-            -43.490955
+            -43.490948
           ],
           [
             171.522326,
-            -43.490619
+            -43.490613
           ],
           [
             171.523481,
-            -43.490024
+            -43.490018
           ],
           [
             171.524636,
-            -43.49002
+            -43.490015
           ]
         ]
       ]
@@ -3866,80 +3858,80 @@
       "coordinates": [
         [
           [
-            171.534396,
+            171.534367,
             -43.490556
           ],
           [
             171.535029,
-            -43.490496
+            -43.490488
           ],
           [
-            171.535486,
+            171.535496,
             -43.490842
           ],
           [
             171.535414,
-            -43.491476
+            -43.491487
           ],
           [
-            171.534391,
+            171.534421,
             -43.491989
           ],
           [
-            171.535537,
+            171.535548,
             -43.493136
           ],
           [
             171.534644,
-            -43.494697
+            -43.494723
           ],
           [
-            171.533881,
+            171.53387,
             -43.493423
           ],
           [
-            171.534161,
+            171.534128,
             -43.492276
           ],
           [
             171.533105,
-            -43.492133
+            -43.49214
           ],
           [
             171.532335,
-            -43.492426
+            -43.492447
           ],
           [
-            171.531682,
+            171.531693,
             -43.49543
           ],
           [
-            171.532189,
+            171.53221,
             -43.496577
           ],
           [
             171.53195,
-            -43.496756
+            -43.496771
           ],
           [
-            171.530344,
+            171.530334,
             -43.495143
           ],
           [
-            171.53023,
+            171.53022,
             -43.49457
           ],
           [
-            171.531018,
+            171.531007,
             -43.49371
           ],
           [
             171.531565,
-            -43.492403
+            -43.492379
           ],
           [
             171.534259,
-            -43.49059
+            -43.490582
           ]
         ]
       ]
@@ -3955,48 +3947,48 @@
       "coordinates": [
         [
           [
-            171.523455,
+            171.523436,
             -43.471918
           ],
           [
             171.524251,
-            -43.47189
+            -43.471883
           ],
           [
-            171.524662,
+            171.524668,
             -43.472204
           ],
           [
-            171.5231,
+            171.523106,
             -43.473351
           ],
           [
-            171.52407,
+            171.52408,
             -43.473925
           ],
           [
             171.523481,
-            -43.474398
+            -43.474403
           ],
           [
             171.521172,
-            -43.475238
+            -43.475243
           ],
           [
-            171.519539,
+            171.519528,
             -43.474211
           ],
           [
-            171.51959,
+            171.519582,
             -43.473351
           ],
           [
             171.520402,
-            -43.472624
+            -43.472618
           ],
           [
             171.523096,
-            -43.47201
+            -43.472005
           ]
         ]
       ]
@@ -4012,51 +4004,51 @@
       "coordinates": [
         [
           [
-            171.547317,
+            171.547305,
             -43.491989
           ],
           [
             171.548117,
-            -43.49189
+            -43.491884
           ],
           [
             171.550042,
-            -43.492899
+            -43.492887
           ],
           [
             171.551967,
-            -43.493465
+            -43.493455
           ],
           [
-            171.552369,
+            171.552389,
             -43.493996
           ],
           [
             171.551197,
-            -43.494659
+            -43.494669
           ],
           [
             171.547347,
-            -43.494985
+            -43.494991
           ],
           [
-            171.546793,
+            171.546785,
             -43.49457
           ],
           [
-            171.546898,
+            171.546886,
             -43.494283
           ],
           [
-            171.548094,
+            171.54808,
             -43.493996
           ],
           [
-            171.548102,
+            171.548093,
             -43.49371
           ],
           [
-            171.547059,
+            171.547051,
             -43.492276
           ]
         ]
@@ -4067,118 +4059,126 @@
       "mode": "recent",
       "thresholdCm": 10,
       "expectedSnowCm": 13,
-      "score": 0.4,
+      "score": 0.41,
       "reason": "Deposits in the wind shadow just behind the crest upwind (S wind).",
       "dominantFactor": "ridge shelter",
       "coordinates": [
         [
           [
-            171.53217,
+            171.532117,
             -43.476792
           ],
           [
             171.533105,
-            -43.476765
+            -43.476752
           ],
           [
-            171.534016,
+            171.534033,
             -43.477652
           ],
           [
-            171.533888,
+            171.533904,
             -43.478513
           ],
           [
             171.534644,
-            -43.480108
+            -43.48009
           ],
           [
-            171.539018,
+            171.539069,
             -43.48052
           ],
           [
-            171.537339,
-            -43.481533
+            171.538785,
+            -43.480806
           ],
           [
-            171.536808,
+            171.537339,
+            -43.481545
+          ],
+          [
+            171.536753,
             -43.480806
           ],
           [
             171.535799,
-            -43.480755
+            -43.480774
           ],
           [
-            171.535394,
+            171.535416,
             -43.481093
           ],
           [
-            171.53583,
+            171.535851,
             -43.481953
           ],
           [
+            171.535414,
+            -43.48216
+          ],
+          [
             171.533874,
-            -43.482096
+            -43.482107
           ],
           [
             171.53272,
-            -43.483176
+            -43.483186
           ],
           [
-            171.532411,
+            171.532369,
             -43.4831
           ],
           [
-            171.532425,
+            171.532632,
+            -43.481667
+          ],
+          [
+            171.532403,
             -43.48138
           ],
           [
             171.531565,
-            -43.48106
+            -43.481071
           ],
           [
             171.530025,
-            -43.481254
+            -43.481264
           ],
           [
-            171.529277,
+            171.529264,
             -43.48052
           ],
           [
             171.530025,
-            -43.479572
+            -43.479562
           ],
           [
             171.53118,
-            -43.480074
+            -43.480064
           ],
           [
             171.53195,
-            -43.480095
+            -43.480063
           ],
           [
-            171.532853,
+            171.532827,
             -43.477652
           ],
           [
-            171.53272,
-            -43.477443
-          ],
-          [
             171.53195,
-            -43.477497
+            -43.477538
           ],
           [
             171.531565,
-            -43.478018
+            -43.47803
           ],
           [
-            171.530946,
+            171.53093,
             -43.477939
           ],
           [
             171.53195,
-            -43.47687
+            -43.476851
           ]
         ]
       ]
@@ -4194,80 +4194,84 @@
       "coordinates": [
         [
           [
-            171.525201,
+            171.525178,
             -43.475072
           ],
           [
-            171.52562,
+            171.525643,
             -43.475072
           ],
           [
-            171.526067,
+            171.52608,
             -43.476219
           ],
           [
-            171.525151,
+            171.525165,
             -43.477079
           ],
           [
-            171.524422,
+            171.524443,
             -43.478513
           ],
           [
-            171.523623,
+            171.523644,
             -43.478799
           ],
           [
-            171.523836,
+            171.523851,
             -43.479659
           ],
           [
             171.523481,
-            -43.480181
+            -43.480196
           ],
           [
-            171.520402,
-            -43.480652
+            171.520787,
+            -43.480539
           ],
           [
-            171.518894,
+            171.519788,
+            -43.481093
+          ],
+          [
+            171.518921,
             -43.48224
           ],
           [
-            171.5175,
+            171.517452,
             -43.48224
           ],
           [
-            171.518088,
+            171.518063,
             -43.48138
           ],
           [
-            171.521675,
+            171.521655,
             -43.479373
           ],
           [
-            171.52187,
+            171.52185,
             -43.478799
           ],
           [
-            171.521004,
+            171.520988,
             -43.478226
           ],
           [
-            171.521018,
+            171.521001,
             -43.477939
           ],
           [
             171.522326,
-            -43.476465
+            -43.476446
           ],
           [
             171.523096,
-            -43.475892
+            -43.47588
           ],
           [
             171.525021,
-            -43.475196
+            -43.47518
           ]
         ]
       ]
@@ -4276,115 +4280,115 @@
       "id": "recent-015",
       "mode": "recent",
       "thresholdCm": 10,
-      "expectedSnowCm": 13,
-      "score": 0.44,
+      "expectedSnowCm": 14,
+      "score": 0.45,
       "reason": "Deposits in the wind shadow just behind the crest upwind (S wind).",
       "dominantFactor": "ridge shelter",
       "coordinates": [
         [
           [
-            171.525435,
+            171.525402,
             -43.48224
           ],
           [
             171.526946,
-            -43.4822
+            -43.48219
           ],
           [
             171.527331,
-            -43.482621
+            -43.482592
           ],
           [
             171.5281,
-            -43.482738
+            -43.482728
           ],
           [
             171.530025,
-            -43.482548
+            -43.482538
           ],
           [
-            171.530377,
+            171.530391,
             -43.482814
           ],
           [
-            171.530148,
+            171.530161,
             -43.483674
           ],
           [
             171.529255,
-            -43.484521
+            -43.484536
           ],
           [
-            171.52855,
+            171.528511,
             -43.483674
           ],
           [
             171.5281,
-            -43.483641
+            -43.483656
           ],
           [
             171.526946,
-            -43.485048
+            -43.48508
           ],
           [
             171.526561,
-            -43.484337
+            -43.484353
           ],
           [
             171.525791,
-            -43.483999
+            -43.48401
           ],
           [
             171.523096,
-            -43.484737
+            -43.484775
           ],
           [
             171.522711,
-            -43.484463
+            -43.484482
           ],
           [
-            171.522005,
+            171.522066,
             -43.484534
           ],
           [
-            171.521764,
+            171.521793,
             -43.485108
           ],
           [
-            171.522551,
+            171.522614,
             -43.485394
           ],
           [
             171.521172,
-            -43.485812
+            -43.485833
           ],
           [
-            171.519951,
+            171.519895,
             -43.485394
           ],
           [
             171.520787,
-            -43.484323
+            -43.48428
           ],
           [
             171.521556,
-            -43.484385
+            -43.484365
           ],
           [
-            171.522248,
+            171.522225,
             -43.483961
           ],
           [
             171.522711,
-            -43.482909
+            -43.482893
           ],
           [
             171.524636,
-            -43.483076
+            -43.48306
           ],
           [
-            171.525406,
-            -43.482259
+            171.52524,
+            -43.482527
           ]
         ]
       ]
@@ -4393,87 +4397,87 @@
       "id": "recent-016",
       "mode": "recent",
       "thresholdCm": 10,
-      "expectedSnowCm": 14,
+      "expectedSnowCm": 15,
       "score": 0.33,
       "reason": "Deposits in the wind shadow just behind the crest upwind (S wind).",
       "dominantFactor": "ridge shelter",
       "coordinates": [
         [
           [
-            171.528357,
+            171.528343,
             -43.46819
           ],
           [
             171.529255,
-            -43.468103
+            -43.468093
           ],
           [
             171.53118,
-            -43.468801
+            -43.46879
           ],
           [
-            171.532024,
+            171.532045,
             -43.468763
           ],
           [
-            171.533498,
+            171.53352,
             -43.470771
           ],
           [
-            171.533313,
+            171.533335,
             -43.471057
           ],
           [
             171.53195,
-            -43.47158
+            -43.471591
           ],
           [
-            171.530504,
+            171.530483,
             -43.471344
           ],
           [
-            171.530149,
+            171.530108,
             -43.470771
           ],
           [
-            171.53187,
+            171.531848,
             -43.46991
           ],
           [
-            171.531868,
+            171.531845,
             -43.469624
           ],
           [
             171.53118,
-            -43.469395
+            -43.469405
           ],
           [
-            171.529954,
+            171.529992,
             -43.469624
           ],
           [
-            171.529576,
+            171.529614,
             -43.470484
           ],
           [
             171.527715,
-            -43.471128
+            -43.471157
           ],
           [
-            171.528612,
+            171.528598,
             -43.469624
           ],
           [
             171.528485,
-            -43.469058
+            -43.469088
           ],
           [
-            171.528048,
+            171.528008,
             -43.46905
           ],
           [
             171.5281,
-            -43.468376
+            -43.468366
           ]
         ]
       ]
@@ -4489,44 +4493,44 @@
       "coordinates": [
         [
           [
-            171.527247,
+            171.527209,
             -43.472491
           ],
           [
             171.53195,
-            -43.47282
+            -43.472804
           ],
           [
-            171.53217,
+            171.532184,
             -43.473065
           ],
           [
             171.531565,
-            -43.473817
+            -43.473827
           ],
           [
             171.530025,
-            -43.474214
+            -43.474224
           ],
           [
             171.52887,
-            -43.474125
+            -43.474135
           ],
           [
             171.527715,
-            -43.474716
+            -43.474725
           ],
           [
-            171.526902,
+            171.526889,
             -43.473925
           ],
           [
-            171.526643,
+            171.526631,
             -43.473065
           ],
           [
             171.526946,
-            -43.472565
+            -43.472555
           ]
         ]
       ]
@@ -4542,44 +4546,44 @@
       "coordinates": [
         [
           [
-            171.523402,
+            171.523367,
             -43.472204
           ],
           [
-            171.524132,
+            171.524152,
             -43.472204
           ],
           [
-            171.522713,
+            171.522726,
             -43.473351
           ],
           [
-            171.523289,
+            171.523309,
             -43.473925
           ],
           [
-            171.523096,
-            -43.474204
+            171.523128,
+            -43.474211
           ],
           [
             171.521172,
-            -43.474938
+            -43.474948
           ],
           [
-            171.519765,
+            171.51975,
             -43.473925
           ],
           [
-            171.520013,
+            171.519999,
             -43.473351
           ],
           [
             171.520402,
-            -43.472944
+            -43.472933
           ],
           [
             171.523096,
-            -43.472288
+            -43.472279
           ]
         ]
       ]
@@ -4595,56 +4599,56 @@
       "coordinates": [
         [
           [
-            171.524768,
+            171.524744,
             -43.490269
           ],
           [
-            171.525413,
+            171.525428,
             -43.490269
           ],
           [
-            171.525462,
+            171.525483,
             -43.491129
           ],
           [
             171.524251,
-            -43.490962
+            -43.490993
           ],
           [
-            171.524015,
+            171.52403,
             -43.491989
           ],
           [
             171.523481,
-            -43.492378
+            -43.492389
           ],
           [
             171.523096,
-            -43.492465
+            -43.492477
           ],
           [
             171.522326,
-            -43.491783
+            -43.491801
           ],
           [
             171.521556,
-            -43.491865
+            -43.491885
           ],
           [
-            171.520031,
+            171.519848,
             -43.491416
           ],
           [
-            171.522711,
-            -43.490861
+            171.522326,
+            -43.490962
           ],
           [
             171.523481,
-            -43.490346
+            -43.490335
           ],
           [
             171.524636,
-            -43.490427
+            -43.490398
           ]
         ]
       ]
@@ -4660,64 +4664,64 @@
       "coordinates": [
         [
           [
-            171.541131,
+            171.541044,
             -43.482814
           ],
           [
-            171.541618,
+            171.541901,
             -43.4831
           ],
           [
-            171.54104,
+            171.541086,
             -43.483387
           ],
           [
             171.541188,
-            -43.484288
+            -43.484308
           ],
           [
             171.540803,
-            -43.484279
+            -43.484292
           ],
           [
             171.539649,
-            -43.483292
+            -43.483312
           ],
           [
-            171.538864,
+            171.538886,
             -43.483674
           ],
           [
             171.539264,
-            -43.484515
+            -43.484482
           ],
           [
-            171.540843,
+            171.540865,
             -43.485681
           ],
           [
             171.540418,
-            -43.485706
+            -43.485717
           ],
           [
-            171.539528,
+            171.53948,
             -43.485394
           ],
           [
-            171.539235,
+            171.539212,
             -43.484821
           ],
           [
-            171.537469,
+            171.537446,
             -43.483674
           ],
           [
             171.538879,
-            -43.48304
+            -43.483029
           ],
           [
             171.540803,
-            -43.482959
+            -43.482921
           ]
         ]
       ]
@@ -4733,32 +4737,32 @@
       "coordinates": [
         [
           [
-            171.531835,
+            171.531811,
             -43.485681
           ],
           [
             171.533105,
-            -43.485626
+            -43.485613
           ],
           [
-            171.533951,
+            171.533976,
             -43.486541
           ],
           [
             171.533105,
-            -43.486466
+            -43.486484
           ],
           [
             171.531565,
-            -43.487164
+            -43.487176
           ],
           [
-            171.530971,
+            171.530955,
             -43.486541
           ],
           [
             171.531565,
-            -43.48588
+            -43.485862
           ]
         ]
       ]
@@ -4768,38 +4772,38 @@
       "mode": "recent",
       "thresholdCm": 10,
       "expectedSnowCm": 12,
-      "score": 0.42,
+      "score": 0.4,
       "reason": "Concave SW-facing gully/bowl terrain that collects drifting snow.",
       "dominantFactor": "sheltered gully",
       "coordinates": [
         [
           [
-            171.544348,
+            171.544305,
             -43.491129
           ],
           [
             171.544653,
-            -43.490883
+            -43.490848
           ],
           [
-            171.545062,
+            171.54508,
             -43.491129
           ],
           [
-            171.545271,
+            171.545287,
             -43.492563
           ],
           [
             171.544268,
-            -43.493038
+            -43.493073
           ],
           [
-            171.543339,
+            171.543293,
             -43.491703
           ],
           [
-            171.544292,
-            -43.491416
+            171.544268,
+            -43.491329
           ]
         ]
       ]
@@ -4808,39 +4812,39 @@
       "id": "recent-023",
       "mode": "recent",
       "thresholdCm": 10,
-      "expectedSnowCm": 14,
+      "expectedSnowCm": 15,
       "score": 0.49,
       "reason": "Concave SE-facing gully/bowl terrain that collects drifting snow.",
       "dominantFactor": "sheltered gully",
       "coordinates": [
         [
           [
-            171.530764,
+            171.53074,
             -43.488262
           ],
           [
-            171.531521,
+            171.53156,
             -43.488262
           ],
           [
             171.530795,
-            -43.488659
+            -43.488697
           ],
           [
             171.530025,
-            -43.489679
+            -43.489689
           ],
           [
-            171.528627,
+            171.528614,
             -43.489409
           ],
           [
-            171.528546,
+            171.528526,
             -43.488835
           ],
           [
             171.53041,
-            -43.488485
+            -43.48847
           ]
         ]
       ]
@@ -4850,38 +4854,42 @@
       "mode": "recent",
       "thresholdCm": 10,
       "expectedSnowCm": 12,
-      "score": 0.3,
+      "score": 0.29,
       "reason": "Deposits in the wind shadow just behind the crest upwind (S wind).",
       "dominantFactor": "ridge shelter",
       "coordinates": [
         [
           [
-            171.537315,
+            171.537231,
             -43.471057
           ],
           [
-            171.537161,
+            171.537649,
+            -43.471057
+          ],
+          [
+            171.537209,
             -43.471631
           ],
           [
             171.535799,
-            -43.471673
+            -43.471693
           ],
           [
             171.535029,
-            -43.472385
+            -43.472397
           ],
           [
-            171.533446,
+            171.533432,
             -43.472491
           ],
           [
             171.535799,
-            -43.471334
+            -43.471322
           ],
           [
             171.536954,
-            -43.47123
+            -43.471191
           ]
         ]
       ]
@@ -4889,136 +4897,148 @@
     {
       "id": "forecast-001",
       "mode": "forecast",
-      "thresholdCm": 2,
-      "expectedSnowCm": 7,
-      "score": 0.35,
-      "reason": "Deposits behind terrain features across 5 active wind sectors.",
-      "dominantFactor": "ridge shelter",
+      "thresholdCm": 5,
+      "expectedSnowCm": 10,
+      "score": 0.36,
+      "reason": "Concave E-facing gully/bowl terrain that collects drifting snow.",
+      "dominantFactor": "sheltered gully",
       "coordinates": [
         [
           [
-            171.532122,
+            171.532575,
             -43.476505
           ],
           [
-            171.533105,
-            -43.476351
+            171.533168,
+            -43.476505
           ],
           [
-            171.534129,
+            171.534029,
             -43.477366
           ],
           [
-            171.533899,
+            171.533796,
             -43.478513
           ],
           [
-            171.534884,
-            -43.479659
+            171.534644,
+            -43.47972
+          ],
+          [
+            171.535799,
+            -43.479804
           ],
           [
             171.536954,
-            -43.480224
+            -43.480379
           ],
           [
-            171.538879,
-            -43.480257
+            171.539264,
+            -43.480209
           ],
           [
-            171.539232,
+            171.539541,
             -43.48052
           ],
           [
-            171.539242,
-            -43.480806
-          ],
-          [
             171.537724,
-            -43.481871
+            -43.481721
           ],
           [
-            171.536184,
-            -43.482172
+            171.537092,
+            -43.481667
           ],
           [
-            171.535414,
-            -43.482632
-          ],
-          [
-            171.535029,
-            -43.482632
-          ],
-          [
-            171.534644,
-            -43.482149
-          ],
-          [
-            171.533785,
-            -43.482527
-          ],
-          [
-            171.53272,
-            -43.483572
-          ],
-          [
-            171.532335,
-            -43.483572
-          ],
-          [
-            171.531935,
-            -43.4831
-          ],
-          [
-            171.53195,
-            -43.481432
-          ],
-          [
-            171.530025,
-            -43.4815
-          ],
-          [
-            171.529201,
+            171.536849,
             -43.481093
           ],
           [
-            171.528837,
+            171.536184,
+            -43.480955
+          ],
+          [
+            171.535938,
+            -43.48138
+          ],
+          [
+            171.536459,
+            -43.481953
+          ],
+          [
+            171.535414,
+            -43.482478
+          ],
+          [
+            171.534259,
+            -43.482128
+          ],
+          [
+            171.53272,
+            -43.48338
+          ],
+          [
+            171.532096,
+            -43.4831
+          ],
+          [
+            171.532354,
+            -43.481667
+          ],
+          [
+            171.532104,
+            -43.48138
+          ],
+          [
+            171.531565,
+            -43.481173
+          ],
+          [
+            171.530025,
+            -43.481363
+          ],
+          [
+            171.529022,
             -43.48052
           ],
           [
             171.52964,
-            -43.479304
+            -43.47954
+          ],
+          [
+            171.530025,
+            -43.479485
           ],
           [
             171.531565,
-            -43.4801
-          ],
-          [
-            171.53188,
-            -43.479946
-          ],
-          [
-            171.531691,
-            -43.479373
-          ],
-          [
-            171.53272,
-            -43.477937
-          ],
-          [
-            171.532335,
-            -43.477662
-          ],
-          [
-            171.53118,
-            -43.478139
-          ],
-          [
-            171.530653,
-            -43.477652
+            -43.480252
           ],
           [
             171.53195,
-            -43.47659
+            -43.480026
+          ],
+          [
+            171.531829,
+            -43.479373
+          ],
+          [
+            171.532432,
+            -43.478799
+          ],
+          [
+            171.532623,
+            -43.477652
+          ],
+          [
+            171.53118,
+            -43.47807
+          ],
+          [
+            171.530875,
+            -43.477652
+          ],
+          [
+            171.532335,
+            -43.476566
           ]
         ]
       ]
@@ -5026,188 +5046,88 @@
     {
       "id": "forecast-002",
       "mode": "forecast",
-      "thresholdCm": 2,
-      "expectedSnowCm": 6,
-      "score": 0.28,
-      "reason": "Concave SE-facing gully/bowl terrain that collects drifting snow.",
+      "thresholdCm": 5,
+      "expectedSnowCm": 11,
+      "score": 0.31,
+      "reason": "Concave W-facing gully/bowl terrain that collects drifting snow.",
       "dominantFactor": "sheltered gully",
       "coordinates": [
         [
           [
-            171.532329,
-            -43.485108
+            171.524669,
+            -43.475072
           ],
           [
-            171.533105,
-            -43.485196
+            171.525406,
+            -43.474802
           ],
           [
-            171.534644,
-            -43.486244
+            171.525791,
+            -43.474949
           ],
           [
-            171.535799,
-            -43.486166
+            171.526303,
+            -43.475932
           ],
           [
-            171.537339,
-            -43.487317
+            171.525009,
+            -43.477366
           ],
           [
-            171.538879,
-            -43.487141
+            171.524878,
+            -43.478226
           ],
           [
-            171.539649,
-            -43.487429
+            171.523866,
+            -43.479031
           ],
           [
-            171.540255,
-            -43.488262
+            171.524096,
+            -43.479659
           ],
           [
-            171.539368,
-            -43.489409
+            171.523698,
+            -43.480233
           ],
           [
-            171.540033,
-            -43.490027
+            171.523096,
+            -43.480485
           ],
           [
-            171.54112,
-            -43.490269
+            171.520787,
+            -43.480574
           ],
           [
-            171.541116,
-            -43.490842
+            171.518862,
+            -43.482364
           ],
           [
-            171.540418,
-            -43.490998
+            171.518092,
+            -43.482642
           ],
           [
-            171.538879,
-            -43.490237
+            171.516937,
+            -43.482528
           ],
           [
-            171.538109,
-            -43.48892
+            171.517849,
+            -43.48138
           ],
           [
-            171.536954,
-            -43.489086
+            171.521595,
+            -43.479086
           ],
           [
-            171.536964,
-            -43.488262
+            171.52058,
+            -43.477939
           ],
           [
-            171.536569,
-            -43.487972
+            171.522118,
+            -43.476219
           ],
           [
-            171.535799,
-            -43.487973
-          ],
-          [
-            171.535414,
-            -43.488248
-          ],
-          [
-            171.535784,
-            -43.488835
-          ],
-          [
-            171.535029,
-            -43.489109
-          ],
-          [
-            171.534528,
-            -43.488548
-          ],
-          [
-            171.534639,
-            -43.487115
-          ],
-          [
-            171.534259,
-            -43.48684
-          ],
-          [
-            171.533105,
-            -43.486933
-          ],
-          [
-            171.531607,
-            -43.487688
-          ],
-          [
-            171.53161,
-            -43.487975
-          ],
-          [
-            171.53272,
-            -43.488112
-          ],
-          [
-            171.533228,
-            -43.488548
-          ],
-          [
-            171.5336,
-            -43.489122
-          ],
-          [
-            171.533105,
-            -43.489685
-          ],
-          [
-            171.532335,
-            -43.489553
-          ],
-          [
-            171.531565,
-            -43.488842
-          ],
-          [
-            171.53118,
-            -43.488846
-          ],
-          [
-            171.530025,
-            -43.489924
-          ],
-          [
-            171.529255,
-            -43.490008
-          ],
-          [
-            171.528485,
-            -43.489736
-          ],
-          [
-            171.528074,
-            -43.489122
-          ],
-          [
-            171.528485,
-            -43.488406
-          ],
-          [
-            171.52964,
-            -43.488432
-          ],
-          [
-            171.531523,
-            -43.487688
-          ],
-          [
-            171.530394,
-            -43.486541
-          ],
-          [
-            171.53195,
-            -43.485203
+            171.524636,
+            -43.475088
           ]
         ]
       ]
@@ -5215,88 +5135,116 @@
     {
       "id": "forecast-003",
       "mode": "forecast",
-      "thresholdCm": 2,
-      "expectedSnowCm": 7,
-      "score": 0.28,
+      "thresholdCm": 5,
+      "expectedSnowCm": 10,
+      "score": 0.38,
       "reason": "Concave W-facing gully/bowl terrain that collects drifting snow.",
       "dominantFactor": "sheltered gully",
       "coordinates": [
         [
           [
-            171.525274,
-            -43.474785
-          ],
-          [
-            171.526049,
-            -43.475072
-          ],
-          [
-            171.52644,
-            -43.476219
-          ],
-          [
-            171.525199,
-            -43.477366
-          ],
-          [
-            171.524896,
-            -43.478513
-          ],
-          [
-            171.524033,
-            -43.479086
-          ],
-          [
-            171.524284,
-            -43.479659
-          ],
-          [
-            171.523899,
-            -43.480233
-          ],
-          [
-            171.523096,
-            -43.480536
-          ],
-          [
-            171.520787,
-            -43.480631
-          ],
-          [
-            171.519039,
-            -43.48224
-          ],
-          [
-            171.518092,
-            -43.48236
-          ],
-          [
-            171.517729,
+            171.525575,
             -43.481953
           ],
           [
-            171.518092,
-            -43.481394
+            171.526946,
+            -43.481989
           ],
           [
-            171.521397,
-            -43.479086
+            171.5281,
+            -43.482637
+          ],
+          [
+            171.530025,
+            -43.48236
+          ],
+          [
+            171.530622,
+            -43.482814
+          ],
+          [
+            171.530514,
+            -43.483387
+          ],
+          [
+            171.529255,
+            -43.484616
+          ],
+          [
+            171.528485,
+            -43.483935
+          ],
+          [
+            171.5281,
+            -43.483934
+          ],
+          [
+            171.527305,
+            -43.485108
+          ],
+          [
+            171.526561,
+            -43.485507
+          ],
+          [
+            171.526332,
+            -43.485108
+          ],
+          [
+            171.526582,
+            -43.484534
+          ],
+          [
+            171.525791,
+            -43.484214
+          ],
+          [
+            171.523481,
+            -43.484868
+          ],
+          [
+            171.521941,
+            -43.484621
+          ],
+          [
+            171.522199,
+            -43.485394
+          ],
+          [
+            171.521556,
+            -43.485897
+          ],
+          [
+            171.5198,
+            -43.485394
           ],
           [
             171.520402,
-            -43.478262
+            -43.483448
           ],
           [
-            171.520768,
-            -43.477652
+            171.52086,
+            -43.483387
           ],
           [
-            171.522498,
-            -43.475932
+            171.521556,
+            -43.484351
           ],
           [
-            171.525021,
-            -43.474843
+            171.52215,
+            -43.483961
+          ],
+          [
+            171.522442,
+            -43.482814
+          ],
+          [
+            171.524636,
+            -43.482766
+          ],
+          [
+            171.525406,
+            -43.481995
           ]
         ]
       ]
@@ -5304,96 +5252,88 @@
     {
       "id": "forecast-004",
       "mode": "forecast",
-      "thresholdCm": 2,
-      "expectedSnowCm": 7,
-      "score": 0.39,
-      "reason": "Concave W-facing gully/bowl terrain that collects drifting snow.",
-      "dominantFactor": "sheltered gully",
+      "thresholdCm": 5,
+      "expectedSnowCm": 10,
+      "score": 0.27,
+      "reason": "High elevation (1908 m) keeping snow cold and dry.",
+      "dominantFactor": "elevation",
       "coordinates": [
         [
           [
-            171.525421,
-            -43.481953
-          ],
-          [
-            171.526946,
-            -43.481851
-          ],
-          [
-            171.5281,
-            -43.482493
-          ],
-          [
-            171.530071,
-            -43.48224
-          ],
-          [
-            171.53079,
-            -43.482814
-          ],
-          [
-            171.530697,
-            -43.483387
+            171.528341,
+            -43.46819
           ],
           [
             171.529255,
-            -43.484733
+            -43.468027
           ],
           [
-            171.528485,
-            -43.484641
+            171.53195,
+            -43.468813
+          ],
+          [
+            171.532233,
+            -43.469337
+          ],
+          [
+            171.53195,
+            -43.469548
+          ],
+          [
+            171.529911,
+            -43.469624
+          ],
+          [
+            171.530025,
+            -43.470263
+          ],
+          [
+            171.53041,
+            -43.470517
+          ],
+          [
+            171.53272,
+            -43.470112
+          ],
+          [
+            171.533605,
+            -43.470484
+          ],
+          [
+            171.533608,
+            -43.471057
+          ],
+          [
+            171.531565,
+            -43.4718
+          ],
+          [
+            171.530673,
+            -43.471631
+          ],
+          [
+            171.52964,
+            -43.470598
+          ],
+          [
+            171.527715,
+            -43.471317
+          ],
+          [
+            171.52754,
+            -43.471057
+          ],
+          [
+            171.528234,
+            -43.470197
+          ],
+          [
+            171.527746,
+            -43.46905
           ],
           [
             171.5281,
-            -43.484159
-          ],
-          [
-            171.527331,
-            -43.485309
-          ],
-          [
-            171.526561,
-            -43.485712
-          ],
-          [
-            171.526118,
-            -43.485394
-          ],
-          [
-            171.526384,
-            -43.484821
-          ],
-          [
-            171.526176,
-            -43.484374
-          ],
-          [
-            171.522711,
-            -43.485119
-          ],
-          [
-            171.522891,
-            -43.484821
-          ],
-          [
-            171.522195,
-            -43.483961
-          ],
-          [
-            171.522442,
-            -43.4831
-          ],
-          [
-            171.523481,
-            -43.482526
-          ],
-          [
-            171.524636,
-            -43.48281
-          ],
-          [
-            171.525406,
-            -43.481959
+            -43.468307
           ]
         ]
       ]
@@ -5401,68 +5341,96 @@
     {
       "id": "forecast-005",
       "mode": "forecast",
-      "thresholdCm": 2,
-      "expectedSnowCm": 4,
-      "score": 0.13,
-      "reason": "Exposed SW-facing terrain likely scoured as storm winds shift.",
-      "dominantFactor": "wind scour",
+      "thresholdCm": 5,
+      "expectedSnowCm": 8,
+      "score": 0.19,
+      "reason": "Deposits behind terrain features across 6 active wind sectors.",
+      "dominantFactor": "ridge shelter",
       "coordinates": [
         [
           [
-            171.544259,
-            -43.490269
+            171.544013,
+            -43.490556
           ],
           [
-            171.545308,
-            -43.490842
+            171.545038,
+            -43.490709
           ],
           [
-            171.545765,
-            -43.492276
+            171.545595,
+            -43.491416
           ],
           [
-            171.544655,
+            171.545473,
+            -43.492563
+          ],
+          [
+            171.544452,
             -43.493423
           ],
           [
-            171.545235,
+            171.545112,
             -43.494857
           ],
           [
+            171.544653,
+            -43.494994
+          ],
+          [
             171.543498,
-            -43.495711
+            -43.494371
+          ],
+          [
+            171.543628,
+            -43.49543
           ],
           [
             171.541573,
-            -43.495295
+            -43.495239
           ],
           [
-            171.540609,
-            -43.49457
+            171.540812,
+            -43.494857
           ],
           [
-            171.541245,
+            171.541306,
+            -43.493996
+          ],
+          [
+            171.541048,
+            -43.491989
+          ],
+          [
+            171.541573,
+            -43.491598
+          ],
+          [
+            171.542343,
+            -43.491956
+          ],
+          [
+            171.541843,
+            -43.493136
+          ],
+          [
+            171.543113,
+            -43.494105
+          ],
+          [
+            171.543615,
             -43.49371
           ],
           [
-            171.540837,
+            171.543697,
             -43.492849
           ],
           [
-            171.541058,
+            171.54306,
             -43.491703
           ],
           [
-            171.541573,
-            -43.491441
-          ],
-          [
-            171.542728,
-            -43.491698
-          ],
-          [
-            171.543883,
-            -43.490408
+            171.543969,
+            -43.490842
           ]
         ]
       ]
@@ -5470,56 +5438,84 @@
     {
       "id": "forecast-006",
       "mode": "forecast",
-      "thresholdCm": 2,
-      "expectedSnowCm": 7,
-      "score": 0.29,
-      "reason": "Deposits behind terrain features across 5 active wind sectors.",
+      "thresholdCm": 5,
+      "expectedSnowCm": 10,
+      "score": 0.35,
+      "reason": "Deposits behind terrain features across 6 active wind sectors.",
       "dominantFactor": "ridge shelter",
       "coordinates": [
         [
           [
-            171.528706,
-            -43.467903
+            171.54288,
+            -43.481953
           ],
           [
-            171.53195,
-            -43.468738
+            171.543498,
+            -43.482159
           ],
           [
-            171.533736,
-            -43.470484
+            171.543455,
+            -43.482527
           ],
           [
-            171.533546,
-            -43.471057
+            171.541631,
+            -43.483674
           ],
           [
-            171.531565,
-            -43.471951
+            171.541484,
+            -43.484534
           ],
           [
-            171.52964,
-            -43.470798
+            171.540693,
+            -43.484534
           ],
           [
-            171.527572,
-            -43.471344
+            171.539649,
+            -43.483623
           ],
           [
-            171.527449,
-            -43.470771
+            171.539264,
+            -43.483842
           ],
           [
-            171.528045,
-            -43.470197
+            171.540033,
+            -43.484858
           ],
           [
-            171.527261,
-            -43.46905
+            171.540951,
+            -43.485394
           ],
           [
-            171.528485,
-            -43.467955
+            171.540803,
+            -43.485934
+          ],
+          [
+            171.539264,
+            -43.48551
+          ],
+          [
+            171.538663,
+            -43.484534
+          ],
+          [
+            171.537442,
+            -43.483961
+          ],
+          [
+            171.53738,
+            -43.483674
+          ],
+          [
+            171.538879,
+            -43.482774
+          ],
+          [
+            171.541573,
+            -43.48243
+          ],
+          [
+            171.542728,
+            -43.481987
           ]
         ]
       ]
@@ -5527,88 +5523,56 @@
     {
       "id": "forecast-007",
       "mode": "forecast",
-      "thresholdCm": 2,
-      "expectedSnowCm": 6,
-      "score": 0.29,
-      "reason": "Deposits behind terrain features across 5 active wind sectors.",
+      "thresholdCm": 5,
+      "expectedSnowCm": 11,
+      "score": 0.34,
+      "reason": "Deposits behind terrain features across 6 active wind sectors.",
       "dominantFactor": "ridge shelter",
       "coordinates": [
         [
           [
-            171.542224,
-            -43.48224
+            171.527004,
+            -43.472491
           ],
           [
-            171.543136,
-            -43.482527
+            171.527715,
+            -43.472326
           ],
           [
-            171.541909,
-            -43.483674
+            171.52887,
+            -43.472584
           ],
           [
-            171.541573,
-            -43.484548
+            171.531565,
+            -43.472596
           ],
           [
-            171.540803,
-            -43.484698
+            171.532326,
+            -43.473065
           ],
           [
-            171.539994,
-            -43.483961
+            171.53118,
+            -43.474121
           ],
           [
-            171.5395,
-            -43.483961
+            171.529255,
+            -43.474223
           ],
           [
-            171.541249,
-            -43.485394
+            171.527715,
+            -43.4748
           ],
           [
-            171.540803,
-            -43.486091
+            171.526673,
+            -43.473925
           ],
           [
-            171.539391,
-            -43.485681
+            171.526441,
+            -43.473065
           ],
           [
-            171.538494,
-            -43.484578
-          ],
-          [
-            171.537724,
-            -43.484151
-          ],
-          [
-            171.537339,
-            -43.485292
-          ],
-          [
-            171.536319,
-            -43.485108
-          ],
-          [
-            171.536119,
-            -43.484534
-          ],
-          [
-            171.537269,
-            -43.483961
-          ],
-          [
-            171.537874,
-            -43.4831
-          ],
-          [
-            171.539264,
-            -43.48253
-          ],
-          [
-            171.541958,
-            -43.482293
+            171.526946,
+            -43.472505
           ]
         ]
       ]
@@ -5616,52 +5580,104 @@
     {
       "id": "forecast-008",
       "mode": "forecast",
-      "thresholdCm": 2,
-      "expectedSnowCm": 7,
-      "score": 0.32,
-      "reason": "Deposits behind terrain features across 5 active wind sectors.",
-      "dominantFactor": "ridge shelter",
+      "thresholdCm": 5,
+      "expectedSnowCm": 10,
+      "score": 0.37,
+      "reason": "Concave S-facing gully/bowl terrain that collects drifting snow.",
+      "dominantFactor": "sheltered gully",
       "coordinates": [
         [
           [
-            171.526773,
-            -43.472491
+            171.534896,
+            -43.486541
           ],
           [
-            171.531565,
-            -43.472454
+            171.535799,
+            -43.486317
           ],
           [
-            171.532391,
-            -43.473065
+            171.537339,
+            -43.487473
           ],
           [
-            171.532038,
-            -43.473638
+            171.538879,
+            -43.487278
           ],
           [
-            171.530795,
-            -43.474356
+            171.539649,
+            -43.487561
           ],
           [
-            171.529255,
-            -43.474359
+            171.54008,
+            -43.488262
           ],
           [
-            171.527715,
-            -43.47493
+            171.539293,
+            -43.489122
           ],
           [
-            171.526621,
-            -43.474211
+            171.539406,
+            -43.489695
           ],
           [
-            171.526256,
-            -43.473065
+            171.540033,
+            -43.490167
           ],
           [
-            171.526561,
-            -43.472572
+            171.540803,
+            -43.490113
+          ],
+          [
+            171.541332,
+            -43.490556
+          ],
+          [
+            171.541079,
+            -43.490842
+          ],
+          [
+            171.540803,
+            -43.491048
+          ],
+          [
+            171.540033,
+            -43.490944
+          ],
+          [
+            171.538739,
+            -43.489982
+          ],
+          [
+            171.53864,
+            -43.489122
+          ],
+          [
+            171.538109,
+            -43.488767
+          ],
+          [
+            171.537272,
+            -43.488835
+          ],
+          [
+            171.536569,
+            -43.487903
+          ],
+          [
+            171.535094,
+            -43.487975
+          ],
+          [
+            171.535434,
+            -43.488835
+          ],
+          [
+            171.535029,
+            -43.48885
+          ],
+          [
+            171.534775,
+            -43.486828
           ]
         ]
       ]
@@ -5669,64 +5685,72 @@
     {
       "id": "forecast-009",
       "mode": "forecast",
-      "thresholdCm": 2,
-      "expectedSnowCm": 6,
-      "score": 0.34,
+      "thresholdCm": 5,
+      "expectedSnowCm": 10,
+      "score": 0.38,
       "reason": "Concave W-facing gully/bowl terrain that collects drifting snow.",
       "dominantFactor": "sheltered gully",
       "coordinates": [
         [
           [
-            171.524967,
-            -43.489982
+            171.523187,
+            -43.490269
+          ],
+          [
+            171.524636,
+            -43.490341
+          ],
+          [
+            171.525406,
+            -43.490022
+          ],
+          [
+            171.52586,
+            -43.490842
           ],
           [
             171.525791,
-            -43.489903
+            -43.4912
           ],
           [
-            171.525924,
-            -43.491129
+            171.524636,
+            -43.490943
           ],
           [
-            171.525021,
-            -43.491165
+            171.524309,
+            -43.491989
           ],
           [
-            171.524237,
-            -43.492276
+            171.523481,
+            -43.492604
           ],
           [
             171.523096,
-            -43.492848
+            -43.492698
           ],
           [
             171.521941,
-            -43.492177
+            -43.492018
           ],
           [
             171.521556,
-            -43.492363
+            -43.492203
           ],
           [
-            171.518635,
+            171.518564,
             -43.491416
           ],
           [
             171.518862,
-            -43.490959
+            -43.491069
           ],
           [
-            171.521172,
-            -43.490859
+            171.520787,
+            -43.49102
           ],
           [
-            171.523481,
-            -43.490076
-          ],
-          [
-            171.524636,
-            -43.490149
+            171.523096,
+            -43.490314
           ]
         ]
       ]
@@ -5734,64 +5758,72 @@
     {
       "id": "forecast-010",
       "mode": "forecast",
-      "thresholdCm": 2,
-      "expectedSnowCm": 6,
-      "score": 0.27,
-      "reason": "Concave E-facing gully/bowl terrain that collects drifting snow.",
-      "dominantFactor": "sheltered gully",
+      "thresholdCm": 5,
+      "expectedSnowCm": 9,
+      "score": 0.28,
+      "reason": "High elevation (1722 m) keeping snow cold and dry.",
+      "dominantFactor": "elevation",
       "coordinates": [
         [
           [
-            171.54719,
-            -43.492276
+            171.525771,
+            -43.493136
           ],
           [
-            171.547732,
-            -43.49201
+            171.526946,
+            -43.493797
           ],
           [
-            171.548502,
-            -43.492105
+            171.5281,
+            -43.493724
           ],
           [
-            171.551582,
-            -43.493418
+            171.528963,
+            -43.495717
           ],
           [
-            171.552334,
+            171.528485,
+            -43.496116
+          ],
+          [
+            171.527331,
+            -43.495602
+          ],
+          [
+            171.525021,
+            -43.496902
+          ],
+          [
+            171.524578,
+            -43.496577
+          ],
+          [
+            171.524947,
+            -43.496004
+          ],
+          [
+            171.526788,
+            -43.495143
+          ],
+          [
+            171.526561,
+            -43.49471
+          ],
+          [
+            171.525021,
+            -43.495259
+          ],
+          [
+            171.524409,
+            -43.494857
+          ],
+          [
+            171.525787,
             -43.493996
           ],
           [
-            171.550812,
-            -43.494797
-          ],
-          [
-            171.549657,
-            -43.494649
-          ],
-          [
-            171.548117,
-            -43.495148
-          ],
-          [
-            171.547347,
-            -43.495059
-          ],
-          [
-            171.546711,
-            -43.49457
-          ],
-          [
-            171.546775,
-            -43.494283
-          ],
-          [
-            171.548486,
-            -43.49371
-          ],
-          [
-            171.547112,
-            -43.492563
+            171.52565,
+            -43.493423
           ]
         ]
       ]
@@ -5799,56 +5831,52 @@
     {
       "id": "forecast-011",
       "mode": "forecast",
-      "thresholdCm": 2,
-      "expectedSnowCm": 7,
-      "score": 0.3,
+      "thresholdCm": 5,
+      "expectedSnowCm": 11,
+      "score": 0.31,
       "reason": "Concave W-facing gully/bowl terrain that collects drifting snow.",
       "dominantFactor": "sheltered gully",
       "coordinates": [
         [
           [
-            171.522233,
+            171.523476,
             -43.472204
           ],
           [
-            171.523866,
-            -43.471999
-          ],
-          [
-            171.524251,
-            -43.47208
-          ],
-          [
-            171.524335,
+            171.524064,
             -43.472491
           ],
           [
-            171.523143,
+            171.522956,
             -43.473351
           ],
           [
-            171.522959,
+            171.522862,
             -43.474211
+          ],
+          [
+            171.521556,
+            -43.474944
+          ],
+          [
+            171.520787,
+            -43.47494
+          ],
+          [
+            171.519814,
+            -43.473925
+          ],
+          [
+            171.520197,
+            -43.473065
           ],
           [
             171.521172,
-            -43.475003
+            -43.472523
           ],
           [
-            171.519782,
-            -43.474211
-          ],
-          [
-            171.51962,
-            -43.473638
-          ],
-          [
-            171.520402,
-            -43.472759
-          ],
-          [
-            171.521941,
-            -43.472278
+            171.523096,
+            -43.472303
           ]
         ]
       ]
@@ -5856,60 +5884,52 @@
     {
       "id": "forecast-012",
       "mode": "forecast",
-      "thresholdCm": 2,
-      "expectedSnowCm": 6,
-      "score": 0.23,
-      "reason": "High elevation (1786 m) keeping snow cold and dry.",
-      "dominantFactor": "elevation",
+      "thresholdCm": 5,
+      "expectedSnowCm": 9,
+      "score": 0.31,
+      "reason": "Concave E-facing gully/bowl terrain that collects drifting snow.",
+      "dominantFactor": "sheltered gully",
       "coordinates": [
         [
           [
-            171.529837,
-            -43.491416
+            171.550147,
+            -43.493136
           ],
           [
-            171.53041,
-            -43.491132
+            171.551197,
+            -43.493286
           ],
           [
-            171.53118,
-            -43.491278
+            171.552544,
+            -43.493996
           ],
           [
-            171.531508,
-            -43.492276
+            171.550812,
+            -43.494641
           ],
           [
-            171.532304,
-            -43.492849
+            171.549657,
+            -43.494485
           ],
           [
-            171.53195,
-            -43.496591
+            171.548117,
+            -43.49499
           ],
           [
-            171.530073,
+            171.546923,
             -43.49457
           ],
           [
-            171.530833,
+            171.549472,
             -43.49371
           ],
           [
-            171.531246,
-            -43.492563
+            171.549657,
+            -43.493171
           ],
           [
-            171.530025,
-            -43.492833
-          ],
-          [
-            171.529659,
-            -43.492563
-          ],
-          [
-            171.529643,
-            -43.491703
+            171.550042,
+            -43.49316
           ]
         ]
       ]
@@ -5917,72 +5937,76 @@
     {
       "id": "forecast-013",
       "mode": "forecast",
-      "thresholdCm": 5,
-      "expectedSnowCm": 7,
-      "score": 0.29,
-      "reason": "Concave SW-facing gully/bowl terrain that collects drifting snow.",
+      "thresholdCm": 10,
+      "expectedSnowCm": 11,
+      "score": 0.32,
+      "reason": "Concave W-facing gully/bowl terrain that collects drifting snow.",
       "dominantFactor": "sheltered gully",
       "coordinates": [
         [
           [
-            171.524567,
+            171.525075,
             -43.475358
           ],
           [
             171.525406,
-            -43.475122
+            -43.47524
           ],
           [
-            171.525992,
+            171.525791,
             -43.475932
           ],
           [
-            171.524693,
-            -43.477366
+            171.52456,
+            -43.477079
           ],
           [
-            171.524556,
+            171.524344,
             -43.478226
           ],
           [
-            171.523533,
-            -43.478799
+            171.523315,
+            -43.478513
           ],
           [
-            171.523617,
+            171.523481,
+            -43.479811
+          ],
+          [
+            171.523096,
+            -43.480012
+          ],
+          [
+            171.521454,
             -43.479946
           ],
           [
-            171.521172,
-            -43.480085
-          ],
-          [
-            171.520986,
-            -43.479946
-          ],
-          [
-            171.521732,
+            171.522174,
             -43.479373
           ],
           [
-            171.521911,
+            171.522236,
             -43.478799
           ],
           [
-            171.520919,
+            171.521941,
+            -43.478387
+          ],
+          [
+            171.521116,
             -43.478226
           ],
           [
-            171.521052,
-            -43.477939
+            171.521172,
+            -43.477846
           ],
           [
-            171.522711,
-            -43.476221
+            171.522883,
+            -43.476219
           ],
           [
-            171.524251,
-            -43.475518
+            171.525021,
+            -43.475397
           ]
         ]
       ]
@@ -5990,92 +6014,64 @@
     {
       "id": "forecast-014",
       "mode": "forecast",
-      "thresholdCm": 5,
-      "expectedSnowCm": 7,
-      "score": 0.37,
-      "reason": "Deposits behind terrain features across 5 active wind sectors.",
+      "thresholdCm": 10,
+      "expectedSnowCm": 10,
+      "score": 0.38,
+      "reason": "Deposits behind terrain features across 6 active wind sectors.",
       "dominantFactor": "ridge shelter",
       "coordinates": [
         [
           [
-            171.532908,
-            -43.478799
-          ],
-          [
-            171.533105,
-            -43.478562
+            171.533091,
+            -43.479086
           ],
           [
             171.533874,
-            -43.478976
+            -43.479337
           ],
           [
-            171.534644,
-            -43.480072
-          ],
-          [
-            171.535799,
-            -43.480143
-          ],
-          [
-            171.53598,
-            -43.48052
-          ],
-          [
-            171.535431,
-            -43.481093
-          ],
-          [
-            171.535841,
-            -43.481953
-          ],
-          [
-            171.534644,
-            -43.481697
-          ],
-          [
-            171.53349,
-            -43.482296
-          ],
-          [
-            171.53272,
-            -43.483125
-          ],
-          [
-            171.532443,
-            -43.48138
-          ],
-          [
-            171.531565,
-            -43.480952
-          ],
-          [
-            171.530025,
-            -43.481131
-          ],
-          [
-            171.529325,
-            -43.48052
-          ],
-          [
-            171.530025,
-            -43.479703
-          ],
-          [
-            171.53195,
-            -43.480455
-          ],
-          [
-            171.532417,
+            171.533962,
             -43.479946
           ],
           [
-            171.532335,
-            -43.479276
+            171.534644,
+            -43.480457
           ],
           [
-            171.53272,
-            -43.479029
+            171.535799,
+            -43.480231
+          ],
+          [
+            171.535838,
+            -43.48052
+          ],
+          [
+            171.535138,
+            -43.480806
+          ],
+          [
+            171.535029,
+            -43.48145
+          ],
+          [
+            171.534259,
+            -43.48155
+          ],
+          [
+            171.533105,
+            -43.4822
+          ],
+          [
+            171.532863,
+            -43.48138
+          ],
+          [
+            171.532123,
+            -43.480806
+          ],
+          [
+            171.533027,
+            -43.479373
           ]
         ]
       ]
@@ -6083,108 +6079,44 @@
     {
       "id": "forecast-015",
       "mode": "forecast",
-      "thresholdCm": 5,
-      "expectedSnowCm": 7,
-      "score": 0.36,
-      "reason": "Concave SW-facing gully/bowl terrain that collects drifting snow.",
+      "thresholdCm": 10,
+      "expectedSnowCm": 11,
+      "score": 0.34,
+      "reason": "Concave E-facing gully/bowl terrain that collects drifting snow.",
       "dominantFactor": "sheltered gully",
       "coordinates": [
         [
           [
-            171.525434,
-            -43.482527
+            171.52737,
+            -43.472778
           ],
           [
-            171.525791,
-            -43.482271
+            171.531735,
+            -43.473065
           ],
           [
-            171.526946,
-            -43.482332
-          ],
-          [
-            171.526254,
-            -43.482814
-          ],
-          [
-            171.526561,
-            -43.483213
-          ],
-          [
-            171.526946,
-            -43.483203
-          ],
-          [
-            171.527331,
-            -43.482742
-          ],
-          [
-            171.5281,
-            -43.482871
+            171.53118,
+            -43.473741
           ],
           [
             171.529255,
-            -43.482583
+            -43.47381
           ],
           [
-            171.530025,
-            -43.482615
+            171.527715,
+            -43.474404
           ],
           [
-            171.530314,
-            -43.4831
+            171.52729,
+            -43.474211
           ],
           [
-            171.529255,
-            -43.484177
-          ],
-          [
-            171.528673,
-            -43.483674
-          ],
-          [
-            171.5281,
-            -43.483595
+            171.526944,
+            -43.473065
           ],
           [
             171.527331,
-            -43.484603
-          ],
-          [
-            171.526946,
-            -43.48467
-          ],
-          [
-            171.526561,
-            -43.484155
-          ],
-          [
-            171.525791,
-            -43.48397
-          ],
-          [
-            171.523221,
-            -43.484534
-          ],
-          [
-            171.522783,
-            -43.483961
-          ],
-          [
-            171.523001,
-            -43.4831
-          ],
-          [
-            171.523481,
-            -43.482934
-          ],
-          [
-            171.524636,
-            -43.483268
-          ],
-          [
-            171.525406,
-            -43.482567
+            -43.472799
           ]
         ]
       ]
@@ -6192,416 +6124,84 @@
     {
       "id": "forecast-016",
       "mode": "forecast",
-      "thresholdCm": 5,
-      "expectedSnowCm": 7,
-      "score": 0.32,
-      "reason": "Deposits behind terrain features across 5 active wind sectors.",
-      "dominantFactor": "ridge shelter",
-      "coordinates": [
-        [
-          [
-            171.527034,
-            -43.472778
-          ],
-          [
-            171.531565,
-            -43.472821
-          ],
-          [
-            171.531897,
-            -43.473065
-          ],
-          [
-            171.530795,
-            -43.473996
-          ],
-          [
-            171.529255,
-            -43.474003
-          ],
-          [
-            171.527715,
-            -43.474582
-          ],
-          [
-            171.526956,
-            -43.473925
-          ],
-          [
-            171.526946,
-            -43.472812
-          ]
-        ]
-      ]
-    },
-    {
-      "id": "forecast-017",
-      "mode": "forecast",
-      "thresholdCm": 5,
-      "expectedSnowCm": 7,
-      "score": 0.27,
-      "reason": "Concave W-facing gully/bowl terrain that collects drifting snow.",
-      "dominantFactor": "sheltered gully",
-      "coordinates": [
-        [
-          [
-            171.521513,
-            -43.472778
-          ],
-          [
-            171.522326,
-            -43.472562
-          ],
-          [
-            171.523183,
-            -43.472778
-          ],
-          [
-            171.52259,
-            -43.473351
-          ],
-          [
-            171.522356,
-            -43.474211
-          ],
-          [
-            171.521556,
-            -43.474616
-          ],
-          [
-            171.520142,
-            -43.473925
-          ],
-          [
-            171.520402,
-            -43.473223
-          ],
-          [
-            171.521172,
-            -43.47287
-          ]
-        ]
-      ]
-    },
-    {
-      "id": "forecast-018",
-      "mode": "forecast",
-      "thresholdCm": 5,
-      "expectedSnowCm": 7,
-      "score": 0.31,
-      "reason": "Deposits behind terrain features across 5 active wind sectors.",
-      "dominantFactor": "ridge shelter",
-      "coordinates": [
-        [
-          [
-            171.528143,
-            -43.468477
-          ],
-          [
-            171.529255,
-            -43.468235
-          ],
-          [
-            171.531779,
-            -43.46905
-          ],
-          [
-            171.530795,
-            -43.469479
-          ],
-          [
-            171.52964,
-            -43.469436
-          ],
-          [
-            171.529342,
-            -43.470484
-          ],
-          [
-            171.528485,
-            -43.470631
-          ],
-          [
-            171.52877,
-            -43.469337
-          ],
-          [
-            171.528169,
-            -43.468763
-          ]
-        ]
-      ]
-    },
-    {
-      "id": "forecast-019",
-      "mode": "forecast",
-      "thresholdCm": 5,
-      "expectedSnowCm": 6,
-      "score": 0.34,
-      "reason": "Concave W-facing gully/bowl terrain that collects drifting snow.",
-      "dominantFactor": "sheltered gully",
-      "coordinates": [
-        [
-          [
-            171.523339,
-            -43.490556
-          ],
-          [
-            171.523866,
-            -43.49048
-          ],
-          [
-            171.524247,
-            -43.490842
-          ],
-          [
-            171.523944,
-            -43.491989
-          ],
-          [
-            171.523481,
-            -43.492341
-          ],
-          [
-            171.523096,
-            -43.49244
-          ],
-          [
-            171.522326,
-            -43.491783
-          ],
-          [
-            171.521556,
-            -43.491894
-          ],
-          [
-            171.520194,
-            -43.491416
-          ],
-          [
-            171.523096,
-            -43.490735
-          ]
-        ]
-      ]
-    },
-    {
-      "id": "forecast-020",
-      "mode": "forecast",
-      "thresholdCm": 5,
-      "expectedSnowCm": 6,
-      "score": 0.38,
-      "reason": "Concave SE-facing gully/bowl terrain that collects drifting snow.",
-      "dominantFactor": "sheltered gully",
-      "coordinates": [
-        [
-          [
-            171.531811,
-            -43.485681
-          ],
-          [
-            171.533105,
-            -43.485608
-          ],
-          [
-            171.533874,
-            -43.48646
-          ],
-          [
-            171.533105,
-            -43.486509
-          ],
-          [
-            171.531565,
-            -43.487192
-          ],
-          [
-            171.530942,
-            -43.486541
-          ],
-          [
-            171.531565,
-            -43.485856
-          ]
-        ]
-      ]
-    },
-    {
-      "id": "forecast-021",
-      "mode": "forecast",
-      "thresholdCm": 5,
-      "expectedSnowCm": 6,
-      "score": 0.32,
-      "reason": "Deposits behind terrain features across 5 active wind sectors.",
-      "dominantFactor": "ridge shelter",
-      "coordinates": [
-        [
-          [
-            171.540795,
-            -43.482814
-          ],
-          [
-            171.542051,
-            -43.482814
-          ],
-          [
-            171.542052,
-            -43.4831
-          ],
-          [
-            171.541234,
-            -43.483387
-          ],
-          [
-            171.540803,
-            -43.484167
-          ],
-          [
-            171.539649,
-            -43.483327
-          ],
-          [
-            171.538905,
-            -43.483674
-          ],
-          [
-            171.538879,
-            -43.484312
-          ],
-          [
-            171.537822,
-            -43.483674
-          ],
-          [
-            171.538879,
-            -43.483022
-          ],
-          [
-            171.540418,
-            -43.483046
-          ]
-        ]
-      ]
-    },
-    {
-      "id": "forecast-022",
-      "mode": "forecast",
-      "thresholdCm": 5,
-      "expectedSnowCm": 7,
-      "score": 0.28,
-      "reason": "Deposits behind terrain features across 5 active wind sectors.",
-      "dominantFactor": "ridge shelter",
-      "coordinates": [
-        [
-          [
-            171.532271,
-            -43.470484
-          ],
-          [
-            171.53272,
-            -43.470297
-          ],
-          [
-            171.533264,
-            -43.470771
-          ],
-          [
-            171.531565,
-            -43.471577
-          ],
-          [
-            171.530795,
-            -43.471264
-          ],
-          [
-            171.530501,
-            -43.470771
-          ],
-          [
-            171.53195,
-            -43.470715
-          ]
-        ]
-      ]
-    },
-    {
-      "id": "forecast-023",
-      "mode": "forecast",
-      "thresholdCm": 5,
-      "expectedSnowCm": 6,
-      "score": 0.34,
+      "thresholdCm": 10,
+      "expectedSnowCm": 11,
+      "score": 0.4,
       "reason": "Concave SW-facing gully/bowl terrain that collects drifting snow.",
       "dominantFactor": "sheltered gully",
       "coordinates": [
         [
           [
-            171.544331,
-            -43.491129
+            171.525632,
+            -43.482527
           ],
           [
-            171.544653,
-            -43.490903
+            171.525968,
+            -43.482527
           ],
           [
-            171.545206,
-            -43.492276
+            171.526176,
+            -43.483559
           ],
           [
-            171.544268,
-            -43.493013
+            171.529255,
+            -43.482737
           ],
           [
-            171.543553,
-            -43.491703
+            171.530025,
+            -43.48276
           ],
           [
-            171.544334,
-            -43.491416
-          ]
-        ]
-      ]
-    },
-    {
-      "id": "forecast-024",
-      "mode": "forecast",
-      "thresholdCm": 5,
-      "expectedSnowCm": 6,
-      "score": 0.33,
-      "reason": "Concave S-facing gully/bowl terrain that collects drifting snow.",
-      "dominantFactor": "sheltered gully",
-      "coordinates": [
-        [
-          [
-            171.538467,
-            -43.487688
+            171.530107,
+            -43.4831
           ],
           [
-            171.538879,
-            -43.487596
+            171.529255,
+            -43.484067
           ],
           [
-            171.539611,
-            -43.487975
+            171.52887,
+            -43.483311
           ],
           [
-            171.539622,
-            -43.488262
+            171.5281,
+            -43.483286
           ],
           [
-            171.538879,
-            -43.488703
+            171.527331,
+            -43.484142
           ],
           [
-            171.53756,
-            -43.488262
+            171.526176,
+            -43.483732
           ],
           [
-            171.537474,
-            -43.487975
+            171.525021,
+            -43.484019
           ],
           [
-            171.538109,
-            -43.487808
+            171.523645,
+            -43.483961
+          ],
+          [
+            171.523096,
+            -43.483423
+          ],
+          [
+            171.523481,
+            -43.483103
+          ],
+          [
+            171.523866,
+            -43.483365
+          ],
+          [
+            171.525021,
+            -43.483321
+          ],
+          [
+            171.525406,
+            -43.482718
           ]
         ]
       ]
@@ -6610,16 +6210,16 @@
   "daily": [
     {
       "date": "2026-09-07",
-      "snowfallCm": 0.1,
-      "precipMm": 0.1,
+      "snowfallCm": 0,
+      "precipMm": 0,
       "rainMm": 0,
-      "tempMinC": -8.9,
-      "tempMaxC": -2.8,
+      "tempMinC": -8.3,
+      "tempMaxC": -3,
       "windMeanKph": 3,
-      "gustMaxKph": 21,
-      "windDirectionDeg": 55,
-      "cloudPct": 80,
-      "freezingLevelM": 1234,
+      "gustMaxKph": 22,
+      "windDirectionDeg": 350,
+      "cloudPct": 72,
+      "freezingLevelM": 1401,
       "weatherCode": 3
     },
     {
@@ -6627,13 +6227,13 @@
       "snowfallCm": 0,
       "precipMm": 0,
       "rainMm": 0,
-      "tempMinC": -9.6,
-      "tempMaxC": -0.1,
+      "tempMinC": -8.4,
+      "tempMaxC": -0.3,
       "windMeanKph": 2,
-      "gustMaxKph": 21,
-      "windDirectionDeg": 266,
-      "cloudPct": 80,
-      "freezingLevelM": 1630,
+      "gustMaxKph": 25,
+      "windDirectionDeg": 236,
+      "cloudPct": 75,
+      "freezingLevelM": 1598,
       "weatherCode": 3
     },
     {
@@ -6641,27 +6241,27 @@
       "snowfallCm": 0,
       "precipMm": 0,
       "rainMm": 0,
-      "tempMinC": -8.9,
+      "tempMinC": -9,
       "tempMaxC": 1.8,
       "windMeanKph": 6,
-      "gustMaxKph": 84,
+      "gustMaxKph": 90,
       "windDirectionDeg": 312,
       "cloudPct": 38,
-      "freezingLevelM": 1914,
+      "freezingLevelM": 2051,
       "weatherCode": 0
     },
     {
       "date": "2026-09-10",
-      "snowfallCm": 6.4,
-      "precipMm": 11,
-      "rainMm": 1.9,
-      "tempMinC": -8.4,
-      "tempMaxC": -1.9,
+      "snowfallCm": 9.7,
+      "precipMm": 16.4,
+      "rainMm": 2.4,
+      "tempMinC": -10.3,
+      "tempMaxC": -1.6,
       "windMeanKph": 3,
-      "gustMaxKph": 84,
-      "windDirectionDeg": 195,
-      "cloudPct": 62,
-      "freezingLevelM": 1348,
+      "gustMaxKph": 82,
+      "windDirectionDeg": 165,
+      "cloudPct": 68,
+      "freezingLevelM": 1282,
       "weatherCode": 85
     },
     {
@@ -6669,13 +6269,13 @@
       "snowfallCm": 0,
       "precipMm": 0,
       "rainMm": 0,
-      "tempMinC": -6.4,
-      "tempMaxC": 1.4,
+      "tempMinC": -9.6,
+      "tempMaxC": 0.8,
       "windMeanKph": 5,
-      "gustMaxKph": 50,
-      "windDirectionDeg": 312,
-      "cloudPct": 28,
-      "freezingLevelM": 1841,
+      "gustMaxKph": 42,
+      "windDirectionDeg": 311,
+      "cloudPct": 23,
+      "freezingLevelM": 1760,
       "weatherCode": 1
     },
     {
@@ -6683,28 +6283,28 @@
       "snowfallCm": 0,
       "precipMm": 0,
       "rainMm": 0,
-      "tempMinC": -8.2,
-      "tempMaxC": 2.9,
-      "windMeanKph": 6,
-      "gustMaxKph": 61,
-      "windDirectionDeg": 310,
-      "cloudPct": 35,
-      "freezingLevelM": 1647,
-      "weatherCode": 2
+      "tempMinC": -5,
+      "tempMaxC": 2.5,
+      "windMeanKph": 4,
+      "gustMaxKph": 50,
+      "windDirectionDeg": 305,
+      "cloudPct": 21,
+      "freezingLevelM": 1559,
+      "weatherCode": 1
     },
     {
       "date": "2026-09-13",
       "snowfallCm": 0,
       "precipMm": 0,
       "rainMm": 0,
-      "tempMinC": -3.7,
+      "tempMinC": -4.9,
       "tempMaxC": 4.4,
       "windMeanKph": 6,
-      "gustMaxKph": 46,
+      "gustMaxKph": 47,
       "windDirectionDeg": 312,
-      "cloudPct": 49,
-      "freezingLevelM": 1849,
-      "weatherCode": 1
+      "cloudPct": 48,
+      "freezingLevelM": 1850,
+      "weatherCode": 2
     },
     {
       "date": "2026-09-14",
@@ -6717,7 +6317,7 @@
       "gustMaxKph": 34,
       "windDirectionDeg": 335,
       "cloudPct": 14,
-      "freezingLevelM": 2176,
+      "freezingLevelM": 1914,
       "weatherCode": 0
     },
     {
@@ -6731,7 +6331,7 @@
       "gustMaxKph": 95,
       "windDirectionDeg": 324,
       "cloudPct": 89,
-      "freezingLevelM": 2398,
+      "freezingLevelM": 2575,
       "weatherCode": 3
     },
     {
@@ -6745,7 +6345,7 @@
       "gustMaxKph": 85,
       "windDirectionDeg": 209,
       "cloudPct": 53,
-      "freezingLevelM": 1305,
+      "freezingLevelM": 1140,
       "weatherCode": 85
     },
     {
@@ -6759,7 +6359,7 @@
       "gustMaxKph": 103,
       "windDirectionDeg": 318,
       "cloudPct": 61,
-      "freezingLevelM": 766,
+      "freezingLevelM": 915,
       "weatherCode": 51
     },
     {
@@ -6773,7 +6373,7 @@
       "gustMaxKph": 93,
       "windDirectionDeg": 142,
       "cloudPct": 100,
-      "freezingLevelM": 1975,
+      "freezingLevelM": 1509,
       "weatherCode": 51
     },
     {
@@ -6787,7 +6387,7 @@
       "gustMaxKph": 29,
       "windDirectionDeg": 277,
       "cloudPct": 56,
-      "freezingLevelM": 1788,
+      "freezingLevelM": 2082,
       "weatherCode": 1
     },
     {
@@ -6801,28 +6401,28 @@
       "gustMaxKph": 19,
       "windDirectionDeg": 115,
       "cloudPct": 36,
-      "freezingLevelM": 1637,
+      "freezingLevelM": 2050,
       "weatherCode": 0
     }
   ],
   "ensemble": {
     "source": "Open-Meteo Ensemble API",
     "model": "gfs_seamless",
-    "generatedAt": "2026-09-06T23:53:58.529Z",
-    "windowStartAt": "2026-09-06T23:00:00.000Z",
-    "windowEndAt": "2026-09-09T22:00:00.000Z",
+    "generatedAt": "2026-09-07T04:40:51.831Z",
+    "windowStartAt": "2026-09-07T04:00:00.000Z",
+    "windowEndAt": "2026-09-10T03:00:00.000Z",
     "windowHours": 72,
     "memberCount": 31,
     "snowfallCm": {
-      "p10": 0.4,
-      "p50": 1.2,
-      "p90": 3.2,
-      "mean": 1.7
+      "p10": 0.8,
+      "p50": 3.8,
+      "p90": 9.9,
+      "mean": 4.7
     },
     "probabilityPct": {
-      "atLeast1Cm": 64.5,
-      "atLeast5Cm": 6.5,
-      "atLeast10Cm": 0
+      "atLeast1Cm": 83.9,
+      "atLeast5Cm": 35.5,
+      "atLeast10Cm": 9.7
     }
   }
 }
